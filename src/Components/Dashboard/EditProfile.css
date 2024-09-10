@@ -1,0 +1,151 @@
+/* Container for the entire edit profile page */
+.edit-profile-container-modern {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+  height: auto;
+}
+
+/* Profile editing section */
+.edit-profile-modern {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.profile-picture-modern {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative; /* Important for button positioning */
+}
+
+.profile-picture-modern img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Keep the change picture button style */
+.change-picture-btn-modern {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.profile-picture-modern:hover .change-picture-btn-modern {
+  opacity: 1;
+}
+
+/* Form for profile information */
+.profile-info-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row-modern {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group-modern label {
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group-modern input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+}
+
+.save-btn-modern {
+  background-color: #cba36b;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-btn-modern:hover {
+  background-color: #a97c50;
+}
+
+/* Message area for feedback */
+.message-modern {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e0f7ea;
+  border-radius: 5px;
+  color: #2e7d32;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.message-modern svg {
+  font-size: 1.5rem;
+}
+
+/* Utils section for change password */
+.utils-modern {
+  width: 40%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+.change-password-section-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.change-password-section-modern h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.change-password-section-modern input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+/* Message area for password feedback */
+.message-modern.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+}

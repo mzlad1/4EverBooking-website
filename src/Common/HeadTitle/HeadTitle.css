@@ -1,0 +1,77 @@
+/* Main image heading container */
+.headtitle-image-heading {
+  display: flex;
+  flex-direction: column; /* Stacks children vertically */
+  justify-content: space-between; /* Places the first item at the top, the last at the bottom */
+  background-image: url("../../../public/Images/image-heading2.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  height: 30vh; /* Adjust height as needed */
+  position: relative;
+  z-index: -2;
+}
+
+.headtitle-image-heading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay on the image */
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+/* Container inside the image-heading section */
+.headtitle-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Title styling */
+.headtitle-title {
+  font-size: 40px;
+  text-transform: capitalize;
+  margin: 10px 0 0 0; /* Adds margin at the top */
+  color: #fff;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Button styling (if included) */
+.headtitle-button {
+  background: black;
+  color: white;
+  font-weight: 400;
+  padding: 15px 30px;
+  word-spacing: 5px;
+  border: none;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.headtitle-button:hover {
+  background-color: #333;
+}
+
+/* Link styling */
+.headtitle-link {
+  color: #31b675;
+  cursor: pointer;
+}
+
+.headtitle-link:hover {
+  text-decoration: underline;
+}
+
+/* Additional styling for spans */
+.headtitle-span {
+  text-transform: capitalize;
+  word-spacing: 30px;
+}

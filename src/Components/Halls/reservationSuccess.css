@@ -1,0 +1,91 @@
+/* General page styling */
+.reservation-success-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9; /* Soft background */
+  font-family: "Arial", sans-serif; /* Clean and modern font */
+  color: #333;
+  padding: 20px;
+}
+
+/* Success message styling */
+.reservation-success-page h1 {
+  color: #4caf50; /* Bright green for success */
+  font-size: 3rem;
+  margin-bottom: 20px;
+  animation: fadeInDown 1s ease; /* Smooth fade-in effect */
+}
+
+/* Success paragraph */
+.reservation-success-page p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 20px;
+  animation: fadeInUp 1s ease;
+}
+
+/* Link to reserved halls */
+.reservation-success-page a {
+  font-weight: bold;
+  text-decoration: none;
+  color: #c29d6d;
+  animation: fadeInUp 1.2s ease;
+}
+
+/* Button styling */
+.home-button {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 30px;
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  animation: fadeInUp 1.4s ease;
+}
+
+.home-button:hover {
+  background-color: #a87f56;
+  transform: scale(1.05); /* Slight scale on hover */
+  color: white;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .reservation-success-page h1 {
+    font-size: 2.5rem;
+  }
+
+  .home-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}

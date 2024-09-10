@@ -1,0 +1,209 @@
+/* Overall page section */
+.login-form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #e2e2e2,
+    #fafafa
+  ); /* Subtle gradient for background */
+  padding: 20px;
+  animation: fadeInBackground 1.5s ease-in-out; /* Fade-in for the whole section */
+}
+
+/* Fade-in background animation */
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.login-form-container {
+  max-width: 600px;
+  width: 100%;
+  padding: 50px 40px;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(50px); /* Start position for slide-up animation */
+  animation: slideUp 1s ease-out forwards; /* Apply slide-up animation */
+}
+
+/* Slide-up animation */
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-form-container:hover {
+  transform: scale(1.02); /* Subtle hover effect */
+}
+
+/* Title styling */
+.login-form-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out 0.5s forwards; /* Fade in the title */
+  opacity: 0;
+}
+
+/* Input field wrapper */
+.login-input-wrapper {
+  position: relative;
+  margin-bottom: 25px;
+  animation: fadeIn 1s ease-in-out 0.7s forwards; /* Delay for input fade-in */
+  opacity: 0;
+}
+
+.login-input-field {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #d1d1d1;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #f7f7f7;
+}
+
+.login-input-field:focus {
+  border-color: #cba36b;
+  box-shadow: 0 0 5px rgba(203, 163, 107, 0.5);
+  outline: none;
+}
+
+/* Checkbox and Forgot Password section */
+.login-flex-space {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  animation: fadeIn 1s ease-in-out 0.9s forwards; /* Delay for fade-in */
+  opacity: 0;
+}
+
+.login-checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.login-checkbox {
+  margin-right: 10px;
+}
+
+.login-forgot-password {
+  font-size: 14px;
+  color: #777;
+}
+
+.login-forgot-password a {
+  color: #cba36b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-forgot-password a:hover {
+  color: #b08e5a;
+  text-decoration: underline;
+}
+
+/* Error message styling */
+.login-error {
+  color: #ff4d4d;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  animation: fadeIn 1s ease-in-out 1.1s forwards; /* Delay fade-in */
+  opacity: 0;
+}
+
+.login-error svg {
+  margin-right: 8px;
+}
+
+/* Submit button */
+.login-submit-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #cba36b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: fadeIn 1s ease-in-out 1.3s forwards; /* Delay fade-in for the button */
+  opacity: 0;
+}
+
+.login-submit-btn:hover {
+  background-color: #b08e5a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Signup prompt section */
+.login-signup-prompt {
+  font-size: 14px;
+  color: #777;
+  margin-top: 30px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out 1.5s forwards; /* Delay fade-in for signup prompt */
+  opacity: 0;
+}
+
+.login-signup-link {
+  color: #cba36b;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.login-signup-link:hover {
+  color: #b08e5a;
+}
+
+/* Fade-in animation for elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .login-form-container {
+    padding: 30px;
+    max-width: 90%;
+  }
+
+  .login-input-field {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .login-submit-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .login-signup-prompt {
+    font-size: 13px;
+  }
+}

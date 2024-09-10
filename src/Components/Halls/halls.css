@@ -1,0 +1,210 @@
+/* General page styling */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f4f9;
+}
+
+/* Search-body to wrap the search bar and results */
+.search-body-modern {
+  width: 100%;
+  background-color: #faf6f0;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center content horizontally */
+  gap: 20px; /* Spacing between the search bar and other elements */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Light shadow for depth */
+  border-radius: 12px; /* Slight rounding to match other components */
+}
+
+.search-container-modern {
+  width: 80%; /* Adjust the width as needed */
+  margin: 30px auto;
+  position: relative; /* Position the icon relative to the input */
+  display: flex;
+  justify-content: center;
+  border-radius: 50px; /* Rounded input */
+  box-shadow: none; /* Remove the shadow to remove the behind box */
+  background-color: transparent; /* Remove background to make it transparent */
+}
+
+.search-container-modern input {
+  width: 100%;
+  padding: 15px 50px 15px 45px; /* Padding adjusted for icon placement */
+  font-size: 16px;
+  border: 2px solid #ddd; /* Add a subtle border instead */
+  border-radius: 50px; /* Fully rounded input */
+  background-color: #fff; /* Input has a white background */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-container-modern input:focus {
+  outline: none;
+  border-color: #cba36b; /* Change border color on focus */
+  box-shadow: 0 0 8px rgba(203, 163, 107, 0.5); /* Soft focus glow */
+}
+
+/* Style for the search icon inside the input */
+.search-container-modern .search-icon {
+  position: absolute;
+  left: 15px; /* Adjust to ensure the icon is inside the input */
+  top: 50%;
+  transform: translateY(-50%); /* Center icon vertically */
+  font-size: 20px;
+  color: #c29d6d;
+}
+
+/* Adjust input padding for icon */
+.search-container-modern input {
+  padding-left: 45px; /* Space for icon inside the input */
+}
+
+/* Main container for halls and filter */
+.main-container-modern {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  background-color: #faf6f0;
+}
+
+/* Filter bar adjustments */
+.filter-bar-modern {
+  width: 20%;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  margin-top: 20px;
+}
+
+.page-container-modern {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 20px;
+  width: 75%;
+  height: auto;
+}
+
+/* Hall Card */
+.hall-card-modern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: transform 0.4s ease-in-out, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInSlideUp 0.5s ease forwards;
+}
+
+@keyframes fadeInSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hall-card-modern:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.hall-card-modern img {
+  border-radius: 8px;
+  width: 100%;
+  height: auto;
+}
+
+/* Hall Name */
+.hall-title-modern {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #c29d6d;
+  text-transform: uppercase;
+  margin-top: 15px;
+  letter-spacing: 1px;
+}
+
+/* Star ratings */
+.rating-stars-modern {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.capacity-location-row-modern {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.capacity-location-row-modern .MuiTypography-root {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+/* Button hover animations */
+.book-now-button-modern {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.book-now-button-modern:hover {
+  transform: translateY(-3px);
+  background-color: #a87c50;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .filter-bar-modern {
+    width: 25%;
+  }
+
+  .page-container-modern {
+    width: 70%;
+  }
+
+  .hall-card-modern {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-container-modern {
+    flex-direction: column;
+  }
+
+  .filter-bar-modern,
+  .page-container-modern {
+    width: 100%;
+  }
+
+  .hall-card-modern {
+    flex: 1 1 100%;
+  }
+
+  .search-container-modern {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-container-modern {
+    width: 100%;
+  }
+
+  .search-container-modern input {
+    font-size: 14px;
+  }
+
+  .search-container-modern .search-icon {
+    font-size: 18px;
+  }
+}

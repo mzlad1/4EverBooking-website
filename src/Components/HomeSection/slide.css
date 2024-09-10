@@ -1,0 +1,160 @@
+/* Slider container with fade-in effect */
+.slider2 {
+  position: relative;
+  width: 100%;
+  height: auto; /* Adjust based on your needs */
+  animation: fadeInBackground 1.5s ease-in-out; /* Fade-in animation for the slider */
+}
+
+
+.welcome-message {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Ensure centering is perfect */
+  color: #fff; /* Choose a color that stands out */
+  text-align: center; /* Center the text within the welcome message box */
+  width: 50%; /* Make the welcome message take full width of the slider */
+  z-index: 10; /* Ensure it's above the images */
+  background-color: rgba(66, 55, 41, 0.5); /* Semi-transparent background */
+  padding: 1em; /* Padding for aesthetics */
+  border-radius: 5px; /* Rounded corners for the welcome message box */
+  animation: fadeInBackground 1.5s ease-in-out forwards; /* Slide-up animation */
+
+}
+
+/* Welcome message heading with fade-in delay */
+.welcome-message h1 {
+  font-size: 2.5rem; /* Large text for headline */
+  margin: 0;
+  padding: 0.5em 0; /* Spacing for aesthetics */
+  color: #fff;
+  text-shadow: 2px 2px 4px #000000;
+  animation: fadeIn 1.2s ease-in-out 0.5s forwards; /* Fade-in with delay */
+  opacity: 0;
+}
+
+/* Welcome message paragraph with fade-in delay */
+.welcome-message p {
+  font-size: 1.2rem; /* Appropriate size for paragraph text */
+  margin: 0;
+  padding: 0 0 0.5em 0; /* Spacing for aesthetics */
+  text-shadow: 2px 2px 4px #000000;
+  animation: fadeIn 1.2s ease-in-out 0.7s forwards; /* Fade-in with delay */
+  opacity: 0;
+}
+
+/* Search overlay with fade-in */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+  display: flex;
+  align-items: center; /* Center vertically in the viewport */
+  justify-content: center; /* Center horizontally in the viewport */
+  z-index: 1000; /* Ensure it's on top of other content */
+  animation: fadeIn 1s ease-in-out; /* Fade-in animation for the overlay */
+  opacity: 0;
+}
+
+/* Search container with subtle slide-up */
+.search1-container {
+  display: flex;
+  width: 100%; /* Maintains the width to 50% of its container */
+  justify-content: space-around;
+  border-radius: 15px;
+  background-color: #ffffff; /* Adjust based on your color theme */
+  box-shadow: 4px 6px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto; /* Centers the filter bar horizontally */
+  animation: fadeIn 1s ease-out forwards; /* Slide-up animation */
+  opacity: 0;
+}
+
+/* Search button with hover transition */
+.search-button {
+  padding: 10px 20px;
+  background-color: #cba36b; /* Golden color background */
+  border: none;
+  cursor: pointer;
+  color: white; /* White text color */
+  border-top-right-radius: 5px; /* Rounded right corner */
+  border-bottom-right-radius: 5px; /* Rounded right corner */
+  transition: background-color 0.3s, transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.search-button:hover {
+  background-color: #ec971f; /* Darker shade on hover */
+  transform: translateY(-3px); /* Slight lift effect */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Add subtle shadow on hover */
+}
+
+/* Control buttons with fade-in */
+.control-btn {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  animation: fadeIn 1s ease-in-out forwards; /* Fade-in effect for the control buttons */
+  opacity: 0;
+}
+
+.control-btn button {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.control-btn button i {
+  color: #fff; /* Default color of the arrows */
+  font-size: 2rem; /* Adjust arrow size */
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.control-btn button:hover {
+  background-color: rgba(0, 0, 0, 0.7); /* Darken background on hover */
+}
+
+.control-btn button:hover i {
+  color: #cba36b; /* Change arrow color to golden on hover */
+}
+
+.prev {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.next {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+/* Keyframes for background fade-in */
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

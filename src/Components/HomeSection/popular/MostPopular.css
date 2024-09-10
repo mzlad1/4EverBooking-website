@@ -1,0 +1,245 @@
+.popular {
+  position: relative;
+}
+.popular::after {
+  content: "";
+  width: 100%;
+  height: 40vh;
+  background: #eaf8f1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.popular img {
+  width: 100%;
+}
+.popular .card {
+  margin: 10px;
+}
+.popular .item {
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin: 10px;
+}
+.popular .imgae {
+  position: relative;
+}
+.popular .imgae i {
+  position: absolute;
+  bottom: 0;
+  color: white;
+  margin: 20px;
+}
+.popular .imgae i label {
+  margin-left: 10px;
+  font-weight: normal;
+}
+.popular .details {
+  text-align: center;
+}
+.popular .rate {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  font-size: 13px;
+  color: grey;
+}
+.popular .rate i {
+  margin: 2px;
+}
+
+.popular .cards .item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensure spacing between items */
+}
+
+.popular .cards .book-now {
+  background-color: #cba36b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 15px; /* Space above the button */
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px; /* Space between heading and content */
+}
+
+.heading h1 {
+  font-size: 24px; /* Adjust font size as needed */
+  color: #333; /* Color of the heading text */
+  margin: 0; /* Remove default margin */
+}
+
+.heading .Line {
+  width: 400px; /* Adjust the width of the line */
+  height: 2px; /* Height of the line */
+  background-color: #cba36b; /* Line color */
+  margin: 10px auto; /* Center the line and add vertical spacing */
+  border-radius: 1px; /* Optional: Make the edges slightly rounded */
+}
+
+.popular .cards .book-now:hover {
+  background-color: #b99a5b; /* Slightly darker shade on hover */
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  background-color: white;
+  color: #cba36b;
+  border-radius: 50%; /* Makes the background circular */
+  width: 40px; /* Adjust the size of the circle */
+  height: 40px; /* Adjust the size of the circle */
+  display: flex; /* Center the arrow icon inside the circle */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  cursor: pointer;
+  box-shadow: 0 0 0 2px white; /* Optional: Add a white stroke around the circle */
+}
+
+.arrow-left {
+  left: 10px;
+}
+
+.arrow-right {
+  right: 10px;
+}
+
+.arrow button {
+  background: none;
+  border: none;
+  color: #cba36b;
+  font-size: 24px;
+}
+
+.popular .cards h2 {
+  font-weight: 500;
+  font-size: 20px;
+  color: #cba36b;
+  position: relative;
+  margin-bottom: 30px;
+}
+.popular .cards h2::after {
+  position: absolute;
+  content: "";
+  bottom: -10px;
+  left: 45%;
+  height: 1px;
+  width: 30px;
+  background: black;
+}
+.popular .cards h2::before {
+  position: absolute;
+  content: "";
+  bottom: -20px;
+  left: 40%;
+  height: 1px;
+  width: 60px;
+  background: black;
+}
+.popular .cards h3 {
+  color: #cba36b;
+  font-weight: 500;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popular .cards .price {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center-align the content horizontally */
+  color: #cba36b; /* Adjust color if needed */
+  font-size: 18px; /* Adjust font size as needed */
+  font-weight: 700; /* Make the price stand out */
+  margin-bottom: 10px; /* Space between price and rating */
+  text-align: center; /* Center-align the text */
+}
+
+.popular .cards .price i {
+  color: grey; /* Color of the icon */
+  margin-right: 8px; /* Space between icon and price */
+  font-size: 20px; /* Size of the icon */
+}
+
+.popular .cards .price span {
+  margin-left: 10px; /* Space between price and "Per Day" */
+  font-size: 16px; /* Adjust font size if needed */
+  color: grey; /* Adjust color if needed */
+}
+
+.popular .cards .capacity-location {
+  display: flex;
+  align-items: center;
+}
+
+.popular .cards .capacity-container,
+.popular .cards .location-container {
+  display: flex;
+  align-items: center;
+}
+
+.popular .cards .capacity-container i,
+.popular .cards .location-container i {
+  color: grey;
+  margin-right: 8px; /* Space between icon and label */
+}
+
+.popular .cards .capacity-container label,
+.popular .cards .location-container label {
+  font-weight: 300;
+  font-size: 15px; /* Adjust size if needed */
+  color: grey;
+}
+
+.popular .content {
+  margin-bottom: 50px;
+}
+/*----- control btn -------*/
+.popular .reco-control-btn .next,
+.popular .reco-control-btn .prev {
+  top: 100%;
+  background: none;
+}
+.popular .reco-control-btn .prev {
+  left: 45%;
+}
+.popular .reco-control-btn .next {
+  right: 45%;
+}
+.popular .reco-control-btn .prev i,
+.popular .reco-control-btn .next i {
+  background: rgba(0, 0, 0, 0.05);
+  color: black;
+  font-size: 15px;
+  transition: 0.5s;
+  padding: 10px;
+  margin-top: 40px;
+}
+.popular .reco-control-btn .prev i:hover,
+.popular .reco-control-btn .next i:hover {
+  background: #cba36b;
+  color: white;
+}
+/*----- control btn -------*/
+@media screen and (max-width: 768px) {
+  .popular .reco-control-btn .prev {
+    left: 40%;
+  }
+  .popular .reco-control-btn .next {
+    right: 42%;
+  }
+}

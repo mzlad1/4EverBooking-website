@@ -1,0 +1,101 @@
+/* Section for 'How it Works' */
+.works-unique-section {
+  padding: 60px 0;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.works-unique-container {
+  max-width: 1200px;
+  margin-top: 20px;  padding: 20px;
+}
+
+/* Heading styling */
+.works-unique-heading h1 {
+  font-size: 2.5rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.works-unique-line {
+  width: 100px;
+  height: 4px;
+  background-color: #cba36b;
+  margin: 0 auto;
+  margin-bottom: 40px;
+}
+
+/* Grid layout for cards */
+.works-unique-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Individual card styling */
+.works-unique-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.works-unique-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Image styling for the card */
+.works-unique-card-img img {
+  width: auto;
+  height: auto;
+display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+
+}
+
+/* Card details styling */
+.works-unique-card-details {
+  padding: 20px;
+  text-align: center;
+}
+
+.works-unique-card-details h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.works-unique-card-details p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .works-unique-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .works-unique-heading h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .works-unique-heading h1 {
+    font-size: 1.8rem;
+  }
+
+  .works-unique-card-details h2 {
+    font-size: 1.2rem;
+  }
+}

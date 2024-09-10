@@ -1,0 +1,196 @@
+/* General Container Styling */
+.navbar-modern {
+  background-color: #2d2f33;
+  padding: 15px 0;
+  position: relative;
+  z-index: 100;
+  width: 100%;
+}
+
+.container-modern {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-space-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-modern {
+  display: flex;
+  align-items: center;
+}
+
+/* Logo */
+.logo-modern {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.logo-highlight-modern {
+  color: #cba36b; /* Highlight color */
+}
+
+.logo-link-modern {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Menu Icon (for mobile) */
+.menu-icon-modern {
+  font-size: 1.8rem;
+  color: #ffffff;
+  display: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-icon-modern {
+    display: block;
+  }
+}
+
+/* Navigation Menu */
+.nav-menu-modern {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  transition: all 0.5s ease;
+}
+
+.nav-menu-modern.active {
+  display: block;
+}
+
+.nav-item-modern {
+  position: relative;
+}
+
+.nav-link-modern {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 10px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link-modern:hover {
+  color: #cba36b; /* Hover highlight */
+}
+
+.nav-link-modern::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #cba36b;
+  transition: all 0.3s ease;
+}
+
+.nav-link-modern:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Profile Dropdown Menu */
+.profile-dropdown-modern {
+  position: relative;
+}
+
+.profile-trigger-modern {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-image-modern {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-text-modern {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.dropdown-menu-modern {
+  position: absolute;
+  top: 101%;
+  right: 0;
+  background-color: #2d2f33;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+}
+
+.profile-dropdown-modern:hover .dropdown-menu-modern {
+  display: flex;
+}
+
+.dropdown-link-modern {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  display: block;
+}
+
+.dropdown-link-modern:hover {
+  background-color: #cba36b;
+  transition: all 0.6s ease;
+}
+
+/* Login and Register Links */
+.login-area-modern {
+  display: flex;
+  align-items: center;
+}
+
+.login-link-modern {
+  margin-left: 15px;
+  list-style: none;
+}
+
+.nav-link-modern i {
+  margin-right: 5px;
+}
+
+/* Media Query for Mobile Menu */
+@media screen and (max-width: 768px) {
+  .nav-menu-modern {
+    display: none;
+    flex-direction: column;
+    background-color: #2d2f33;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-menu-modern.active {
+    display: flex;
+  }
+
+  .nav-link-modern {
+    padding: 20px;
+    font-size: 1.2rem;
+  }
+}

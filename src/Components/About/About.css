@@ -1,0 +1,253 @@
+/* General container styling */
+.about-unique-container {
+  padding: 50px 0;
+  background-color: #f9f9f9;
+}
+
+.about-unique-inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Flexbox for rows and columns */
+.about-unique-flex-space {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.about-unique-mtop {
+  margin-top: 50px;
+}
+
+/* Row styling */
+.about-unique-row {
+  flex: 1;
+  margin: 20px;
+}
+
+.about-unique-row1 {
+  max-width: 600px;
+}
+
+/* About card styling */
+.about-unique-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-unique-row h2 {
+  font-size: 1.8rem;
+  color: #cba36b;
+  margin-bottom: 10px;
+}
+
+.about-unique-row h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.about-unique-row p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* Styling for images */
+.about-unique-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.about-unique-image img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Control button (for any buttons in the card) */
+.about-unique-control-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.about-unique-prev {
+  background-color: #cba36b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.about-unique-prev:hover {
+  background-color: #a97c50;
+}
+
+/* Features section */
+.about-unique-features {
+  background-color: #f7f7f7;
+  padding: 60px 0;
+}
+
+.about-unique-features h1,
+.about-unique-features h2 {
+  color: #333;
+  text-align: left;
+}
+
+.about-unique-features h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.about-unique-features h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.about-unique-features p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-unique-flex-space {
+    flex-direction: column;
+  }
+
+  .about-unique-row {
+    margin: 20px 0;
+  }
+
+  .about-unique-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+/* General container styling */
+.about-unique-container {
+  padding: 50px 0;
+  background-color: #f9f9f9;
+}
+
+.about-unique-inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Flexbox layout for rows and columns */
+.about-unique-flex-space {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.about-unique-mtop {
+  margin-top: 50px;
+}
+
+/* Specific layout for AboutCard */
+.about-unique-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Left side image styling */
+.about-unique-image-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.about-unique-image-left img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+/* Heading styling */
+.aboutcard-unique-heading h1 {
+  font-size: 2.5rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.aboutcard-unique-line {
+  width: 100px;
+  height: 4px;
+  background-color: #cba36b;
+  margin: 0 auto;
+  margin-bottom: 40px;
+}
+
+/* Right side text styling */
+.about-unique-text-right {
+  flex: 1;
+  margin-left: 30px;
+}
+
+.about-unique-text-right h2 {
+  font-size: 1.8rem;
+  color: #cba36b;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.about-unique-text-right h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.about-unique-text-right p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-unique-flex-space {
+    flex-direction: column;
+  }
+
+  .about-unique-image-left,
+  .about-unique-text-right {
+    margin: 0;
+    flex: 1 1 100%;
+  }
+
+  .about-unique-text-right {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .about-unique-image-left img {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
