@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import logo from "./logo1.png";
 import "./Footer.css"; // Assuming this is where the CSS will be placed
 
 const Footer = () => {
@@ -30,15 +31,14 @@ const Footer = () => {
           {/* Logo Section */}
           <div className="foote-unique-box foote-unique-logo_box">
             <img
-              src={"Images/logo.png"}
+              src={logo}
               className="foote-unique-footer_logo"
               alt="Footer Logo"
             />
-            <p>4EverBooking Lifestyle</p>
           </div>
 
           {/* Contact Section */}
-          <div className="foote-unique-box">
+          <div className="foote-unique-box-contact">
             <h2>CONTACTS</h2>
             <ul>
               <li>

@@ -1,116 +1,157 @@
-/* Main footer styling */
+/* Footer.css */
 .foote-unique-footer {
-  background-color: #333; /* Dark background for contrast */
-  padding: 40px 20px;
-  color: #ffffff;
-  text-align: left;
+  background-color: #222; /* Dark background */
+  color: #fff; /* White text */
+  padding: 50px 0; /* Padding for breathing space */
+  font-family: 'Roboto', sans-serif; /* Modern font */
 }
 
 .foote-unique-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; /* Ensure responsiveness */
+  width: 90%;
+  max-width: 1200px; /* Ensures content isn't too wide */
+  margin: 0 auto; /* Centering the container */
 }
 
-/* Each box in the footer */
+.foote-unique-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 30px; /* Spacing between grid items */
+}
+
 .foote-unique-box {
-  flex: 1 1 30%; /* Each box takes about 30% of the width */
-  margin: 10px;
+  text-align: left; /* Ensures everything aligns to the left */
 }
 
-/* About us section */
 .foote-unique-box h2 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  color: #cba36b; /* Accent color */
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #cba36b; /* Slightly different color for headings */
 }
 
 .foote-unique-box p {
-  line-height: 1.8;
-  font-size: 1rem;
-  color: #dcdcdc;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #d3d3d3; /* Light grey for text */
 }
 
-.foote-unique-icon {
-  display: flex;
-  gap: 15px;
-}
-
-.foote-unique-icon i {
-  color: #ffffff;
-  font-size: 18px;
-  transition: color 0.3s ease;
-  cursor: pointer;
-}
-
-.foote-unique-icon i:hover {
-  color: #cba36b; /* Hover effect */
-}
-
-/* Logo section */
-.foote-unique-logo_box {
-  text-align: center;
-}
-
-.foote-unique-footer_logo {
-  width: 120px;
-  margin-bottom: 10px;
-}
-
-/* Contacts section */
 .foote-unique-box ul {
   list-style: none;
   padding: 0;
 }
 
 .foote-unique-box li {
-  margin: 10px 0;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #dcdcdc;
+  margin-bottom: 15px;
+  font-size: 16px;
 }
 
-/* Legal section */
-.foote-unique-legal {
-  background-color: #222;
+.foote-unique-box li svg {
+  vertical-align: middle;
+  margin-right: 10px;
+  color: #cba36b; /* Matching color for icons */
+}
+
+.foote-unique-box-contact {
+  text-align: left; /* Ensures everything aligns to the left */
+  margin-left: 30%;
+}
+
+.foote-unique-box-contact h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #cba36b; /* Slightly different color for headings */
+}
+
+.foote-unique-box-contact p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #d3d3d3; /* Light grey for text */
+}
+
+.foote-unique-box-contact ul {
+  list-style: none;
+  padding: 0;
+}
+
+.foote-unique-box-contact li {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.foote-unique-box-contact li svg {
+  vertical-align: middle;
+  margin-right: 10px;
+  color: #cba36b; /* Matching color for icons */
+}
+
+.foote-unique-flex_space {
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
+  margin-top: 15px;
+}
+
+.foote-unique-icon i {
+  font-size: 18px;
+  color: #cba36b;
+  transition: color 0.3s ease;
+}
+
+.foote-unique-icon i:hover {
+  color: #fff; /* Hover effect */
+}
+
+.foote-unique-logo_box {
   text-align: center;
-  padding: 15px 0;
-  color: #dcdcdc;
+}
+
+.foote-unique-footer_logo {
+  width: 350px;
+  height: auto;
+  margin: 15%;
+  margin-right: 15%;
+}
+
+.foote-unique-legal {
+  background-color: #111; /* Darker section for legal */
+  color: #d3d3d3;
+  text-align: center;
+  padding: 20px 0;
 }
 
 .foote-unique-legal p {
-  margin: 0;
+  font-size: 14px;
 }
 
 .foote-unique-legal a {
   color: #cba36b;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .foote-unique-legal a:hover {
   text-decoration: underline;
 }
 
-/* Flexbox adjustments for responsiveness */
-.foote-unique-flex_space {
-  display: flex;
-  margin-top: 6px;
-  justify-content: start;
+/* Media Queries */
+@media (max-width: 768px) {
+  .foote-unique-grid {
+    grid-template-columns: 1fr; /* Stacks items on small screens */
+  }
 }
 
-@media (max-width: 768px) {
-  .foote-unique-container {
-    flex-direction: column;
-    align-items: center;
+@media (max-width: 480px) {
+  .foote-unique-footer {
+    padding: 30px 0;
   }
 
-  .foote-unique-box {
-    text-align: center;
-    flex: 1 1 100%;
+  .foote-unique-box h2 {
+    font-size: 20px;
+  }
+
+  .foote-unique-box p {
+    font-size: 14px;
+  }
+
+  .foote-unique-box li {
+    font-size: 14px;
   }
 }

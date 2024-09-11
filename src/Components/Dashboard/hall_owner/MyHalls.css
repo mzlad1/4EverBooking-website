@@ -2,6 +2,8 @@
 .my-halls-container-modern {
   padding: 20px;
   background-color: #f9fafb;
+  border-radius: 10px;
+  
 }
 
 .my-halls-title {
@@ -20,7 +22,7 @@
 }
 
 /* Individual Hall Card */
-.hall-card-modern {
+.myhall-card-modern {
   background-color: #ffffff;
   border-radius: 10px;
   overflow: hidden;
@@ -28,7 +30,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.hall-card-modern:hover {
+.myhall-card-modern:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
@@ -64,8 +66,9 @@
 /* Buttons */
 .hall-actions-modern {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 20px;
+  gap: 10px;
 }
 
 .button-update-modern,

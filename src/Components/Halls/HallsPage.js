@@ -175,16 +175,26 @@ const HallsPage = () => {
             </p>
           )}
           {halls.map((hall, index) => {
-            const categoryPrices = Object.values(hall.categories || {});
+            const categoryPrices = Object.values(hall.categories || {}).map(
+              (price) => Math.floor(price) // Ensure only integer part of the price is used
+            );
+
             const lowPrice = Math.min(...categoryPrices);
             const highPrice = Math.max(...categoryPrices);
-            const servicePrices = Object.values(hall.services || {});
+
+            const servicePrices = Object.values(hall.services || {}).map(
+              (price) => Math.floor(price) // Ensure service prices also only use the integer part
+            );
+
             const totalServicesPrice = servicePrices.reduce(
               (total, price) => total + price,
               0
             );
-            const highPriceWithServices = highPrice + totalServicesPrice;
-  
+
+            // Calculate highPriceWithServices and ensure it's a valid number
+            const highPriceWithServices =
+              Number(highPrice + totalServicesPrice) || 0;
+
             return (
               <Card
                 className="hall-card-modern"
@@ -221,7 +231,7 @@ const HallsPage = () => {
                   >
                     {hall.name}
                   </Typography>
-  
+
                   <Typography
                     level="title-lg"
                     className="hall-price-modern"
@@ -229,7 +239,7 @@ const HallsPage = () => {
                   >
                     ${lowPrice.toFixed(2)} - ${highPriceWithServices.toFixed(2)}
                   </Typography>
-  
+
                   <div className="rating-stars-modern">
                     {renderStars(hall.averageRating)}
                     <Typography
@@ -239,7 +249,7 @@ const HallsPage = () => {
                       {hall.averageRating.toFixed(1)}
                     </Typography>
                   </div>
-  
+
                   <div className="capacity-location-row-modern">
                     <Typography level="body-sm" className="capacity-modern">
                       <People
@@ -278,7 +288,8 @@ const HallsPage = () => {
               </Card>
             );
           })}
-          {loading && <p className="loading-text-modern">{t("loading")}</p>} {/* Translated loading text */}
+          {loading && <p className="loading-text-modern">{t("loading")}</p>}{" "}
+          {/* Translated loading text */}
           <div ref={loader} style={{ height: "20px" }}></div>
         </div>
       </div>
@@ -290,7 +301,6 @@ const HallsPage = () => {
       />
     </>
   );
-  
 };
 
 export default HallsPage;

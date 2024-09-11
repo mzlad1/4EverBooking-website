@@ -63,20 +63,26 @@ const FilterBar = ({ onFilterChange }) => {
         <div className="filter-bar-label-modern">{t('advanced_search')}</div> {/* Translated "Advanced Search" */}
         
         <FormControl variant="filled" className="form-control-modern">
-          <InputLabel id="city-select-label-modern">{t('city')}</InputLabel> {/* Translated "City" */}
-          <Select
-            labelId="city-select-label-modern"
-            id="city-select-modern"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          >
-            {westBankCities.map((cityKey) => (
-              <MenuItem key={cityKey} value={cityKey}>
-                {t(`west_bank_cities.${cityKey}`)} {/* Translated city */}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+  <InputLabel id="city-select-label-modern">{t('city')}</InputLabel> {/* Translated "City" */}
+  <Select
+    labelId="city-select-label-modern"
+    id="city-select-modern"
+    value={city}
+    onChange={(e) => setCity(e.target.value)}
+  >
+    {/* "Select a city" option - resets the selection */}
+    <MenuItem value="">
+      {t('select_a_city')} {/* Translated "Select a city" */}
+    </MenuItem>
+
+    {westBankCities.map((cityKey) => (
+      <MenuItem key={cityKey} value={cityKey}>
+        {t(`west_bank_cities.${cityKey}`)} {/* Translated city */}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
   
         <FormControl variant="filled" className="form-control-modern">
           <InputLabel id="category-select-label-modern">{t('category')}</InputLabel> {/* Translated "Category" */}

@@ -1,0 +1,83 @@
+.deleted-halls-page-unique {
+    padding: 20px;
+  }
+  
+  .deleted-halls-title-unique {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .deleted-halls-container-unique {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .deleted-hall-card-unique {
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 300px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .deleted-hall-image-unique {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .deleted-hall-name-unique {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+  
+  .deleted-hall-info-unique {
+    margin: 5px 0;
+  }
+  
+  .restore-hall-button-unique {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .restore-hall-button-unique:hover {
+    background-color: #0056b3;
+  }
+  
+  .deleted-halls-no-halls-unique {
+    font-size: 1.2em;
+    color: #777;
+  }
+  
+  .deleted-halls-pagination-controls-unique {
+    margin-top: 20px;
+  }
+  
+  .pagination-button-unique {
+    margin-right: 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .pagination-button-unique.active {
+    background-color: #0056b3;
+  }
+  
+  .pagination-button-unique:hover {
+    background-color: #0056b3;
+  }
+  

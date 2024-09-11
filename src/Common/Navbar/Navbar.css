@@ -61,7 +61,7 @@
 .nav-menu-modern {
   display: flex;
   list-style: none;
-  gap: 30px;
+  gap: 10px;
   transition: all 0.5s ease;
 }
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext"; // Ensure the path is correct
 import "./Navbar.css";
 import LanguageSwitcher from "./LanguageSwitcher"; // Import the Language Switcher
@@ -10,7 +9,6 @@ const Navbar = () => {
   const [click, setClick] = useState(false);
   const [profileImage, setProfileImage] = useState("/Images/user.png"); // Default profile picture
   const { isLoggedIn, logout } = useAuth(); // Use logout directly from the context
-  const history = useHistory();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -51,7 +49,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout(); // Directly use the logout function
-      history.push("/sign-in"); // Redirect to sign-in page after logout
+      window.location.href = "/sign-in"; // Full page refresh after logout
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout Error:", error);
@@ -63,54 +61,54 @@ const Navbar = () => {
       <nav className="navbar-modern">
         <div className="container-modern flex-space-modern">
           <div className="logo-modern">
-            <Link to="/" className="logo-link-modern" onClick={closeMobileMenu}>
+            <a href="/" className="logo-link-modern" onClick={closeMobileMenu}>
               <p>
                 4<span className="logo-highlight-modern">EVER</span>BOOKING
               </p>
-            </Link>
+            </a>
           </div>
-  
+
           <div className="menu-icon-modern" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
           </div>
-  
+
           <ul className={click ? "nav-menu-modern active" : "nav-menu-modern"}>
             <li className="nav-item-modern">
-              <Link to="/" className="nav-link-modern" onClick={closeMobileMenu}>
+              <a href="/" className="nav-link-modern" onClick={closeMobileMenu}>
                 {t("home")}
-              </Link>
+              </a>
             </li>
             <li className="nav-item-modern">
-              <Link
-                to="/about"
+              <a
+                href="/about"
                 className="nav-link-modern"
                 onClick={closeMobileMenu}
               >
                 {t("about_us")}
-              </Link>
+              </a>
             </li>
-  
+
             <li className="nav-item-modern">
-              <Link
-                to="/halls"
+              <a
+                href="/halls"
                 className="nav-link-modern"
                 onClick={closeMobileMenu}
               >
                 {t("halls")}
-              </Link>
+              </a>
             </li>
-  
+
             <li className="nav-item-modern">
-              <Link
-                to="/contact"
+              <a
+                href="/contact"
                 className="nav-link-modern"
                 onClick={closeMobileMenu}
               >
                 {t("contact_us")}
-              </Link>
+              </a>
             </li>
           </ul>
-  
+
           <div className="login-area-modern flex-modern">
             {isLoggedIn ? (
               <li className="profile-dropdown-modern">
@@ -127,36 +125,43 @@ const Navbar = () => {
                 </div>
                 <ul className="dropdown-menu-modern">
                   <li>
-                    <Link to="/dashboard/edit-profile" className="dropdown-link-modern">
+                    <a
+                      href="/dashboard/edit-profile"
+                      className="dropdown-link-modern"
+                      onClick={closeMobileMenu}
+                    >
                       <i className="fas fa-cog"></i> {t("settings")}
-                    </Link>
+                    </a>
                   </li>
                   <li>
-                    <Link className="dropdown-link-modern" onClick={handleLogout}>
+                    <a
+                      className="dropdown-link-modern"
+                      onClick={handleLogout}
+                    >
                       <i className="fas fa-sign-out-alt"></i> {t("logout")}
-                    </Link>
+                    </a>
                   </li>
                 </ul>
               </li>
             ) : (
               <>
                 <li className="login-link-modern">
-                  <Link
-                    to="/sign-in"
+                  <a
+                    href="/sign-in"
                     className="nav-link-modern"
                     onClick={closeMobileMenu}
                   >
                     <i className="fas fa-sign-in-alt"></i> {t("sign_in")}
-                  </Link>
+                  </a>
                 </li>
                 <li className="login-link-modern">
-                  <Link
-                    to="/register"
+                  <a
+                    href="/register"
                     className="nav-link-modern"
                     onClick={closeMobileMenu}
                   >
                     <i className="fas fa-user-plus"></i> {t("register")}
-                  </Link>
+                  </a>
                 </li>
               </>
             )}
@@ -167,7 +172,6 @@ const Navbar = () => {
       </nav>
     </>
   );
-  
 };
 
 export default Navbar;

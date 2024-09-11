@@ -486,6 +486,7 @@ select option:checked {
 
 .hall-location {
   margin-top: 30px;
+  margin-left: 20px;
 }
 
 .hall-location h3 {
@@ -1119,39 +1120,3 @@ input[type="checkbox"]:checked {
   margin-top: 20px; /* Add space above the fallback text */
 }
 
-/* Map container styling */
-.leaflet-container {
-  border-radius: 10px; /* Rounded corners for the map itself */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to match design */
-  overflow: hidden; /* Ensure rounded corners are respected */
-  margin-top: 15px; /* Space above the map */
-  height: 400px; /* Ensure map height is consistent */
-  width: 100%; /* Full width for map */
-}
-
-/* Popup styling */
-.leaflet-popup-content-wrapper {
-  background-color: #faf6f0; /* Light background for the popup */
-  border-radius: 5px; /* Smooth corners for the popup */
-  border: 1px solid #e0d5c2; /* Soft border to match theme */
-  color: #333; /* Text color inside the popup */
-}
-
-.leaflet-popup-content {
-  font-size: 14px;
-  text-align: center; /* Center the popup text */
-}
-
-/* Marker popup styling */
-.leaflet-popup-tip {
-  background: #e0d5c2; /* Popup tip color matching the popup box */
-}
-
-/* Map interaction states */
-.leaflet-marker-icon {
-  transition: transform 0.3s ease;
-}
-
-.leaflet-marker-icon:hover {
-  transform: scale(1.2); /* Slight zoom on marker hover */
-}

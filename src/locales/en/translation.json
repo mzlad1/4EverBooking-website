@@ -205,6 +205,10 @@
   "delete_user": "Delete User",
     "update_hall": "Update Hall",
   "delete_hall": "Delete Hall",
-  "average_rating": "Average Rating"
+  "average_rating": "Average Rating",
+  "select_a_city" : "Select a city",
+  "deleted_halls": "Deleted Halls",
+  "are_you_sure_you_want_to_delete_this_hall": "Are you sure you want to delete this hall?",
+  "confirm_delete": "Confirm Delete"
 
 }

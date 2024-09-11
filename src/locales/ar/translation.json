@@ -204,6 +204,10 @@
   "delete_user": "حذف مستخدم",
   "update_hall": "تعديل القاعة",
   "delete_hall": "حذف القاعة",
-  "average_rating": "التقييم"
+  "average_rating": "التقييم",
+  "select_a_city" : "اختر مدينة",
+  "deleted_halls": "القاعات المحذوفة",
+  "are_you_sure_you_want_to_delete_this_hall": "هل أنت متأكد أنك تريد حذف هذه القاعة؟",
+  "confirm_delete": "تأكيد الحذف"
 
 }

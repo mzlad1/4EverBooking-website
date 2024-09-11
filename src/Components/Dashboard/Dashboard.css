@@ -1,78 +1,126 @@
+/* Root container for dashboard, flex layout for navigation and content */
 .dashboard-container {
   display: flex;
   height: 100vh;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Sidebar styling */
 .dashboard-nav {
-  width: 250px;
+  width: 280px;
   background-color: #2d2f33;
   padding: 20px;
   display: flex;
   flex-direction: column;
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
+/* Navigation list */
 .links-container {
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-top: 30px;
 }
 
+/* Individual nav item */
 .nav-item {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
+/* Styling for nav links */
 .nav-link {
   text-decoration: none;
-  color: #ffffff;
-  font-size: 18px;
-  padding: 10px 15px;
+  color: #e0e0e0;
+  font-size: 16px;
+  padding: 12px 20px;
   display: block;
-  border-radius: 5px;
-  transition: all 0.3s ease;
+  border-radius: 8px;
   position: relative;
   z-index: 1;
   overflow: hidden;
-  width: 100%; /* Make each button take the full width */
-  text-align: center; /* Center the text */
+  transition: all 0.3s ease;
+  width: 100%; /* Full-width button */
+  font-weight: 500;
 }
 
+/* Before pseudo element for hover effects */
 .nav-link::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 300%;
-  height: 300%;
-  background: radial-gradient(circle, rgba(203, 163, 107, 0.4), transparent 60%);
+  width: 140%;
+  height: 140%;
+  background: rgba(255, 255, 255, 0.05); /* Subtle white overlay */
   transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.4s ease-in-out;
   border-radius: 50%;
   z-index: -1;
 }
 
-.nav-link:hover::before,
-.nav-link.active::before {
+/* Hover effect for links */
+.nav-link:hover::before {
   transform: translate(-50%, -50%) scale(1);
 }
 
 .nav-link:hover,
 .nav-link.active {
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(203, 163, 107, 0.6); /* Aura color */
+  background-color: #cba36b; /* Updated accent color */
+  box-shadow: 0 8px 16px rgba(203, 163, 107, 0.3); /* Soft glow */
 }
 
-/* Make it glow with the specified color on hover and active */
+/* Subtle glow on hover */
 .nav-link:hover {
-  text-shadow: 0 0 10px rgba(203, 163, 107, 0.8); /* Glow effect on hover */
+  text-shadow: 0 0 8px rgba(203, 163, 107, 0.8); /* Updated glow effect */
 }
 
+/* Stronger glow when active */
 .nav-link.active {
-  text-shadow: 0 0 20px rgba(203, 163, 107, 1), 0 0 30px rgba(203, 163, 107, 0.9); /* Stronger glow on active */
+  text-shadow: 0 0 15px rgba(203, 163, 107, 1), 0 0 20px rgba(203, 163, 107, 0.9); /* Stronger glow */
 }
 
+/* Content area */
 .dashboard-content {
   flex: 1;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Elevated look */
   overflow-y: auto;
+
+}
+
+/* Headings in content */
+.dashboard-content h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Overall responsive layout */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .dashboard-nav {
+    width: 100%;
+    padding: 15px;
+    flex-direction: row;
+    overflow-x: auto;
+    box-shadow: none;
+  }
+
+  .nav-item {
+    margin-bottom: 0;
+    margin-right: 15px;
+  }
+
+  .dashboard-content {
+    margin: 10px;
+    padding: 20px;
+  }
 }

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./MyHalls.css"; // CSS for styling the halls page
 import { useTranslation } from "react-i18next"; // i18n for translation
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
 const MyHalls = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -9,6 +15,9 @@ const MyHalls = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const [selectedHall, setSelectedHall] = useState(null); // For storing the selected hall for deletion
+  const [openDialog, setOpenDialog] = useState(false); // State to manage dialog visibility
 
   const fetchHalls = async (page) => {
     try {
@@ -67,19 +76,12 @@ const MyHalls = () => {
 
   // Function to handle hall deletion
   const handleDeleteHall = async (hallId) => {
-    const isConfirmed = window.confirm(
-      t("are_you_sure_you_want_to_delete_this_hall")
-    );
-    if (!isConfirmed) {
-      return;
-    }
-  
     try {
       const token = localStorage.getItem("accessToken");
       const ownerId = localStorage.getItem("hallOwnerId");
-  
+
       const deleteUrl = `http://localhost:8080/hallOwner/?id=${hallId}&OwnerId=${ownerId}`;
-  
+
       const response = await fetch(deleteUrl, {
         method: "DELETE",
         headers: {
@@ -87,15 +89,15 @@ const MyHalls = () => {
           Accept: "*/*",
         },
       });
-  
+
       const data = await response.json(); // Parse the response
       if (!response.ok) {
         throw new Error(t("failed_to_delete_hall"));
       }
-  
+
       // Display the response message
       alert(data.message); // This will show the message "Hall deleted successfully"
-  
+
       // Continue with the rest of the deletion logic...
       const updatedHalls = halls.filter((hall) => hall.id !== hallId);
       if (updatedHalls.length < 12 && currentPage < totalPages) {
@@ -104,14 +106,29 @@ const MyHalls = () => {
       } else {
         setHalls(updatedHalls);
       }
-  
     } catch (err) {
       setError(err.message);
     }
   };
+
   const handleUpdateHall = (hallId) => {
     console.log("Update Hall: ", hallId);
     // Add logic to update the hall
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setSelectedHall(null);
+  };
+
+  const handleOpenDialog = (hall) => {
+    setSelectedHall(hall);
+    setOpenDialog(true);
+  };
+
+  const confirmDelete = () => {
+    handleDeleteHall(selectedHall.id);
+    handleDialogClose();
   };
 
   return (
@@ -119,7 +136,7 @@ const MyHalls = () => {
       <h1 className="my-halls-title">{t("my_halls")}</h1>
       <div className="halls-list-modern">
         {halls.map((hall) => (
-          <div key={hall.id} className="hall-card-modern">
+          <div key={hall.id} className="myhall-card-modern">
             <img
               src={getValidImage(hall.image)}
               alt={hall.name}
@@ -149,7 +166,7 @@ const MyHalls = () => {
                 </button>
                 <button
                   className="button-delete-modern"
-                  onClick={() => handleDeleteHall(hall.id)}
+                  onClick={() => handleOpenDialog(hall)}
                 >
                   {t("delete_hall")}
                 </button>
@@ -180,9 +197,26 @@ const MyHalls = () => {
           {t("next")}
         </button>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>{t("confirm_delete")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t("are_you_sure_you_want_to_delete_this_hall")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            {t("cancel")}
+          </Button>
+          <Button onClick={confirmDelete} color="secondary">
+            {t("delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
-  
 };
 
 export default MyHalls;

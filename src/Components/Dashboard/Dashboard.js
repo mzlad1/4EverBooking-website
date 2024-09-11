@@ -7,6 +7,7 @@ import MyHalls from "./hall_owner/MyHalls"; // MyHalls component for hall owners
 import AllUsers from "./admin/AllUsers"; // AllUsers component for admins
 import AddNewAdmin from "./admin/AddNewAdmin"; // AddNewAdmin component for admins
 import DeleteUser from "./admin/DeleteUser"; // DeleteUser component for admins
+import DeletedHalls from "./hall_owner/DeletedHalls"; // DeletedHalls component for hall owners
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./Dashboard.css";
 
@@ -24,8 +25,10 @@ const Dashboard = () => {
           <li className="nav-item nav-edit-profile">
             <NavLink
               to={`${url}/edit-profile`}
-              className={`nav-link edit-profile-link ${({ isActive, isPending }) =>
-                isPending ? "pending" : isActive ? "active" : ""}`}
+              className={`nav-link edit-profile-link ${({
+                isActive,
+                isPending,
+              }) => (isPending ? "pending" : isActive ? "active" : "")}`}
             >
               {t("edit_profile")} {/* Translated "Edit Profile" */}
             </NavLink>
@@ -36,8 +39,10 @@ const Dashboard = () => {
             <li className="nav-item nav-reserved-halls-customer">
               <NavLink
                 to={`${url}/reserved-halls`}
-                className={`nav-link reserved-halls-link-customer ${({ isActive, isPending }) =>
-                  isPending ? "pending" : isActive ? "active" : ""}`}
+                className={`nav-link reserved-halls-link-customer ${({
+                  isActive,
+                  isPending,
+                }) => (isPending ? "pending" : isActive ? "active" : "")}`}
               >
                 {t("reserved_halls")} {/* Translated "Reserved Halls" */}
               </NavLink>
@@ -49,8 +54,10 @@ const Dashboard = () => {
               <li className="nav-item nav-reserved-halls-owner">
                 <NavLink
                   to={`${url}/reserved-halls`}
-                  className={`nav-link reserved-halls-link-owner ${({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""}`}
+                  className={`nav-link reserved-halls-link-owner ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
                 >
                   {t("reserved_halls")} {/* Translated "Reserved Halls" */}
                 </NavLink>
@@ -58,8 +65,10 @@ const Dashboard = () => {
               <li className="nav-item nav-add-new-hall">
                 <NavLink
                   to={`${url}/add-new-hall`}
-                  className={`nav-link add-new-hall-link ${({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""}`}
+                  className={`nav-link add-new-hall-link ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
                 >
                   {t("add_new_hall")} {/* Translated "Add New Hall" */}
                 </NavLink>
@@ -67,10 +76,23 @@ const Dashboard = () => {
               <li className="nav-item nav-my-halls">
                 <NavLink
                   to={`${url}/my-halls`}
-                  className={`nav-link my-halls-link ${({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""}`}
+                  className={`nav-link my-halls-link ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
                 >
                   {t("my_halls")} {/* Translated "My Halls" */}
+                </NavLink>
+              </li>
+              <li className="nav-item nav-deleted-halls">
+                <NavLink
+                  to={`${url}/deleted-halls`}
+                  className={`nav-link my-halls-link ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
+                >
+                  {t("deleted_halls")} {/* Translated "My Halls" */}
                 </NavLink>
               </li>
             </>
@@ -81,8 +103,10 @@ const Dashboard = () => {
               <li className="nav-item nav-all-users">
                 <NavLink
                   to={`${url}/all-users`}
-                  className={`nav-link all-users-link ${({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""}`}
+                  className={`nav-link all-users-link ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
                 >
                   {t("all_users")} {/* Translated "All Users" */}
                 </NavLink>
@@ -90,8 +114,10 @@ const Dashboard = () => {
               <li className="nav-item nav-add-new-admin">
                 <NavLink
                   to={`${url}/add-new-admin`}
-                  className={`nav-link add-new-admin-link ${({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""}`}
+                  className={`nav-link add-new-admin-link ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
                 >
                   {t("add_new_admin")} {/* Translated "Add New Admin" */}
                 </NavLink>
@@ -99,8 +125,10 @@ const Dashboard = () => {
               <li className="nav-item nav-delete-user">
                 <NavLink
                   to={`${url}/delete-user`}
-                  className={`nav-link delete-user-link ${({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""}`}
+                  className={`nav-link delete-user-link ${({
+                    isActive,
+                    isPending,
+                  }) => (isPending ? "pending" : isActive ? "active" : "")}`}
                 >
                   {t("delete_user")} {/* Translated "Delete User" */}
                 </NavLink>
@@ -124,6 +152,7 @@ const Dashboard = () => {
               />
               <Route path={`${path}/add-new-hall`} component={AddNewHall} />
               <Route path={`${path}/my-halls`} component={MyHalls} />
+              <Route path={`${path}/deleted-halls`} component={DeletedHalls} />
             </>
           )}
 

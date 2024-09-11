@@ -74,6 +74,18 @@ input {
 .row {
   width: 50%;
 }
+/* Initially hide the section */
+.hidden-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* When the section becomes visible (on scroll) */
+.hidden-section.active {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 .mtop {
   margin-top: 50px;

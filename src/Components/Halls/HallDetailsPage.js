@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"; // Google Maps components
 import "leaflet/dist/leaflet.css"; // Import Leaflet CSS
 import L from "leaflet"; // Leaflet for custom marker icon
 import DatePicker from "react-datepicker";
@@ -31,6 +31,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
+const containerStyle = {
+  width: "97%",
+  height: "400px",
+  borderRadius: "10px",
+  border: "2px solid #c29d6d",
+};
+
 const HallDetailsPage = () => {
   const { id } = useParams();
   const [hall, setHall] = useState(null);
@@ -46,7 +53,6 @@ const HallDetailsPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(
     calendarDate.getMonth() + 1
   );
-
   const [selectedYear, setSelectedYear] = useState(calendarDate.getFullYear());
   const [isFromDateCalendarVisible, setFromDateCalendarVisible] =
     useState(false);
@@ -60,6 +66,10 @@ const HallDetailsPage = () => {
     categoryError: "",
     fromDateError: "",
     toDateError: "",
+  });
+  // Load Google Maps script using the API key
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyDl-x5DoQXJ23WIsrGFLOFFTX_DcH37160",
   });
 
   const fetchReservedDays = async (year, month) => {
@@ -126,31 +136,35 @@ const HallDetailsPage = () => {
       history.push("/sign-in");
       return; // Exit the function early to prevent further actions
     }
-  
+
     let newErrors = { categoryError: "", fromDateError: "", toDateError: "" };
-  
+
     if (!selectedCategory) {
       newErrors.categoryError = "Please select a category.";
     }
-  
+
     if (!fromDate) {
       newErrors.fromDateError = "Please select a 'from' date.";
     }
-  
+
     if (selectedCategory === "FUNERALS" && !toDate) {
       newErrors.toDateError = "Please select a 'to' date for funerals.";
     }
-  
+
     setErrors(newErrors);
-  
+
     // If there are any errors, don't proceed
-    if (newErrors.categoryError || newErrors.fromDateError || newErrors.toDateError) {
+    if (
+      newErrors.categoryError ||
+      newErrors.fromDateError ||
+      newErrors.toDateError
+    ) {
       return;
     }
-  
+
     // Only pass the category name
     const cleanCategory = selectedCategory.split(" - ")[0]; // Assuming category is in format "Weddings - 100"
-  
+
     // If no errors, proceed with navigation
     const totalPrice = calculateTotalPrice();
     history.push({
@@ -166,7 +180,6 @@ const HallDetailsPage = () => {
       },
     });
   };
-  
 
   const tileDisabled = ({ date, view }) => {
     const today = new Date();
@@ -200,12 +213,12 @@ const HallDetailsPage = () => {
   const calculateTotalPrice = () => {
     if (!hall || !selectedCategory) return 0; // Ensure hall and category exist
 
-    // Get the price of the selected category
-    const categoryPrice = hall.categories[selectedCategory] || 0;
+    // Get the price of the selected category and ensure it's a number
+    const categoryPrice = Math.floor(hall.categories[selectedCategory] || 0);
 
-    // Calculate the total price for selected services
+    // Calculate the total price for selected services, ensuring valid numbers
     const totalServicesPrice = selectedServices.reduce((total, service) => {
-      return total + service.price; // Add the price of each selected service
+      return total + Math.floor(service.price || 0); // Use Math.floor() to ensure no decimal places
     }, 0);
 
     // Return the sum of category price and total services price
@@ -274,17 +287,22 @@ const HallDetailsPage = () => {
   const calculatePriceRange = () => {
     if (!hall || !hall.categories || !hall.services) return "N/A";
 
-    const categoryPrices = Object.values(hall.categories);
+    // Ensure category prices are valid numbers
+    const categoryPrices = Object.values(hall.categories).map(
+      (price) => Math.floor(price || 0) // Use Math.floor() to remove any decimal places
+    );
     const lowPrice = Math.min(...categoryPrices);
     const highPrice = Math.max(...categoryPrices);
 
-    const totalServicesPrice = Object.values(hall.services).reduce(
-      (total, price) => total + price,
+    // Ensure service prices are valid numbers
+    const totalServicesPrice = Object.values(hall.services || {}).reduce(
+      (total, price) => total + Math.floor(price || 0), // Use Math.floor() to ensure no decimal places
       0
     );
 
     const highPriceWithServices = highPrice + totalServicesPrice;
 
+    // Return price range as a formatted string
     return (
       <span>
         <AttachMoney style={{ color: "#c29d6d", marginRight: "5px" }} />
@@ -338,7 +356,7 @@ const HallDetailsPage = () => {
     setFromDateCalendarVisible(false); // Close From date calendar if it's open
   };
 
-  if (!hall) return <p>Loading...</p>;
+  if (!hall || !isLoaded) return <p>Loading...</p>;
 
   return (
     <div className="hall-details-page">
@@ -458,20 +476,17 @@ const HallDetailsPage = () => {
           />
         </div>
 
+        {/* Google Maps Section */}
         <div className="hall-location">
           <h3>{t("location")}</h3>
-          {hall && hall.longitude && hall.latitude ? (
-            <MapContainer
-              center={[hall.latitude, hall.longitude]}
+          {hall.latitude && hall.longitude ? (
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={{ lat: hall.latitude, lng: hall.longitude }}
               zoom={15}
-              scrollWheelZoom={false}
-              style={{ height: "400px", width: "100%" }}
             >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <Marker position={[hall.latitude, hall.longitude]}>
-                <Popup>{hall.name}</Popup>
-              </Marker>
-            </MapContainer>
+              <Marker position={{ lat: hall.latitude, lng: hall.longitude }} />
+            </GoogleMap>
           ) : (
             <p>{t("location_not_available")}</p>
           )}
