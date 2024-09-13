@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./MyHalls.css"; // CSS for styling the halls page
+import { useRouteMatch } from "react-router-dom"; // Import useRouteMatch hook
+import { useHistory } from "react-router-dom"; // Import navigation hook
 import { useTranslation } from "react-i18next"; // i18n for translation
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import "./MyHalls.css"; // CSS for styling the halls page
 
 const MyHalls = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -15,9 +17,10 @@ const MyHalls = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const history = useHistory(); // Initialize navigation hook
   const [selectedHall, setSelectedHall] = useState(null); // For storing the selected hall for deletion
   const [openDialog, setOpenDialog] = useState(false); // State to manage dialog visibility
+  const { url } = useRouteMatch(); // This gives you the base URL
 
   const fetchHalls = async (page) => {
     try {
@@ -112,8 +115,7 @@ const MyHalls = () => {
   };
 
   const handleUpdateHall = (hallId) => {
-    console.log("Update Hall: ", hallId);
-    // Add logic to update the hall
+    history.push(`update-hall/${hallId}`); // Construct the full path
   };
 
   const handleDialogClose = () => {

@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('refreshToken');
         setIsLoggedIn(false);
     };
-
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
             {children}

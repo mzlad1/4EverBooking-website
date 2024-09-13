@@ -1,0 +1,72 @@
+/* Main container for Unauthorized page */
+.unauthorized-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #1d1f21, #2e3236);
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+}
+
+.unauthorized-content {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 50px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.unauthorized-heading {
+  font-size: 8rem;
+  color: #c0392b;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.unauthorized-subheading {
+  font-size: 2rem;
+  color: #ecf0f1;
+  margin-bottom: 10px;
+}
+
+.unauthorized-message {
+  font-size: 1.2rem;
+  color: #bdc3c7;
+  margin-bottom: 30px;
+}
+
+.unauthorized-btn {
+  font-size: 1rem;
+  padding: 10px 20px;
+  background-color: #2980b9;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.unauthorized-btn:hover {
+  background-color: #3498db;
+}
+
+@media (max-width: 768px) {
+  .unauthorized-heading {
+    font-size: 5rem;
+  }
+
+  .unauthorized-subheading {
+    font-size: 1.5rem;
+  }
+
+  .unauthorized-message {
+    font-size: 1rem;
+  }
+
+  .unauthorized-btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}

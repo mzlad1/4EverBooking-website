@@ -1,5 +1,5 @@
 /* Slider container with fade-in effect */
-.slider2 {
+.slider {
   position: relative;
   width: 100%;
   height: auto; /* Adjust based on your needs */
@@ -7,6 +7,70 @@
 }
 
 
+/* Control buttons styling */
+.control-btn {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-50%);
+  z-index: 10;
+  animation: fadeIn 1s ease-in-out forwards;
+  opacity: 0;
+}
+
+/* Rest of your styles here... */
+
+
+.control-btn button {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.control-btn button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.control-btn button i {
+  color: #fff; /* Default color of the arrows */
+  font-size: 2rem;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.control-btn button:hover i {
+  color: #cba36b; /* Change arrow color to golden on hover */
+}
+
+.prev {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.next {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* Slide styling */
+.slide {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* Welcome message styling */
 .welcome-message {
   position: absolute;
   top: 50%; /* Center vertically */
@@ -20,7 +84,6 @@
   padding: 1em; /* Padding for aesthetics */
   border-radius: 5px; /* Rounded corners for the welcome message box */
   animation: fadeInBackground 1.5s ease-in-out forwards; /* Slide-up animation */
-
 }
 
 /* Welcome message heading with fade-in delay */
@@ -44,97 +107,68 @@
   opacity: 0;
 }
 
-/* Search overlay with fade-in */
-.search-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
-  display: flex;
-  align-items: center; /* Center vertically in the viewport */
-  justify-content: center; /* Center horizontally in the viewport */
-  z-index: 1000; /* Ensure it's on top of other content */
-  animation: fadeIn 1s ease-in-out; /* Fade-in animation for the overlay */
-  opacity: 0;
-}
-
 /* Search container with subtle slide-up */
 .search1-container {
   display: flex;
-  width: 100%; /* Maintains the width to 50% of its container */
-  justify-content: space-around;
-  border-radius: 15px;
-  background-color: #ffffff; /* Adjust based on your color theme */
-  box-shadow: 4px 6px 10px rgba(0, 0, 0, 0.1);
-  margin: 20px auto; /* Centers the filter bar horizontally */
-  animation: fadeIn 1s ease-out forwards; /* Slide-up animation */
-  opacity: 0;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin: 20px auto;
+  z-index: 1000; /* Ensure it's above other content */
 }
 
-/* Search button with hover transition */
+/* Initially hidden search input */
+.search1-container input {
+  width: 0;
+  opacity: 0;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid white;
+  border-radius: 5px;
+  background-color: transparent;
+  color: white;
+  transition: width 0.4s ease, opacity 0.4s ease;
+}
+
+.search1-container input.visible {
+  width: 300px; /* Define the width when visible */
+  height: 50px;
+  opacity: 1;
+  color: #000;
+  background-color: rgba(255, 255, 255, 0.9); /* White background when visible */
+  border: 2px solid #cba36b; /* Match the button color */
+}
+
+/* Circular Search button with hover transition */
 .search-button {
-  padding: 10px 20px;
+  padding: 10px;
   background-color: #cba36b; /* Golden color background */
   border: none;
   cursor: pointer;
-  color: white; /* White text color */
-  border-top-right-radius: 5px; /* Rounded right corner */
-  border-bottom-right-radius: 5px; /* Rounded right corner */
-  transition: background-color 0.3s, transform 0.3s ease; /* Smooth transition for hover effect */
+  color: white;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, transform 0.3s ease;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for better button visibility */
 }
 
 .search-button:hover {
   background-color: #ec971f; /* Darker shade on hover */
-  transform: translateY(-3px); /* Slight lift effect */
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Add subtle shadow on hover */
+  transform: translateY(-5px); /* Slight lift effect */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
 }
 
-/* Control buttons with fade-in */
-.control-btn {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  z-index: 10;
-  animation: fadeIn 1s ease-in-out forwards; /* Fade-in effect for the control buttons */
-  opacity: 0;
+.search-button i {
+  transition: color 0.3s ease; /* Smooth icon color transition */
 }
 
-.control-btn button {
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.control-btn button i {
-  color: #fff; /* Default color of the arrows */
-  font-size: 2rem; /* Adjust arrow size */
-  transition: color 0.3s ease; /* Smooth color transition */
-}
-
-.control-btn button:hover {
-  background-color: rgba(0, 0, 0, 0.7); /* Darken background on hover */
-}
-
-.control-btn button:hover i {
-  color: #cba36b; /* Change arrow color to golden on hover */
-}
-
-.prev {
-  position: absolute;
-  left: 0;
-  transform: translateY(-50%);
-}
-
-.next {
-  position: absolute;
-  right: 0;
-  transform: translateY(-50%);
+.search-button:hover i {
+  color: #fff; /* Ensure the icon stays white on hover */
 }
 
 /* Keyframes for fade-in animation */
@@ -146,8 +180,6 @@
     opacity: 1;
   }
 }
-
-
 
 /* Keyframes for background fade-in */
 @keyframes fadeInBackground {

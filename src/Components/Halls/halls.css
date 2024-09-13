@@ -5,26 +5,25 @@ body {
 }
 
 /* Search-body to wrap the search bar and results */
+/* Search Bar - Centering and Spacing */
 .search-body-modern {
   width: 100%;
   background-color: #faf6f0;
   display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center content horizontally */
-  gap: 20px; /* Spacing between the search bar and other elements */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Light shadow for depth */
-  border-radius: 12px; /* Slight rounding to match other components */
+  justify-content: center;
+  padding: 20px 0; /* Add padding for better spacing */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
 }
 
 .search-container-modern {
-  width: 80%; /* Adjust the width as needed */
-  margin: 30px auto;
-  position: relative; /* Position the icon relative to the input */
+  width: 60%; /* Reduced width to center the search bar on larger screens */
+  position: relative;
   display: flex;
   justify-content: center;
-  border-radius: 50px; /* Rounded input */
-  box-shadow: none; /* Remove the shadow to remove the behind box */
-  background-color: transparent; /* Remove background to make it transparent */
+  border-radius: 50px;
+  box-shadow: none;
+  background-color: transparent;
 }
 
 .search-container-modern input {
@@ -208,3 +207,7 @@ body {
     font-size: 18px;
   }
 }
+/* Modern Page Layout Adjustments */
+
+
+

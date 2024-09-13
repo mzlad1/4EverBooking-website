@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom"; // Import useHistory
+import { useHistory } from "react-router-dom"; 
 import Data from "./Data";
 import "./slide.css";
-import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { useTranslation } from "react-i18next"; 
 
 const Home = () => {
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation(); 
   const [current, setCurrent] = useState(0);
-  const [searchTerm, setSearchTerm] = useState(""); // State to hold search term
+  const [searchTerm, setSearchTerm] = useState(""); 
+  const [showSearchInput, setShowSearchInput] = useState(false); 
   const length = Data.length;
-  const history = useHistory(); // Initialize useHistory
+  const history = useHistory();
 
   const nextSlide = () => {
     setCurrent(current === length - 1 ? 0 : current + 1);
@@ -20,17 +21,16 @@ const Home = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value); // Update the search term state
+    setSearchTerm(e.target.value); 
   };
 
   const handleSearch = () => {
-    // Navigate to halls page and pass the search term as a query parameter
-    history.push(`/halls?search=${encodeURIComponent(searchTerm)}`);
+    if (!showSearchInput) {
+      setShowSearchInput(true); 
+    } else {
+      history.push(`/halls?search=${encodeURIComponent(searchTerm)}`);
+    }
   };
-
-  if (!Array.isArray(Data) || Data.length <= 0) {
-    return null;
-  }
 
   return (
     <>
@@ -60,15 +60,15 @@ const Home = () => {
         ))}
 
         <div className="welcome-message">
-          <h1>{t('welcome_message')}</h1> {/* Translated welcome message */}
-          <p>{t('find_best_halls_home')}</p> {/* Translated "Find The Best Halls For Your Event." */}
+          <h1>{t('welcome_message')}</h1>
+          <p>{t('find_best_halls_home')}</p>
           <div className="search1-container">
             <input
               type="text"
-              placeholder={t('search_placeholder')} // Translated placeholder text
+              placeholder={t('search_placeholder')}
               value={searchTerm}
               onChange={handleSearchChange}
-              autoFocus
+              className={showSearchInput ? "visible" : ""}
             />
             <button className="search-button" onClick={handleSearch}>
               <i className="fas fa-search"></i>

@@ -16,6 +16,7 @@
   align-items: center;
 }
 
+/* Flexbox Containers */
 .flex-space-modern {
   display: flex;
   justify-content: space-between;
@@ -170,8 +171,41 @@
   margin-right: 5px;
 }
 
-/* Media Query for Mobile Menu */
+/* Responsive Layout Changes */
+/* Media Query for Tablets and Larger Mobile Devices */
+@media screen and (max-width: 992px) {
+  .container-modern {
+    max-width: 960px;
+    padding: 0 15px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-menu-modern {
+    gap: 8px;
+  }
+
+  .nav-link-modern {
+    font-size: 0.9rem;
+  }
+
+  .profile-text-modern {
+    font-size: 0.9rem;
+  }
+
+  .login-link-modern {
+    margin-left: 10px;
+  }
+}
+
+/* Media Query for Mobile Devices */
 @media screen and (max-width: 768px) {
+  .container-modern {
+    max-width: 100%;
+    padding: 0 10px;
+    flex-direction: column;
+  }
+
   .nav-menu-modern {
     display: none;
     flex-direction: column;
@@ -179,6 +213,7 @@
     position: absolute;
     top: 70px;
     right: 0;
+    gap: 30px;
     width: 100%;
     height: calc(100vh - 70px);
     justify-content: center;
@@ -193,4 +228,73 @@
     padding: 20px;
     font-size: 1.2rem;
   }
+
+  .profile-image-modern {
+    width: 30px;
+    height: 30px;
+  }
+
+  .profile-text-modern {
+    font-size: 0.8rem;
+  }
+}
+/* Keyframes for Fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Logo Fade-in */
+.logo-modern {
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+  animation-delay: 0.2s; /* Fade in after 0.2s */
+}
+
+/* Navigation Links Fade-in */
+.nav-link-modern {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+.nav-item-modern:nth-child(1) .nav-link-modern {
+  animation-delay: 0.3s; /* Slight stagger effect */
+}
+
+.nav-item-modern:nth-child(2) .nav-link-modern {
+  animation-delay: 0.4s;
+}
+
+.nav-item-modern:nth-child(3) .nav-link-modern {
+  animation-delay: 0.5s;
+}
+
+.nav-item-modern:nth-child(4) .nav-link-modern {
+  animation-delay: 0.6s;
+}
+
+
+
+/* Login/Register Links Fade-in */
+.login-link-modern {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+.login-link-modern:nth-child(1) {
+  animation-delay: 0.7s; /* Login link fades in after language switcher */
+}
+
+.login-link-modern:nth-child(2) {
+  animation-delay: 0.8s; /* Register link fades in after login */
+}
+/* Language Switcher Fade-in */
+.language-switcher-modern {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 0.9s; /* Fade in after the menu */
 }

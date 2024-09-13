@@ -2,7 +2,7 @@ import "./App.css";
 import Navbar from "./Common/Navbar/Navbar";
 import Home from "./Components/pages/Home";
 import About from "./Components/About/About";
-
+import Unauthorized from "./Components/Dashboard/Unauthorized"; // Error page for unauthorized access
 //import Destinations from "./Components/Destinations/Destinations"
 //import DHome from "./Components/Destinations/Home"
 import ReservationSuccess from "./Components/Halls/ReservationSuccess";
@@ -32,6 +32,7 @@ function App() {
         <Router>
           <Navbar />
           <Switch>
+            <Route path="/unauthorized" component={Unauthorized} />
             <Route path="/" exact component={Home} />
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/about" exact component={About} />

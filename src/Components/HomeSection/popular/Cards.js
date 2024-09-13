@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React,{useState,useEffect} from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -48,7 +48,20 @@ const PrevArrow = (props) => {
   );
 };
 
+// HallSlider Component (Updated to skip videos)
 const HallSlider = ({ images }) => {
+  // Define image extensions to filter valid image files
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+
+  // Function to check if the URL is an image by matching its extension
+  const isImage = (url) => {
+    const extension = url.split(".").pop().toLowerCase(); // Get file extension
+    return imageExtensions.includes(extension); // Check if it's an image extension
+  };
+
+  // Filter the images array to skip any video files
+  const filteredImages = images.filter(isImage);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -62,7 +75,7 @@ const HallSlider = ({ images }) => {
 
   return (
     <Slider {...settings}>
-      {images.map((imageUrl, index) => (
+      {filteredImages.map((imageUrl, index) => (
         <div key={index}>
           <img src={imageUrl} alt={`Slide ${index + 1}`} />
         </div>
@@ -71,6 +84,7 @@ const HallSlider = ({ images }) => {
   );
 };
 
+// Main Cards Component
 const Cards = () => {
   const { t } = useTranslation(); // Initialize translation hook
   const [popularHalls, setPopularHalls] = useState([]);
@@ -156,18 +170,24 @@ const Cards = () => {
     window.location.href = `/hall/${hallId}`;
   };
 
-  // Function to calculate price range
   const calculatePriceRange = (categories, services) => {
-    const categoryPrices = Object.values(categories);
+    const categoryPrices = Object.values(categories).map(Number).filter(price => !isNaN(price));
     const lowPrice = Math.min(...categoryPrices);
     const highPrice = Math.max(...categoryPrices);
-    const totalServicesPrice = Object.values(services).reduce(
-      (total, price) => total + price,
-      0
-    );
+  
+    const totalServicesPrice = Object.values(services)
+      .map(Number)
+      .filter(price => !isNaN(price))
+      .reduce((total, price) => total + price, 0);
+  
+    if (isNaN(lowPrice) || isNaN(highPrice)) {
+      return 'Invalid category prices';
+    }
+  
     const highPriceWithServices = highPrice + totalServicesPrice;
     return `$${lowPrice.toFixed(2)} - $${highPriceWithServices.toFixed(2)}`;
   };
+  
 
   // Function to translate West Bank cities
   const translateLocation = (location) => {

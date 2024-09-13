@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./DeletedHalls.css";
 
@@ -15,7 +15,7 @@ const DeletedHallsPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [openDialog, setOpenDialog] = useState(false);
   const [hallToRestore, setHallToRestore] = useState(null);
-
+  const { t } = useTranslation(); // Initialize translation hook
   const accessToken = localStorage.getItem("accessToken");
   const hallOwnerId = localStorage.getItem("hallOwnerId");
 
@@ -28,8 +28,8 @@ const DeletedHallsPage = () => {
         {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Accept": "*/*",
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "*/*",
           },
         }
       );
@@ -68,8 +68,8 @@ const DeletedHallsPage = () => {
         {
           method: "PUT",
           headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Accept": "*/*",
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "*/*",
           },
         }
       );
@@ -106,13 +106,27 @@ const DeletedHallsPage = () => {
         <div className="deleted-halls-container-unique">
           {deletedHalls.map((hall) => (
             <div key={hall.id} className="deleted-hall-card-unique">
-              <img src={hall.image.split(",")[0]} alt={hall.name} className="deleted-hall-image-unique" />
+              <img
+                src={hall.image.split(",")[0]}
+                alt={hall.name}
+                className="deleted-hall-image-unique"
+              />
               <h2 className="deleted-hall-name-unique">{hall.name}</h2>
-              <p className="deleted-hall-info-unique"><strong>Location:</strong> {hall.location}</p>
-              <p className="deleted-hall-info-unique"><strong>Capacity:</strong> {hall.capacity}</p>
-              <p className="deleted-hall-info-unique"><strong>Description:</strong> {hall.description}</p>
-              <p className="deleted-hall-info-unique"><strong>Phone:</strong> {hall.phone}</p>
-              <p className="deleted-hall-info-unique"><strong>Average Rating:</strong> {hall.averageRating}</p>
+              <p className="deleted-hall-info-unique">
+                <strong>Location:</strong> {hall.location}
+              </p>
+              <p className="deleted-hall-info-unique">
+                <strong>Capacity:</strong> {hall.capacity}
+              </p>
+              <p className="deleted-hall-info-unique">
+                <strong>Description:</strong> {hall.description}
+              </p>
+              <p className="deleted-hall-info-unique">
+                <strong>Phone:</strong> {hall.phone}
+              </p>
+              <p className="deleted-hall-info-unique">
+                <strong>Average Rating:</strong> {hall.averageRating}
+              </p>
               <button
                 className="restore-hall-button-unique"
                 onClick={() => openRestoreDialog(hall)}
@@ -129,7 +143,9 @@ const DeletedHallsPage = () => {
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
-            className={`pagination-button-unique ${page === index + 1 ? 'active' : ''}`}
+            className={`pagination-button-unique ${
+              page === index + 1 ? "active" : ""
+            }`}
             onClick={() => handlePageChange(index + 1)}
           >
             {index + 1}

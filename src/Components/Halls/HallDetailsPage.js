@@ -71,12 +71,13 @@ const HallDetailsPage = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyDl-x5DoQXJ23WIsrGFLOFFTX_DcH37160",
   });
+  const [visibleFeedbackCount, setVisibleFeedbackCount] = useState(2); // State to control visible feedback items
 
   const fetchReservedDays = async (year, month) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(
-        `http://localhost:8080/customer/${id}/reserved-days?year=${year}&month=${month}`,
+        `http://localhost:8080/whitelist/${id}/reserved-days?year=${year}&month=${month}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -356,6 +357,11 @@ const HallDetailsPage = () => {
     setFromDateCalendarVisible(false); // Close From date calendar if it's open
   };
 
+  const handleLoadMoreFeedback = () => {
+    // Increment the number of visible feedbacks by 2
+    setVisibleFeedbackCount((prevCount) => prevCount + 2);
+  };
+
   if (!hall || !isLoaded) return <p>Loading...</p>;
 
   return (
@@ -489,6 +495,37 @@ const HallDetailsPage = () => {
             </GoogleMap>
           ) : (
             <p>{t("location_not_available")}</p>
+          )}
+        </div>
+        {/* Hall details content */}
+        <div className="hall-feedback-section">
+          <h3>{t("feedback")}</h3>
+          {hall.hallRatings && hall.hallRatings.length > 0 ? (
+            <div className="feedback-list">
+              {hall.hallRatings
+                .slice(0, visibleFeedbackCount)
+                .map((feedback) => (
+                  <div key={feedback.id} className="feedback-item">
+                    <div className="feedback-header">
+                      {renderStars(feedback.rating)}{" "}
+                      <span className="feedback-date">
+                        {new Date(feedback.createdDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="feedback-comment">{feedback.comment}</p>
+                  </div>
+                ))}
+              {visibleFeedbackCount < hall.hallRatings.length && (
+                <button
+                  className="load-more-button"
+                  onClick={handleLoadMoreFeedback}
+                >
+                  {t("show_more")} {/* Translation for "Show More" */}
+                </button>
+              )}
+            </div>
+          ) : (
+            <p>{t("no_feedback")}</p>
           )}
         </div>
       </div>

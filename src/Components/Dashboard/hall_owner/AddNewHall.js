@@ -5,6 +5,7 @@ import {
   Autocomplete,
   useJsApiLoader,
 } from "@react-google-maps/api";
+import { History } from "react-router-dom";
 import "./AddNewHall.css";
 
 const libraries = ["places"]; // Required for Places Autocomplete
@@ -258,248 +259,250 @@ const AddNewHall = () => {
   ];
 
   return (
-    <div className="add-hall-unique-container">
-      <h1 className="add-hall-unique-title">Add a New Hall</h1>
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      <form className="add-hall-unique-form" onSubmit={handleSubmit}>
-        {/* Section 1: Basic Information */}
-        <div className="add-hall-box">
-          <h2 className="section-title-unique">Basic Information</h2>
-          <div className="form-group-unique">
-            <label htmlFor="name" className="input-label-unique">
-              Hall Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="input-field-unique"
-              name="name"
-              value={hallData.name}
-              onChange={handleInputChange}
-              placeholder="Enter hall name"
-            />
-          </div>
-
-          <div className="form-group-unique">
-            <label htmlFor="capacity" className="input-label-unique">
-              Capacity
-            </label>
-            <input
-              type="number"
-              id="capacity"
-              className="input-field-unique"
-              name="capacity"
-              value={hallData.capacity}
-              onChange={handleInputChange}
-              placeholder="Enter capacity"
-            />
-          </div>
-
-          <div className="form-group-unique">
-            <label htmlFor="phone" className="input-label-unique">
-              Phone
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              className="input-field-unique"
-              name="phone"
-              value={hallData.phone}
-              onChange={handleInputChange}
-              placeholder="Enter phone number"
-            />
-          </div>
-
-          <div className="form-group-unique">
-            <label htmlFor="description" className="input-label-unique">
-              Description
-            </label>
-            <textarea
-              id="description"
-              className="input-textarea-unique"
-              name="description"
-              value={hallData.description}
-              onChange={handleInputChange}
-              placeholder="Enter description"
-            />
-          </div>
-        </div>
-
-        {/* Section 2: Location Information */}
-        <div className="add-hall-box">
-          <h2 className="section-title-unique">Location Information</h2>
-
-          {/* City Selection Dropdown */}
-          <div className="form-group-unique">
-            <label htmlFor="city" className="input-label-unique">
-              City
-            </label>
-            <select
-              id="city"
-              className="input-field-unique"
-              name="city"
-              value={hallData.city}
-              onChange={handleInputChange}
-            >
-              <option value="">Select a city</option>
-              {westBankCities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Location Search Input */}
-          <div className="form-group-unique">
-            <label htmlFor="location" className="input-label-unique">
-              Location
-            </label>
-            <Autocomplete
-              onLoad={(autocomplete) => setAutocomplete(autocomplete)}
-              onPlaceChanged={handlePlaceSelect}
-            >
+      <div className="add-hall-unique-container">
+        <h1 className="add-hall-unique-title">Add a New Hall</h1>
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        <form className="add-hall-unique-form" onSubmit={handleSubmit}>
+          {/* Section 1: Basic Information */}
+          <div className="add-hall-box">
+            <h2 className="section-title-unique">Basic Information</h2>
+            <div className="form-group-unique">
+              <label htmlFor="name" className="input-label-unique">
+                Hall Name
+              </label>
               <input
                 type="text"
-                id="location"
+                id="name"
                 className="input-field-unique"
-                placeholder="Search location"
+                name="name"
+                value={hallData.name}
+                onChange={handleInputChange}
+                placeholder="Enter hall name"
               />
-            </Autocomplete>
-          </div>
+            </div>
 
-          {/* Google Map Section */}
-          <div className="map-container">
-            <GoogleMap
-              mapContainerStyle={{ width: "100%", height: "300px" }}
-              center={markerPosition}
-              zoom={13}
-              onClick={handleMapClick}
-              onLoad={(map) => setMap(map)}
-            >
-              <Marker position={markerPosition} />
-            </GoogleMap>
-          </div>
-
-          <div className="form-group-unique">
-            <label htmlFor="latitude" className="input-label-unique">
-              Latitude
-            </label>
-            <input
-              type="number"
-              id="latitude"
-              className="input-field-unique"
-              name="latitude"
-              value={hallData.latitude}
-              readOnly
-              placeholder="Selected latitude"
-            />
-          </div>
-
-          <div className="form-group-unique">
-            <label htmlFor="longitude" className="input-label-unique">
-              Longitude
-            </label>
-            <input
-              type="number"
-              id="longitude"
-              className="input-field-unique"
-              name="longitude"
-              value={hallData.longitude}
-              readOnly
-              placeholder="Selected longitude"
-            />
-          </div>
-        </div>
-
-        {/* Section 3: Services */}
-        <div className="add-hall-box">
-          <h2 className="section-title-unique">Services</h2>
-          {hallData.services.map((service, index) => (
-            <div key={index} className="dynamic-service-unique">
-              <input
-                type="text"
-                className="input-field-unique"
-                value={service.serviceName}
-                onChange={(e) => handleServiceChange(e, index, "serviceName")}
-                placeholder={`Service #${index + 1}`}
-              />
+            <div className="form-group-unique">
+              <label htmlFor="capacity" className="input-label-unique">
+                Capacity
+              </label>
               <input
                 type="number"
+                id="capacity"
                 className="input-field-unique"
-                value={service.servicePrice}
-                onChange={(e) => handleServiceChange(e, index, "servicePrice")}
-                placeholder="Service Price"
+                name="capacity"
+                value={hallData.capacity}
+                onChange={handleInputChange}
+                placeholder="Enter capacity"
               />
-              <button
-                type="button"
-                className="remove-service-btn-unique"
-                onClick={() => removeService(index)}
-              >
-                Remove
-              </button>
             </div>
-          ))}
-          <button
-            type="button"
-            className="add-service-btn-unique"
-            onClick={addService}
-          >
-            Add Service
-          </button>
-        </div>
 
-        {/* Section 4: Categories with Price Inputs */}
-        <div className="add-hall-box">
-          <h2 className="section-title-unique">Categories</h2>
-          <div className="category-checkboxes-unique">
-            {["WEDDINGS", "BIRTHDAYS", "MEETINGS", "PARTIES", "FUNERALS"].map(
-              (category) => (
-                <div key={category} className="checkbox-item-unique">
-                  <input
-                    type="checkbox"
-                    id={`category-${category}`}
-                    value={category}
-                    onChange={handleCategoryChange}
-                    checked={categoryPrices.hasOwnProperty(category)}
-                  />
-                  <label htmlFor={`category-${category}`}>{category}</label>
+            <div className="form-group-unique">
+              <label htmlFor="phone" className="input-label-unique">
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                className="input-field-unique"
+                name="phone"
+                value={hallData.phone}
+                onChange={handleInputChange}
+                placeholder="Enter phone number"
+              />
+            </div>
 
-                  {/* Show price input if category is selected */}
-                  {categoryPrices.hasOwnProperty(category) && (
+            <div className="form-group-unique">
+              <label htmlFor="description" className="input-label-unique">
+                Description
+              </label>
+              <textarea
+                id="description"
+                className="input-textarea-unique"
+                name="description"
+                value={hallData.description}
+                onChange={handleInputChange}
+                placeholder="Enter description"
+              />
+            </div>
+          </div>
+
+          {/* Section 2: Location Information */}
+          <div className="add-hall-box">
+            <h2 className="section-title-unique">Location Information</h2>
+
+            {/* City Selection Dropdown */}
+            <div className="form-group-unique">
+              <label htmlFor="city" className="input-label-unique">
+                City
+              </label>
+              <select
+                id="city"
+                className="input-field-unique"
+                name="city"
+                value={hallData.city}
+                onChange={handleInputChange}
+              >
+                <option value="">Select a city</option>
+                {westBankCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Location Search Input */}
+            <div className="form-group-unique">
+              <label htmlFor="location" className="input-label-unique">
+                Location
+              </label>
+              <Autocomplete
+                onLoad={(autocomplete) => setAutocomplete(autocomplete)}
+                onPlaceChanged={handlePlaceSelect}
+              >
+                <input
+                  type="text"
+                  id="location"
+                  className="input-field-unique"
+                  placeholder="Search location"
+                />
+              </Autocomplete>
+            </div>
+
+            {/* Google Map Section */}
+            <div className="map-container">
+              <GoogleMap
+                mapContainerStyle={{ width: "100%", height: "300px" }}
+                center={markerPosition}
+                zoom={13}
+                onClick={handleMapClick}
+                onLoad={(map) => setMap(map)}
+              >
+                <Marker position={markerPosition} />
+              </GoogleMap>
+            </div>
+
+            <div className="form-group-unique">
+              <label htmlFor="latitude" className="input-label-unique">
+                Latitude
+              </label>
+              <input
+                type="number"
+                id="latitude"
+                className="input-field-unique"
+                name="latitude"
+                value={hallData.latitude}
+                readOnly
+                placeholder="Selected latitude"
+              />
+            </div>
+
+            <div className="form-group-unique">
+              <label htmlFor="longitude" className="input-label-unique">
+                Longitude
+              </label>
+              <input
+                type="number"
+                id="longitude"
+                className="input-field-unique"
+                name="longitude"
+                value={hallData.longitude}
+                readOnly
+                placeholder="Selected longitude"
+              />
+            </div>
+          </div>
+
+          {/* Section 3: Services */}
+          <div className="add-hall-box">
+            <h2 className="section-title-unique">Services</h2>
+            {hallData.services.map((service, index) => (
+              <div key={index} className="dynamic-service-unique">
+                <input
+                  type="text"
+                  className="input-field-unique"
+                  value={service.serviceName}
+                  onChange={(e) => handleServiceChange(e, index, "serviceName")}
+                  placeholder={`Service #${index + 1}`}
+                />
+                <input
+                  type="number"
+                  className="input-field-unique"
+                  value={service.servicePrice}
+                  onChange={(e) =>
+                    handleServiceChange(e, index, "servicePrice")
+                  }
+                  placeholder="Service Price"
+                />
+                <button
+                  type="button"
+                  className="remove-service-btn-unique"
+                  onClick={() => removeService(index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="add-service-btn-unique"
+              onClick={addService}
+            >
+              Add Service
+            </button>
+          </div>
+
+          {/* Section 4: Categories with Price Inputs */}
+          <div className="add-hall-box">
+            <h2 className="section-title-unique">Categories</h2>
+            <div className="category-checkboxes-unique">
+              {["WEDDINGS", "BIRTHDAYS", "MEETINGS", "PARTIES", "FUNERALS"].map(
+                (category) => (
+                  <div key={category} className="checkbox-item-unique">
                     <input
-                      type="number"
-                      className="input-field-unique"
-                      value={categoryPrices[category]}
-                      onChange={(e) => handleCategoryPriceChange(e, category)}
-                      placeholder={`Enter price for ${category}`}
+                      type="checkbox"
+                      id={`category-${category}`}
+                      value={category}
+                      onChange={handleCategoryChange}
+                      checked={categoryPrices.hasOwnProperty(category)}
                     />
-                  )}
-                </div>
-              )
-            )}
-          </div>
-        </div>
+                    <label htmlFor={`category-${category}`}>{category}</label>
 
-        {/* Section 5: Upload Image */}
-        <div className="add-hall-box">
-          <h2 className="section-title-unique">Upload Image</h2>
-          <div className="form-group-unique">
-            <input
-              type="file"
-              className="choosefile-input-unique"
-              multiple
-              accept="image/*,video/*" // Only accept image and video formats
-              onChange={handleFileChange}
-            />
+                    {/* Show price input if category is selected */}
+                    {categoryPrices.hasOwnProperty(category) && (
+                      <input
+                        type="number"
+                        className="input-field-unique"
+                        value={categoryPrices[category]}
+                        onChange={(e) => handleCategoryPriceChange(e, category)}
+                        placeholder={`Enter price for ${category}`}
+                      />
+                    )}
+                  </div>
+                )
+              )}
+            </div>
           </div>
-        </div>
 
-        <button type="submit" className="submit-btn-unique">
-          Submit
-        </button>
-      </form>
-    </div>
+          {/* Section 5: Upload Image */}
+          <div className="add-hall-box">
+            <h2 className="section-title-unique">Upload Image</h2>
+            <div className="form-group-unique">
+              <input
+                type="file"
+                className="choosefile-input-unique"
+                multiple
+                accept="image/*,video/*" // Only accept image and video formats
+                onChange={handleFileChange}
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="submit-btn-unique">
+            Submit
+          </button>
+        </form>
+      </div>
   );
 };
 

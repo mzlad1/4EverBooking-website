@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../Context/AuthContext"; // Adjust the path as needed
 import HeadTitle from "../../Common/HeadTitle/HeadTitle";
-import { Link, useHistory } from "react-router-dom";
+import { useLocation, Link, useHistory, Redirect } from "react-router-dom"; // Make sure Redirect is imported
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./login.css";
@@ -11,8 +11,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth(); // Use login and isLoggedIn from context
   const history = useHistory();
+  const location = useLocation();
+
+  // Check if already logged in, if so, redirect to the previous page or home
+  if (isLoggedIn) {
+    return <Redirect to={"/"} />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +30,7 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`); // Fixed backticks
       }
 
       const data = await response.json();
@@ -32,18 +38,18 @@ const Login = () => {
 
       // Fetch the user ID and role using the access token
       const userResponse = await fetch(
-        "http://localhost:8080/whitelist/getUser",
+        `http://localhost:8080/whitelist/getUser`, // Fixed backticks
         {
           method: "GET",
           headers: {
             Accept: "*/*",
-            Authorization: `Bearer ${data.access_token}`,
+            Authorization: `Bearer ${data.access_token}`, // Fixed backticks
           },
         }
       );
 
       if (!userResponse.ok) {
-        throw new Error(`HTTP error! status: ${userResponse.status}`);
+        throw new Error(`HTTP error! status: ${userResponse.status}`); // Fixed backticks
       }
 
       const userData = await userResponse.json();
@@ -54,18 +60,18 @@ const Login = () => {
       if (userData.role === "CUSTOMER") {
         // Fetch the customer ID using the user ID and access token
         const customerResponse = await fetch(
-          `http://localhost:8080/customer/getCustomerByUserId/${userData.id}`,
+          `http://localhost:8080/customer/getCustomerByUserId/${userData.id}`, // Fixed backticks
           {
             method: "GET",
             headers: {
               Accept: "*/*",
-              Authorization: `Bearer ${data.access_token}`,
+              Authorization: `Bearer ${data.access_token}`, // Fixed backticks
             },
           }
         );
 
         if (!customerResponse.ok) {
-          throw new Error(`HTTP error! status: ${customerResponse.status}`);
+          throw new Error(`HTTP error! status: ${customerResponse.status}`); // Fixed backticks
         }
 
         const customerId = await customerResponse.text(); // Get the customer ID
@@ -74,18 +80,18 @@ const Login = () => {
       } else if (userData.role === "HALL_OWNER") {
         // Fetch hall owner info using the user ID and access token
         const hallOwnerResponse = await fetch(
-          `http://localhost:8080/hallOwner/getHallOwnerByUserId/${userData.id}`,
+          `http://localhost:8080/hallOwner/getHallOwnerByUserId/${userData.id}`, // Fixed backticks
           {
             method: "GET",
             headers: {
               Accept: "*/*",
-              Authorization: `Bearer ${data.access_token}`,
+              Authorization: `Bearer ${data.access_token}`, // Fixed backticks
             },
           }
         );
 
         if (!hallOwnerResponse.ok) {
-          throw new Error(`HTTP error! status: ${hallOwnerResponse.status}`);
+          throw new Error(`HTTP error! status: ${hallOwnerResponse.status}`); // Fixed backticks
         }
 
         const hallOwnerData = await hallOwnerResponse.json(); // Expecting a JSON response
@@ -101,6 +107,8 @@ const Login = () => {
       }
 
       history.push("/"); // Redirect to home
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, Opera
     } catch (error) {
       console.error("Login Error:", error);
       setError(t("login_error")); // Set translated error message
@@ -113,7 +121,8 @@ const Login = () => {
       <section className="login-form-section">
         <div className="login-form-container">
           <div className="login-form-box">
-            <p className="login-form-title">{t("login_prompt")}</p> {/* Translated login prompt */}
+            <p className="login-form-title">{t("login_prompt")}</p>{" "}
+            {/* Translated login prompt */}
             <form onSubmit={handleSubmit} className="login-form">
               <div className="login-input-wrapper">
                 <input
@@ -126,7 +135,7 @@ const Login = () => {
                   className="login-input-field"
                 />
               </div>
-  
+
               <div className="login-input-wrapper">
                 <input
                   type="password"
@@ -138,33 +147,32 @@ const Login = () => {
                   className="login-input-field"
                 />
               </div>
-  
+
               <div className="login-flex-space">
                 <div className="login-checkbox-container">
                   <input type="checkbox" className="login-checkbox" />
-                  <label>{t("remember_me")}</label>{" "}
-                  {/* Translated Remember Me */}
+                  <label>{t("remember_me")}</label>
                 </div>
                 <div className="login-forgot-password">
-                  <Link to="/reset-password">{t("forgot_password")}</Link>{" "}
-                  {/* Translated Forgot Password */}
+                  <Link to="/reset-password">{t("forgot_password")}</Link>
                 </div>
               </div>
-  
+
               {error && (
                 <div className="login-error">
                   <ErrorOutlineIcon color="error" />
                   {error} {/* Error message */}
                 </div>
               )}
-  
+
               <button type="submit" className="login-submit-btn">
-                {t("sign_in")} {/* Translated Sign In */}
+                {t("sign_in")}
               </button>
               <p className="login-signup-prompt">
-                {t("no_account")} {/* Translated "Don't have an account?" */}
-                <Link to="/register" className="login-signup-link">{t("signup")}</Link>{" "}
-                {/* Translated Signup */}
+                {t("no_account")}
+                <Link to="/register" className="login-signup-link">
+                  {t("signup")}
+                </Link>
               </p>
             </form>
           </div>
@@ -172,7 +180,6 @@ const Login = () => {
       </section>
     </>
   );
-  
 };
 
 export default Login;
