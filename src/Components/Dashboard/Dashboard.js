@@ -1,20 +1,43 @@
-import React from "react";
-import { NavLink, Route, Switch, useRouteMatch } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  Route,
+  NavLink,
+  Switch,
+  useRouteMatch,
+  useHistory,
+} from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext"; // Import the useAuth hook
+import ProtectedRoute from "./ProtectedRoute"; // Import the new ProtectedRoute component
 import EditProfile from "./EditProfile";
 import ReservedHalls from "./reservedHalls";
-import AddNewHall from "./hall_owner/AddNewHall"; // AddNewHall component for hall owners
-import MyHalls from "./hall_owner/MyHalls"; // MyHalls component for hall owners
-import UpdateHallPage from "./hall_owner/updateHall"; // updateHall component for hall owners
-import AllUsers from "./admin/AllUsers"; // AllUsers component for admins
-import AddNewAdmin from "./admin/AddNewAdmin"; // AddNewAdmin component for admins
-import DeleteUser from "./admin/DeleteUser"; // DeleteUser component for admins
-import DeletedHalls from "./hall_owner/DeletedHalls"; // DeletedHalls component for hall owners
-import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import AddNewHall from "./hall_owner/AddNewHall";
+import MyHalls from "./hall_owner/MyHalls";
+import UpdateHallPage from "./hall_owner/updateHall";
+import AllUsers from "./admin/AllUsers";
+import AddNewAdmin from "./admin/AddNewAdmin";
+import DeleteUser from "./admin/DeleteUser";
+import DeletedHalls from "./hall_owner/DeletedHalls";
+import { useTranslation } from "react-i18next";
+import FinancialReport from './hall_owner/FinancialReport';
 import "./Dashboard.css";
+
 const Dashboard = () => {
   const { path, url } = useRouteMatch();
-  const { t } = useTranslation(); // Initialize translation hook
-  const userRole = localStorage.getItem("role"); // Retrieve user role from localStorage
+  const { t } = useTranslation();
+  const history = useHistory();
+  const { isLoggedIn, loading } = useAuth(); // Get isLoggedIn and loading state
+
+  const userRole = localStorage.getItem("role"); // Get user role from localStorage
+
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      history.push("/unauthorized");
+    }
+  }, [isLoggedIn, loading, history]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Loading spinner or message
+  }
 
   return (
     <div className="dashboard-container">
@@ -56,6 +79,11 @@ const Dashboard = () => {
                   {t("deleted_halls")}
                 </NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink to={`${url}/financial-report`} className="nav-link">
+                  {t("financial_report")}
+                </NavLink>
+              </li>
             </>
           )}
 
@@ -83,64 +111,58 @@ const Dashboard = () => {
 
       <div className="dashboard-content">
         <Switch>
-          <Route
-            path={`${path}/edit-profile`}
-            component={EditProfile}
-            allowedRoles={["CUSTOMER", "HALL_OWNER", "ADMIN"]} // Pass allowedRoles explicitly here
+          <Route path={`${path}/edit-profile`} component={EditProfile} />
+
+          {/* CUSTOMER-Specific Protected Route */}
+          <ProtectedRoute
+            path={`${path}/reserved-halls`}
+            component={ReservedHalls}
+            allowedRoles={["CUSTOMER", "HALL_OWNER"]} // Allow both CUSTOMER and HALL_OWNER
           />
-          {userRole === "CUSTOMER" && (
-            <Route
-              path={`${path}/reserved-halls`}
-              component={ReservedHalls}
-              allowedRoles={["CUSTOMER"]} // Only CUSTOMER can access this route
-            />
-          )}
 
-          {userRole === "HALL_OWNER" && (
-            <>
-              <Route
-                path={`${path}/update-hall/:hallId`}
-                component={UpdateHallPage}
-              />
+          {/* HALL_OWNER-Specific Protected Routes */}
+          <ProtectedRoute
+            path={`${path}/add-new-hall`}
+            component={AddNewHall}
+            allowedRoles={["HALL_OWNER"]}
+          />
+          <ProtectedRoute
+            path={`${path}/my-halls`}
+            component={MyHalls}
+            allowedRoles={["HALL_OWNER"]}
+          />
+          <ProtectedRoute
+            path={`${path}/deleted-halls`}
+            component={DeletedHalls}
+            allowedRoles={["HALL_OWNER"]}
+          />
+          <ProtectedRoute
+            path={`${path}/update-hall/:hallId`}
+            component={UpdateHallPage}
+            allowedRoles={["HALL_OWNER"]}
+          />
+          <ProtectedRoute
+            path={`${path}/financial-report`}
+            component={FinancialReport}
+            allowedRoles={["HALL_OWNER"]}
+          />
 
-              <Route
-                path={`${path}/reserved-halls`}
-                component={ReservedHalls}
-                allowedRoles={["HALL_OWNER"]} // Only HALL_OWNER can access this route
-              />
-              <Route
-                path={`${path}/add-new-hall`}
-                component={AddNewHall}
-                allowedRoles={["HALL_OWNER"]} // Only HALL_OWNER can access this route
-              />
-              <Route
-                path={`${path}/my-halls`}
-                component={MyHalls}
-                allowedRoles={["HALL_OWNER"]} // Only HALL_OWNER can access this route
-              />
-              <Route path={`${path}/deleted-halls`} component={DeletedHalls} />
-            </>
-          )}
-
-          {userRole === "ADMIN" && (
-            <>
-              <Route
-                path={`${path}/all-users`}
-                component={AllUsers}
-                allowedRoles={["ADMIN"]} // Only ADMIN can access this route
-              />
-              <Route
-                path={`${path}/add-new-admin`}
-                component={AddNewAdmin}
-                allowedRoles={["ADMIN"]} // Only ADMIN can access this route
-              />
-              <Route
-                path={`${path}/delete-user`}
-                component={DeleteUser}
-                allowedRoles={["ADMIN"]} // Only ADMIN can access this route
-              />
-            </>
-          )}
+          {/* ADMIN-Specific Protected Routes */}
+          <ProtectedRoute
+            path={`${path}/all-users`}
+            component={AllUsers}
+            allowedRoles={["ADMIN"]}
+          />
+          <ProtectedRoute
+            path={`${path}/add-new-admin`}
+            component={AddNewAdmin}
+            allowedRoles={["ADMIN"]}
+          />
+          <ProtectedRoute
+            path={`${path}/delete-user`}
+            component={DeleteUser}
+            allowedRoles={["ADMIN"]}
+          />
         </Switch>
       </div>
     </div>

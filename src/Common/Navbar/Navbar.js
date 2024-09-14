@@ -48,8 +48,30 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Directly use the logout function
-      window.location.href = "/sign-in"; // Full page refresh after logout
+      const token = localStorage.getItem("accessToken"); // Get the access token from localStorage
+
+      const response = await fetch("http://localhost:8080/auth/logout", {
+        method: "POST",
+        headers: {
+          Accept: "*/*",
+          Authorization: `Bearer ${token}`, // Pass the Bearer token in the Authorization header
+        },
+        body: "", // Empty body for POST request
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed"); // Handle non-successful response
+      }
+
+      // Clear the token from localStorage if the logout is successful
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("hallOwnerId");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userRole");
+
+      // Redirect to sign-in page after successful logout
+      window.location.href = "/sign-in";
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout Error:", error);
@@ -134,10 +156,7 @@ const Navbar = () => {
                     </a>
                   </li>
                   <li>
-                    <a
-                      className="dropdown-link-modern"
-                      onClick={handleLogout}
-                    >
+                    <a className="dropdown-link-modern" onClick={handleLogout}>
                       <i className="fas fa-sign-out-alt"></i> {t("logout")}
                     </a>
                   </li>
