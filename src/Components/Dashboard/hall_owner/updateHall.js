@@ -13,7 +13,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import "./UpdateHall.css"; // CSS for styling the update page
-
+import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 const libraries = ["places"]; // Required for Places Autocomplete
 
 const UpdateHall = () => {
@@ -77,7 +77,7 @@ const UpdateHall = () => {
     const fetchHallDetails = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `http://localhost:8080/whitelist/${hallId}`,
           {
             headers: {
@@ -165,7 +165,7 @@ const UpdateHall = () => {
   const handleDeleteImage = async (imageUrl) => {
     try {
       const token = localStorage.getItem("accessToken");
-      const deleteResponse = await fetch(
+      const deleteResponse = await fetchWithAuth(
         `http://localhost:8080/hallOwner/${hallId}/delete-image?imageUrl=${encodeURIComponent(
           imageUrl
         )}`,
@@ -243,7 +243,7 @@ const UpdateHall = () => {
       });
 
       if (newImages.length > 0) {
-        const uploadResponse = await fetch(
+        const uploadResponse = await fetchWithAuth(
           `http://localhost:8080/hallOwner/${hallId}/add-image`,
           {
             method: "POST",
@@ -281,7 +281,7 @@ const UpdateHall = () => {
       };
 
       // Send the PUT request to update the hall
-      const updateHallResponse = await fetch(
+      const updateHallResponse = await fetchWithAuth(
         `http://localhost:8080/hallOwner/${ownerId}`,
         {
           method: "PUT",

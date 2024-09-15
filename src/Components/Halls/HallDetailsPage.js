@@ -9,6 +9,7 @@ import Calendar from "react-calendar";
 import { useTranslation } from "react-i18next"; // Import translation hook
 import "react-calendar/dist/Calendar.css";
 import { useHistory } from "react-router-dom";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 
 import {
   People,
@@ -76,7 +77,7 @@ const HallDetailsPage = () => {
   const fetchReservedDays = async (year, month) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://localhost:8080/whitelist/${id}/reserved-days?year=${year}&month=${month}`,
         {
           headers: {
@@ -96,7 +97,9 @@ const HallDetailsPage = () => {
   useEffect(() => {
     const fetchHallDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/whitelist/${id}`);
+        const response = await fetchWithAuth(
+          `http://localhost:8080/whitelist/${id}`
+        );
         const data = await response.json();
 
         // Log the entire data to see if 'image' field exists

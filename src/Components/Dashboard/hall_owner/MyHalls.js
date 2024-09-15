@@ -9,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import "./MyHalls.css"; // CSS for styling the halls page
+import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 
 const MyHalls = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -29,7 +30,7 @@ const MyHalls = () => {
 
       const apiUrl = `http://localhost:8080/hallOwner/getAll?ownerId=${ownerId}&page=${page}&size=12`;
 
-      const response = await fetch(apiUrl, {
+      const response = await fetchWithAuth(apiUrl, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -85,7 +86,7 @@ const MyHalls = () => {
 
       const deleteUrl = `http://localhost:8080/hallOwner/?id=${hallId}&OwnerId=${ownerId}`;
 
-      const response = await fetch(deleteUrl, {
+      const response = await fetchWithAuth(deleteUrl, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

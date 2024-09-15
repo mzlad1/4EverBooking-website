@@ -6,6 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 import "./DeletedHalls.css";
 
 const DeletedHallsPage = () => {
@@ -23,7 +24,7 @@ const DeletedHallsPage = () => {
   const fetchDeletedHalls = async (page) => {
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://localhost:8080/hallOwner/getDeletedHallsByHallOwner?page=${page}&size=10&hallOwnerId=${hallOwnerId}`,
         {
           method: "GET",
@@ -63,7 +64,7 @@ const DeletedHallsPage = () => {
   // Restore hall
   const restoreHall = async () => {
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://localhost:8080/hallOwner/restoreHall?id=${hallToRestore.id}&ownerId=${hallOwnerId}`,
         {
           method: "PUT",

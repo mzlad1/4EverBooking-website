@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"; // Import success icon
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+
 import "./resetpassword.css"; // Ensure this path is correct to apply your CSS styles
 
 const ResetPassword = () => {
@@ -23,7 +25,7 @@ const ResetPassword = () => {
       const url = `http://localhost:8080/whitelist/send-verification-code?email=${encodeURIComponent(
         email
       )}`;
-      const response = await fetch(url, {
+      const response = await fetchWithAuth(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +68,7 @@ const ResetPassword = () => {
                 required
                 className="reset-input-field"
               />
-  
+
               {error && (
                 <div className="reset-error">
                   <ErrorOutlineIcon color="error" />{" "}
@@ -74,7 +76,7 @@ const ResetPassword = () => {
                   {error}
                 </div>
               )}
-  
+
               {message && (
                 <div className="reset-message">
                   <CheckCircleOutlineIcon color="success" />{" "}
@@ -82,7 +84,7 @@ const ResetPassword = () => {
                   {message}
                 </div>
               )}
-  
+
               <button
                 type="submit"
                 className="reset-primary-btn"
@@ -104,7 +106,6 @@ const ResetPassword = () => {
       </section>
     </>
   );
-  
 };
 
 export default ResetPassword;

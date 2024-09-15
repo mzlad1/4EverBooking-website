@@ -5,6 +5,7 @@ import { useLocation, Link, useHistory, Redirect } from "react-router-dom"; // M
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./login.css";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 
 const Login = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -23,7 +24,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetchWithAuth("http://localhost:8080/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -35,9 +36,10 @@ const Login = () => {
 
       const data = await response.json();
       login(data.access_token, data.refresh_token); // Use login from context
-
+      console.log("accessToken:", data.access_token);
+      console.log("refreshToken:", data.refresh_token);
       // Fetch the user ID and role using the access token
-      const userResponse = await fetch(
+      const userResponse = await fetchWithAuth(
         `http://localhost:8080/whitelist/getUser`, // Fixed backticks
         {
           method: "GET",
@@ -56,10 +58,12 @@ const Login = () => {
       localStorage.setItem("userId", userData.id); // Save user ID in local storage
       localStorage.setItem("role", userData.role); // Save user role in local storage
       console.log("User role saved:", userData.role);
+      localStorage.setItem("accessToken", data.access_token); // Save access token in local storage
+      localStorage.setItem("refreshToken", data.refresh_token); // Save refresh token in local storage
 
       if (userData.role === "CUSTOMER") {
         // Fetch the customer ID using the user ID and access token
-        const customerResponse = await fetch(
+        const customerResponse = await fetchWithAuth(
           `http://localhost:8080/customer/getCustomerByUserId/${userData.id}`, // Fixed backticks
           {
             method: "GET",
@@ -79,7 +83,7 @@ const Login = () => {
         console.log("Customer ID saved:", customerId);
       } else if (userData.role === "HALL_OWNER") {
         // Fetch hall owner info using the user ID and access token
-        const hallOwnerResponse = await fetch(
+        const hallOwnerResponse = await fetchWithAuth(
           `http://localhost:8080/hallOwner/getHallOwnerByUserId/${userData.id}`, // Fixed backticks
           {
             method: "GET",
@@ -101,9 +105,6 @@ const Login = () => {
         // Store the hall owner ID and company name in localStorage
         localStorage.setItem("hallOwnerId", hallOwnerId);
         localStorage.setItem("companyName", companyName);
-
-        console.log("Hall Owner ID saved:", hallOwnerId);
-        console.log("Company Name saved:", companyName);
       }
 
       history.push("/"); // Redirect to home

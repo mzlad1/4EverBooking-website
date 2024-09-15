@@ -3,6 +3,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useTranslation } from "react-i18next"; // Import the useTranslation hook
 import "./EditProfile.css";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 
 const EditProfile = () => {
   const { t } = useTranslation(); // Initialize the translation hook
@@ -33,7 +34,7 @@ const EditProfile = () => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await fetch(
+        const response = await fetchWithAuth(
           "http://localhost:8080/whitelist/getUser",
           {
             method: "GET",
@@ -52,7 +53,10 @@ const EditProfile = () => {
         const dob = new Date(user.dateOfBirth).toISOString().split("T")[0];
 
         // Get companyName from localStorage if the user is a hall owner
-        const companyName = userRole === "HALL_OWNER" ? localStorage.getItem("companyName") || "" : "";
+        const companyName =
+          userRole === "HALL_OWNER"
+            ? localStorage.getItem("companyName") || ""
+            : "";
 
         setProfile({
           id: user.id,
@@ -119,7 +123,7 @@ const EditProfile = () => {
         };
       }
 
-      const response = await fetch(apiEndpoint, {
+      const response = await fetchWithAuth(apiEndpoint, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -132,10 +136,10 @@ const EditProfile = () => {
         throw new Error("Failed to save profile");
       }
 
-          // Update companyName in localStorage if the user is a HALL_OWNER
-    if (userRole === "HALL_OWNER") {
-      localStorage.setItem("companyName", profile.companyName);
-    }
+      // Update companyName in localStorage if the user is a HALL_OWNER
+      if (userRole === "HALL_OWNER") {
+        localStorage.setItem("companyName", profile.companyName);
+      }
       setMessage(t("profile_updated_success")); // Set translated success message
     } catch (error) {
       setMessage(`${t("error_saving_profile")} ${error.message}`); // Set translated error message
@@ -151,7 +155,7 @@ const EditProfile = () => {
       const token = localStorage.getItem("accessToken");
       const email = profile.email;
 
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://localhost:8080/common/changePassword?email=${encodeURIComponent(
           email
         )}&oldPassword=${encodeURIComponent(
@@ -190,7 +194,7 @@ const EditProfile = () => {
 
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `http://localhost:8080/common/uploadImageToProfile?id=${profile.id}`,
         {
           method: "POST",
@@ -285,7 +289,8 @@ const EditProfile = () => {
             />
           </div>
           <div className="form-group-modern">
-            <label>{t("date_of_birth")}:</label> {/* Translated Date of Birth */}
+            <label>{t("date_of_birth")}:</label>{" "}
+            {/* Translated Date of Birth */}
             <input
               type="date"
               name="dateOfBirth"
@@ -293,11 +298,12 @@ const EditProfile = () => {
               onChange={handleChange}
             />
           </div>
-  
+
           {/* Render the Company Name field only for Hall Owners */}
           {userRole === "HALL_OWNER" && (
             <div className="form-group-modern">
-              <label>{t("company_name")}:</label> {/* Translated Company Name */}
+              <label>{t("company_name")}:</label>{" "}
+              {/* Translated Company Name */}
               <input
                 type="text"
                 name="companyName"
@@ -306,7 +312,7 @@ const EditProfile = () => {
               />
             </div>
           )}
-  
+
           <button onClick={handleSave} className="save-btn-modern">
             {t("save_profile")} {/* Translated Save Profile */}
           </button>
@@ -339,7 +345,8 @@ const EditProfile = () => {
             />
           </div>
           <div className="form-group-modern">
-            <label>{t("confirm_new_password")}:</label> {/* Translated Confirm New Password */}
+            <label>{t("confirm_new_password")}:</label>{" "}
+            {/* Translated Confirm New Password */}
             <input
               type="password"
               name="confirmPassword"
@@ -364,7 +371,6 @@ const EditProfile = () => {
       </div>
     </div>
   );
-  
 };
 
 export default EditProfile;

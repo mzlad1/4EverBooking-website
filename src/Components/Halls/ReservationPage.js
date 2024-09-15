@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker"; // Import React Date Picker
 import "react-datepicker/dist/react-datepicker.css"; // Import Date Picker styles
 import "./reservation.css"; // Custom CSS for styling the form
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+
 import {
   faUser,
   faHome,
@@ -156,7 +158,7 @@ const ReservationPage = () => {
       };
 
       try {
-        const response = await fetch(
+        const response = await fetchWithAuth(
           "http://localhost:8080/customer/reserveHall",
           {
             method: "POST",

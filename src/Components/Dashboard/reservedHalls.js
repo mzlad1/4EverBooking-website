@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ReservedHalls.css";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 
 const ReservedHalls = () => {
@@ -21,7 +23,7 @@ const ReservedHalls = () => {
           apiUrl = `http://localhost:8080/hallOwner/getReservedHalls?page=1&size=10&ownerId=${userId}`;
         }
 
-        const response = await fetch(apiUrl, {
+        const response = await fetchWithAuth(apiUrl, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +54,10 @@ const ReservedHalls = () => {
       }
     };
 
-    const userId = localStorage.getItem("role") === "HALL_OWNER" ? localStorage.getItem("hallOwnerId") : localStorage.getItem("customerId");
+    const userId =
+      localStorage.getItem("role") === "HALL_OWNER"
+        ? localStorage.getItem("hallOwnerId")
+        : localStorage.getItem("customerId");
     const role = localStorage.getItem("role");
 
     if (!userId) {
@@ -64,7 +69,12 @@ const ReservedHalls = () => {
   }, [t]);
 
   if (loading) return <p>{t("loading")}</p>; // Translated loading message
-  if (error) return <p>{t("error")}: {error}</p>; // Translated error message
+  if (error)
+    return (
+      <p>
+        {t("error")}: {error}
+      </p>
+    ); // Translated error message
 
   const translateCategory = (category) => {
     if (!category) return t("N/A"); // Translate "N/A" if no category is available
@@ -73,7 +83,8 @@ const ReservedHalls = () => {
 
   return (
     <div className="reserved-halls-container-modern">
-      <h1 className="reserved-halls-title-modern">{t("reserved_halls")}</h1> {/* Translated "Reserved Halls" */}
+      <h1 className="reserved-halls-title-modern">{t("reserved_halls")}</h1>{" "}
+      {/* Translated "Reserved Halls" */}
       <table className="reserved-halls-table-modern">
         <thead className="reserved-halls-thead-modern">
           <tr className="reserved-halls-header-row-modern">
@@ -83,7 +94,8 @@ const ReservedHalls = () => {
             <th>{t("end_time")}</th> {/* Translated "End Time" */}
             {serviceHeaders.map((service, index) => (
               <th key={index}>
-                {service.charAt(0).toUpperCase() + service.slice(1)} {t("cost")} {/* Translated "Cost" */}
+                {service.charAt(0).toUpperCase() + service.slice(1)} {t("cost")}{" "}
+                {/* Translated "Cost" */}
               </th>
             ))}
             <th>{t("total_price")}</th> {/* Translated "Total Price" */}
@@ -93,9 +105,15 @@ const ReservedHalls = () => {
           {halls.map((hall, index) => (
             <tr key={index} className="reserved-halls-row-modern">
               <td>{hall.hallName}</td>
-              <td>{translateCategory(hall.category)}</td> {/* Translated category */}
+              <td>{translateCategory(hall.category)}</td>{" "}
+              {/* Translated category */}
               <td>{new Date(hall.time).toLocaleString()}</td>
-              <td>{hall.endTime ? new Date(hall.endTime).toLocaleString() : t("N/A")}</td> {/* Translated "N/A" */}
+              <td>
+                {hall.endTime
+                  ? new Date(hall.endTime).toLocaleString()
+                  : t("N/A")}
+              </td>{" "}
+              {/* Translated "N/A" */}
               {serviceHeaders.map((service, index) => (
                 <td key={index}>{hall.services[service] || t("N/A")}</td>
               ))}
@@ -106,7 +124,6 @@ const ReservedHalls = () => {
       </table>
     </div>
   );
-  
 };
 
 export default ReservedHalls;

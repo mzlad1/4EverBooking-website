@@ -10,6 +10,8 @@ import Typography from "@mui/joy/Typography";
 import HeadTitle from "../../Common/HeadTitle/HeadTitle";
 import FilterBar from "./Filterbar";
 import Pagination from "./Pagination";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+
 import {
   People,
   LocationOn,
@@ -69,7 +71,7 @@ const HallsPage = () => {
     console.log("API URL:", apiUrl);
 
     try {
-      const response = await fetch(apiUrl);
+      const response = await fetchWithAuth(apiUrl);
       const data = await response.json();
 
       const filteredHalls = data.content.filter((hall) => {

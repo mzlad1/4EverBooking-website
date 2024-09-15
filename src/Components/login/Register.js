@@ -3,6 +3,7 @@ import HeadTitle from "../../Common/HeadTitle/HeadTitle";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./register.css";
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 
 const Register = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -44,7 +45,7 @@ const Register = () => {
       }
 
       try {
-        const response = await fetch(apiUrl, {
+        const response = await fetchWithAuth(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -58,7 +59,7 @@ const Register = () => {
 
         const data = await response.json();
         console.log(data);
-        alert(t('registration_success')); // Use translated registration success message
+        alert(t("registration_success")); // Use translated registration success message
         // Reset form after successful registration
         setEmail("");
         setPassword("");
@@ -74,7 +75,7 @@ const Register = () => {
         window.location.href = "/sign-in";
       } catch (error) {
         console.error("Error:", error);
-        alert(t('registration_error')); // Use translated registration error message
+        alert(t("registration_error")); // Use translated registration error message
       }
     }
   };
@@ -91,17 +92,17 @@ const Register = () => {
       !phone ||
       (userType === "hallOwner" && !companyName)
     ) {
-      setError(t('all_fields_required')); // Use translated error message
+      setError(t("all_fields_required")); // Use translated error message
       return false;
     }
 
     if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/.test(password)) {
-      setError(t('password_requirements')); // Use translated password requirements error
+      setError(t("password_requirements")); // Use translated password requirements error
       return false;
     }
 
     if (password !== confirmPassword) {
-      setError(t('password_mismatch')); // Use translated password mismatch error
+      setError(t("password_mismatch")); // Use translated password mismatch error
       return false;
     }
 
@@ -115,8 +116,8 @@ const Register = () => {
       <section className="register-forms top">
         <div className="register-container">
           <div className="register-sign-box">
-            <p>{t('create_account_prompt')}</p> {/* Translated account prompt */}
-  
+            <p>{t("create_account_prompt")}</p>{" "}
+            {/* Translated account prompt */}
             {/* Toggle Buttons */}
             <div className="register-toggle-buttons">
               <button
@@ -124,17 +125,16 @@ const Register = () => {
                 className={userType === "user" ? "active" : ""}
                 onClick={() => setUserType("user")}
               >
-                {t('user')}
+                {t("user")}
               </button>
               <button
                 type="button"
                 className={userType === "hallOwner" ? "active" : ""}
                 onClick={() => setUserType("hallOwner")}
               >
-                {t('hall_owner')}
+                {t("hall_owner")}
               </button>
             </div>
-  
             <form onSubmit={handleSubmit}>
               {/* Two-column input layout */}
               <div className="register-form-grid">
@@ -143,7 +143,7 @@ const Register = () => {
                   name="firstName"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder={t('first_name')}
+                  placeholder={t("first_name")}
                   className="register-input-field"
                   required
                 />
@@ -152,7 +152,7 @@ const Register = () => {
                   name="lastName"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  placeholder={t('last_name')}
+                  placeholder={t("last_name")}
                   className="register-input-field"
                   required
                 />
@@ -161,7 +161,7 @@ const Register = () => {
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('email')}
+                  placeholder={t("email")}
                   className="register-input-field register-full-width"
                   required
                 />
@@ -170,7 +170,7 @@ const Register = () => {
                   name="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder={t('phone')}
+                  placeholder={t("phone")}
                   className="register-input-field"
                   required
                 />
@@ -179,7 +179,7 @@ const Register = () => {
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t('password')}
+                  placeholder={t("password")}
                   className="register-input-field"
                   required
                 />
@@ -188,17 +188,17 @@ const Register = () => {
                   name="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder={t('confirm_password')}
+                  placeholder={t("confirm_password")}
                   className="register-input-field"
                   required
                 />
-                
+
                 <input
                   type="text"
                   name="address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder={t('address')}
+                  placeholder={t("address")}
                   className="register-input-field register-full-width"
                   required
                 />
@@ -217,20 +217,22 @@ const Register = () => {
                     name="companyName"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    placeholder={t('company_name')}
+                    placeholder={t("company_name")}
                     className="register-input-field register-full-width"
                     required
                   />
                 )}
               </div>
-  
+
               {error && <p className="register-error">{error}</p>}
               <button type="submit" className="register-primary-btn">
-                {t('create_account')}
+                {t("create_account")}
               </button>
               <p>
-                {t('have_account')}{" "}
-                <Link to="/sign-in" className="register-signin-link">{t('sign_in')}</Link>
+                {t("have_account")}{" "}
+                <Link to="/sign-in" className="register-signin-link">
+                  {t("sign_in")}
+                </Link>
               </p>
             </form>
           </div>
@@ -238,7 +240,6 @@ const Register = () => {
       </section>
     </>
   );
-  
 };
 
 export default Register;

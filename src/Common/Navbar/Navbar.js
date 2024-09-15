@@ -3,7 +3,7 @@ import { useAuth } from "../../Context/AuthContext"; // Ensure the path is corre
 import "./Navbar.css";
 import LanguageSwitcher from "./LanguageSwitcher"; // Import the Language Switcher
 import { useTranslation } from "react-i18next"; // Import the hook for translation
-
+import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 const Navbar = () => {
   const { t } = useTranslation(); // Initialize translation
   const [click, setClick] = useState(false);
@@ -17,7 +17,7 @@ const Navbar = () => {
       const fetchProfileImage = async () => {
         try {
           const token = localStorage.getItem("accessToken");
-          const response = await fetch(
+          const response = await fetchWithAuth(
             "http://localhost:8080/whitelist/getUser",
             {
               method: "GET",
@@ -59,14 +59,17 @@ const Navbar = () => {
     try {
       const token = localStorage.getItem("accessToken"); // Get the access token from localStorage
 
-      const response = await fetch("http://localhost:8080/auth/logout", {
-        method: "POST",
-        headers: {
-          Accept: "*/*",
-          Authorization: `Bearer ${token}`, // Pass the Bearer token in the Authorization header
-        },
-        body: "", // Empty body for POST request
-      });
+      const response = await fetchWithAuth(
+        "http://localhost:8080/auth/logout",
+        {
+          method: "POST",
+          headers: {
+            Accept: "*/*",
+            Authorization: `Bearer ${token}`, // Pass the Bearer token in the Authorization header
+          },
+          body: "", // Empty body for POST request
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Logout failed"); // Handle non-successful response

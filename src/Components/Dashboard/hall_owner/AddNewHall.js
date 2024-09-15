@@ -5,6 +5,7 @@ import {
   Autocomplete,
   useJsApiLoader,
 } from "@react-google-maps/api";
+import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 import { History } from "react-router-dom";
 import "./AddNewHall.css";
 
@@ -138,46 +139,54 @@ const AddNewHall = () => {
 
   const validateForm = () => {
     const newErrors = {};
-  
+
     // Basic Information Validation
-    if (!(hallData.name || "").trim()) newErrors.name = "Hall name is required.";
-    if (!(hallData.capacity || "").trim()) newErrors.capacity = "Capacity is required.";
-    if (!(hallData.phone || "").trim()) newErrors.phone = "Phone number is required.";
-    if (!(hallData.description || "").trim()) newErrors.description = "Description is required.";
-  
+    if (!(hallData.name || "").trim())
+      newErrors.name = "Hall name is required.";
+    if (!(hallData.capacity || "").trim())
+      newErrors.capacity = "Capacity is required.";
+    if (!(hallData.phone || "").trim())
+      newErrors.phone = "Phone number is required.";
+    if (!(hallData.description || "").trim())
+      newErrors.description = "Description is required.";
+
     // Location Validation
     if (!(hallData.city || "").trim()) newErrors.city = "City is required.";
     if (!hallData.latitude || !hallData.longitude) {
       newErrors.location = "Latitude and longitude are required.";
     }
-  
+
     // Services Validation
     hallData.services.forEach((service, index) => {
       if ((service.serviceName || "").trim() && !service.servicePrice) {
-        newErrors[`servicePrice-${index}`] = "Service price is required if service name is provided.";
+        newErrors[`servicePrice-${index}`] =
+          "Service price is required if service name is provided.";
       }
     });
-  
+
     // Categories Validation
     const selectedCategories = Object.keys(categoryPrices);
     if (selectedCategories.length === 0) {
-      newErrors.categories = "At least one category and its price are required.";
+      newErrors.categories =
+        "At least one category and its price are required.";
     } else {
       selectedCategories.forEach((category) => {
         if (!categoryPrices[category]) {
-          newErrors[`categoryPrice-${category}`] = `Price for ${category} is required.`;
+          newErrors[
+            `categoryPrice-${category}`
+          ] = `Price for ${category} is required.`;
         }
       });
     }
-  
+
     // Image and Proof Validation
     if (!hallData.image) newErrors.image = "Hall image is required.";
-    if (!hallData.proofOfOwnership) newErrors.proofOfOwnership = "Proof of ownership is required.";
-  
+    if (!hallData.proofOfOwnership)
+      newErrors.proofOfOwnership = "Proof of ownership is required.";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -201,7 +210,7 @@ const AddNewHall = () => {
       }
 
       // Step 2: Upload proof of ownership file to backend
-      const proofResponse = await fetch(
+      const proofResponse = await fetchWithAuth(
         "http://localhost:8080/hallOwner/uploadFileProof",
         {
           method: "POST",
@@ -232,7 +241,7 @@ const AddNewHall = () => {
       }
 
       // Step 4: Upload images to backend
-      const uploadResponse = await fetch(
+      const uploadResponse = await fetchWithAuth(
         "http://localhost:8080/hallOwner/uploadImageToHall",
         {
           method: "POST",
@@ -275,7 +284,7 @@ const AddNewHall = () => {
       };
 
       // Step 7: Add hall API call
-      const addHallResponse = await fetch(
+      const addHallResponse = await fetchWithAuth(
         "http://localhost:8080/hallOwner/addHall",
         {
           method: "POST",
@@ -357,10 +366,12 @@ const AddNewHall = () => {
           {/* Section 1: Basic Information */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Basic Information</h2>
-            
+
             {/* Hall Name */}
             <div className="form-group-unique">
-              <label htmlFor="name" className="input-label-unique">Hall Name</label>
+              <label htmlFor="name" className="input-label-unique">
+                Hall Name
+              </label>
               <input
                 type="text"
                 id="name"
@@ -372,10 +383,12 @@ const AddNewHall = () => {
               />
               {errors.name && <p className="error-message">{errors.name}</p>}
             </div>
-  
+
             {/* Capacity */}
             <div className="form-group-unique">
-              <label htmlFor="capacity" className="input-label-unique">Capacity</label>
+              <label htmlFor="capacity" className="input-label-unique">
+                Capacity
+              </label>
               <input
                 type="number"
                 id="capacity"
@@ -385,12 +398,16 @@ const AddNewHall = () => {
                 onChange={handleInputChange}
                 placeholder="Enter capacity"
               />
-              {errors.capacity && <p className="error-message">{errors.capacity}</p>}
+              {errors.capacity && (
+                <p className="error-message">{errors.capacity}</p>
+              )}
             </div>
-  
+
             {/* Phone */}
             <div className="form-group-unique">
-              <label htmlFor="phone" className="input-label-unique">Phone</label>
+              <label htmlFor="phone" className="input-label-unique">
+                Phone
+              </label>
               <input
                 type="tel"
                 id="phone"
@@ -402,10 +419,12 @@ const AddNewHall = () => {
               />
               {errors.phone && <p className="error-message">{errors.phone}</p>}
             </div>
-  
+
             {/* Description */}
             <div className="form-group-unique">
-              <label htmlFor="description" className="input-label-unique">Description</label>
+              <label htmlFor="description" className="input-label-unique">
+                Description
+              </label>
               <textarea
                 id="description"
                 className="input-textarea-unique"
@@ -414,17 +433,21 @@ const AddNewHall = () => {
                 onChange={handleInputChange}
                 placeholder="Enter description"
               />
-              {errors.description && <p className="error-message">{errors.description}</p>}
+              {errors.description && (
+                <p className="error-message">{errors.description}</p>
+              )}
             </div>
           </div>
-  
+
           {/* Section 2: Location Information */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Location Information</h2>
-  
+
             {/* City Selection Dropdown */}
             <div className="form-group-unique">
-              <label htmlFor="city" className="input-label-unique">City</label>
+              <label htmlFor="city" className="input-label-unique">
+                City
+              </label>
               <select
                 id="city"
                 className="input-field-unique"
@@ -441,10 +464,12 @@ const AddNewHall = () => {
               </select>
               {errors.city && <p className="error-message">{errors.city}</p>}
             </div>
-  
+
             {/* Location Search Input */}
             <div className="form-group-unique">
-              <label htmlFor="location" className="input-label-unique">Location</label>
+              <label htmlFor="location" className="input-label-unique">
+                Location
+              </label>
               <Autocomplete
                 onLoad={(autocomplete) => setAutocomplete(autocomplete)}
                 onPlaceChanged={handlePlaceSelect}
@@ -457,7 +482,7 @@ const AddNewHall = () => {
                 />
               </Autocomplete>
             </div>
-  
+
             {/* Google Map */}
             <div className="map-container">
               <GoogleMap
@@ -470,10 +495,12 @@ const AddNewHall = () => {
                 <Marker position={markerPosition} />
               </GoogleMap>
             </div>
-  
+
             {/* Latitude and Longitude */}
             <div className="form-group-unique">
-              <label htmlFor="latitude" className="input-label-unique">Latitude</label>
+              <label htmlFor="latitude" className="input-label-unique">
+                Latitude
+              </label>
               <input
                 type="number"
                 id="latitude"
@@ -484,9 +511,11 @@ const AddNewHall = () => {
                 placeholder="Selected latitude"
               />
             </div>
-  
+
             <div className="form-group-unique">
-              <label htmlFor="longitude" className="input-label-unique">Longitude</label>
+              <label htmlFor="longitude" className="input-label-unique">
+                Longitude
+              </label>
               <input
                 type="number"
                 id="longitude"
@@ -497,10 +526,12 @@ const AddNewHall = () => {
                 placeholder="Selected longitude"
               />
             </div>
-  
-            {errors.location && <p className="error-message">{errors.location}</p>}
+
+            {errors.location && (
+              <p className="error-message">{errors.location}</p>
+            )}
           </div>
-  
+
           {/* Section 3: Services */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Services</h2>
@@ -517,11 +548,15 @@ const AddNewHall = () => {
                   type="number"
                   className="input-field-unique"
                   value={service.servicePrice}
-                  onChange={(e) => handleServiceChange(e, index, "servicePrice")}
+                  onChange={(e) =>
+                    handleServiceChange(e, index, "servicePrice")
+                  }
                   placeholder="Service Price"
                 />
                 {errors[`servicePrice-${index}`] && (
-                  <p className="error-message">{errors[`servicePrice-${index}`]}</p>
+                  <p className="error-message">
+                    {errors[`servicePrice-${index}`]}
+                  </p>
                 )}
                 <button
                   type="button"
@@ -540,7 +575,7 @@ const AddNewHall = () => {
               Add Service
             </button>
           </div>
-  
+
           {/* Section 4: Categories with Price Inputs */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Categories</h2>
@@ -556,7 +591,7 @@ const AddNewHall = () => {
                       checked={categoryPrices.hasOwnProperty(category)}
                     />
                     <label htmlFor={`category-${category}`}>{category}</label>
-  
+
                     {/* Show price input if category is selected */}
                     {categoryPrices.hasOwnProperty(category) && (
                       <input
@@ -568,15 +603,19 @@ const AddNewHall = () => {
                       />
                     )}
                     {errors[`categoryPrice-${category}`] && (
-                      <p className="error-message">{errors[`categoryPrice-${category}`]}</p>
+                      <p className="error-message">
+                        {errors[`categoryPrice-${category}`]}
+                      </p>
                     )}
                   </div>
                 )
               )}
             </div>
-            {errors.categories && <p className="error-message">{errors.categories}</p>}
+            {errors.categories && (
+              <p className="error-message">{errors.categories}</p>
+            )}
           </div>
-  
+
           {/* Section 5: Upload Image */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Upload Image</h2>
@@ -591,7 +630,7 @@ const AddNewHall = () => {
               {errors.image && <p className="error-message">{errors.image}</p>}
             </div>
           </div>
-  
+
           {/* Section 6: Upload Proof of Ownership */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Upload Proof of Ownership</h2>
@@ -602,22 +641,26 @@ const AddNewHall = () => {
                 accept="application/pdf,image/*"
                 onChange={handleProofFileChange}
               />
-              {errors.proofOfOwnership && <p className="error-message">{errors.proofOfOwnership}</p>}
+              {errors.proofOfOwnership && (
+                <p className="error-message">{errors.proofOfOwnership}</p>
+              )}
             </div>
           </div>
-  
+
           <button type="submit" className="submit-btn-unique">
             Submit
           </button>
         </form>
       ) : (
         <div>
-          <p>Your hall is under processing. You will receive an email when it is approved.</p>
+          <p>
+            Your hall is under processing. You will receive an email when it is
+            approved.
+          </p>
         </div>
       )}
     </div>
   );
-  
 };
 
 export default AddNewHall;

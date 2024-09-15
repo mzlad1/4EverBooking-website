@@ -1,8 +1,9 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 
 const SampleNextArrow = (props) => {
   const { onClick } = props;
@@ -96,7 +97,7 @@ const Cards = () => {
       const token = localStorage.getItem("accessToken");
 
       try {
-        const response = await fetch(
+        const response = await fetchWithAuth(
           "http://localhost:8080/customer/recommendhalls",
           {
             method: "GET",
@@ -171,23 +172,24 @@ const Cards = () => {
   };
 
   const calculatePriceRange = (categories, services) => {
-    const categoryPrices = Object.values(categories).map(Number).filter(price => !isNaN(price));
+    const categoryPrices = Object.values(categories)
+      .map(Number)
+      .filter((price) => !isNaN(price));
     const lowPrice = Math.min(...categoryPrices);
     const highPrice = Math.max(...categoryPrices);
-  
+
     const totalServicesPrice = Object.values(services)
       .map(Number)
-      .filter(price => !isNaN(price))
+      .filter((price) => !isNaN(price))
       .reduce((total, price) => total + price, 0);
-  
+
     if (isNaN(lowPrice) || isNaN(highPrice)) {
-      return 'Invalid category prices';
+      return "Invalid category prices";
     }
-  
+
     const highPriceWithServices = highPrice + totalServicesPrice;
     return `$${lowPrice.toFixed(2)} - $${highPriceWithServices.toFixed(2)}`;
   };
-  
 
   // Function to translate West Bank cities
   const translateLocation = (location) => {

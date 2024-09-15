@@ -16,16 +16,21 @@ const processQueue = (error, token = null) => {
 // Helper function to refresh the access token
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
+  console.log("Refresh Token:", refreshToken);
 
   try {
     // Call the refresh token API
-    const response = await fetch("http://localhost:8080/auth/refresh-token", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetchWithAuth(
+      "http://localhost:8080/auth/refresh-token",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          "Content-Type": "application/json", // Ensure this is included
+          Accept: "*/*", // Match the curl request
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to refresh token");
@@ -39,6 +44,9 @@ export const refreshAccessToken = async () => {
     // Store new tokens in localStorage
     localStorage.setItem("accessToken", newAccessToken);
     localStorage.setItem("refreshToken", newRefreshToken);
+    console.log("Token refreshed successfully");
+    console.log("New access token:", newAccessToken);
+    console.log("Refresh token:", newRefreshToken);
 
     return newAccessToken; // Return the new access token
   } catch (error) {
@@ -48,7 +56,10 @@ export const refreshAccessToken = async () => {
 };
 
 // Wrapper function around fetch to handle access token expiration and refresh token logic
-export const fetchWithAuth = async (url, options = {}) => {
+// Utility to check whether the request has already been retried
+const MAX_RETRY_ATTEMPTS = 1; // Only retry once after refreshing the token
+
+export const fetchWithAuth = async (url, options = {}, retryAttempt = 0) => {
   let accessToken = localStorage.getItem("accessToken");
 
   // Attach the access token to the request headers
@@ -61,11 +72,10 @@ export const fetchWithAuth = async (url, options = {}) => {
     // Make the initial API request
     const response = await fetch(url, options);
 
-    // If the access token is expired (401 Unauthorized)
-    if (response.status === 401) {
+    // If the access token is expired (403 Forbidden) and this is the first retry
+    if (response.status === 403 && retryAttempt < MAX_RETRY_ATTEMPTS) {
       if (!isRefreshing) {
-        // Only the first request triggers the token refresh process
-        isRefreshing = true;
+        isRefreshing = true; // Only one refresh process should happen at a time
 
         try {
           // Attempt to refresh the access token
@@ -83,9 +93,9 @@ export const fetchWithAuth = async (url, options = {}) => {
       return new Promise((resolve, reject) => {
         failedQueue.push({
           resolve: (token) => {
-            // Retry the original request with the new access token
+            // Retry the original request with the new access token, but only once
             options.headers["Authorization"] = `Bearer ${token}`;
-            resolve(fetch(url, options));
+            resolve(fetchWithAuth(url, options, retryAttempt + 1)); // Increment retryAttempt
           },
           reject: (error) => {
             reject(error);
@@ -94,7 +104,7 @@ export const fetchWithAuth = async (url, options = {}) => {
       });
     }
 
-    return response; // Return the original response if no 401 error
+    return response; // Return the original response if no 403 error
   } catch (error) {
     console.error("Error in API call:", error);
     throw error; // Handle or rethrow the error
