@@ -111,7 +111,7 @@ const ReservationPage = () => {
   // Form submission and validation
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Show confirmation dialog
     const isConfirmed = window.confirm(
       "Are you sure you want to confirm the reservation?"
@@ -119,9 +119,9 @@ const ReservationPage = () => {
     if (!isConfirmed) {
       return; // If user cancels, don't proceed
     }
-
+  
     const newErrors = {};
-
+  
     // Basic validation
     if (!billingAddress.fullName) newErrors.fullName = "Full name is required.";
     if (!billingAddress.address) newErrors.address = "Address is required.";
@@ -133,30 +133,34 @@ const ReservationPage = () => {
       newErrors.expiryDate = "Valid expiry date is required (MM/YY).";
     if (!paymentInfo.cvv || paymentInfo.cvv.length !== 3)
       newErrors.cvv = "Valid 3-digit CVV is required.";
-
+  
     setErrors(newErrors);
-
+  
     // If no errors, proceed with the API call
     if (Object.keys(newErrors).length === 0) {
       console.log("Billing Info: ", billingAddress);
       console.log("Payment Info: ", paymentInfo);
       console.log("Total Price: ", totalPrice);
-
+  
       const servicesObject = getServiceObject(selectedServices);
-
+  
+      // Ensure fromDate and toDate are valid Date objects
+      const fromDateObject = new Date(fromDate); // Convert fromDate to Date object if it's not
+      const toDateObject = toDate ? new Date(toDate) : fromDateObject; // Convert toDate if provided, or use fromDate
+  
       // Prepare the request payload
       const reservationData = {
         hallId,
         customerId,
-        time: fromDate.toISOString(),
-        endTime: toDate ? toDate.toISOString() : fromDate.toISOString(),
+        time: fromDateObject.toISOString(),
+        endTime: toDateObject.toISOString(),
         selectedCategory,
         services: servicesObject,
         expiryDate: paymentInfo.expiryDate
           ? paymentInfo.expiryDate.toISOString()
           : null, // Send expiry date as ISO string
       };
-
+  
       try {
         const response = await fetchWithAuth(
           "http://localhost:8080/customer/reserveHall",
@@ -169,10 +173,10 @@ const ReservationPage = () => {
             body: JSON.stringify(reservationData),
           }
         );
-
+  
         const result = await response.json();
         console.log("Reservation successful: ", result);
-
+  
         // Redirect on successful reservation
         history.push({
           pathname: "/reservation-success",
@@ -183,6 +187,7 @@ const ReservationPage = () => {
       }
     }
   };
+  
 
   // Handle cancel button click
   const handleCancel = () => {

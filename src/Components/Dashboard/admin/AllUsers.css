@@ -1,0 +1,50 @@
+.all-users-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .MuiButton-containedPrimary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .MuiButton-containedPrimary:hover {
+    background-color: #0056b3;
+  }
+  
+  .MuiButton-containedSecondary {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .MuiButton-containedSecondary:hover {
+    background-color: #d32f2f;
+  }
+  
+  .MuiTableCell-root {
+    font-size: 1rem;
+    padding: 16px;
+  }
+  
+  .MuiDialogTitle-root {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .MuiDialogContentText-root {
+    font-size: 1rem;
+  }
+  
+  ul {
+    padding-left: 20px;
+    margin-top: 10px;
+  }
+  

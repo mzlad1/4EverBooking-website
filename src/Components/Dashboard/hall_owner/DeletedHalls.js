@@ -5,6 +5,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination"; // Material-UI pagination
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 import "./DeletedHalls.css";
@@ -89,70 +94,76 @@ const DeletedHallsPage = () => {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
 
   if (loading) {
-    return <p>Loading deleted halls...</p>;
+    return <p>{t("loading_deleted_halls")}</p>;
   }
 
   return (
     <div className="deleted-halls-page-unique">
-      <h1 className="deleted-halls-title-unique">Deleted Halls</h1>
+      <Typography variant="h4" align="center" gutterBottom>
+        {t("deleted_halls")}
+      </Typography>
 
       {deletedHalls.length === 0 ? (
-        <p className="deleted-halls-no-halls-unique">No deleted halls found.</p>
+        <Typography variant="body1" align="center" color="textSecondary">
+          {t("no_deleted_halls_found")}
+        </Typography>
       ) : (
         <div className="deleted-halls-container-unique">
           {deletedHalls.map((hall) => (
-            <div key={hall.id} className="deleted-hall-card-unique">
-              <img
-                src={hall.image.split(",")[0]}
+            <Card key={hall.id} className="deleted-hall-card-unique">
+              <CardMedia
+                component="img"
+                height="140"
+                image={hall.image.split(",")[0]}
                 alt={hall.name}
-                className="deleted-hall-image-unique"
               />
-              <h2 className="deleted-hall-name-unique">{hall.name}</h2>
-              <p className="deleted-hall-info-unique">
-                <strong>Location:</strong> {hall.location}
-              </p>
-              <p className="deleted-hall-info-unique">
-                <strong>Capacity:</strong> {hall.capacity}
-              </p>
-              <p className="deleted-hall-info-unique">
-                <strong>Description:</strong> {hall.description}
-              </p>
-              <p className="deleted-hall-info-unique">
-                <strong>Phone:</strong> {hall.phone}
-              </p>
-              <p className="deleted-hall-info-unique">
-                <strong>Average Rating:</strong> {hall.averageRating}
-              </p>
-              <button
-                className="restore-hall-button-unique"
-                onClick={() => openRestoreDialog(hall)}
-              >
-                Restore Hall
-              </button>
-            </div>
+              <CardContent>
+                <Typography variant="h5" gutterBottom>
+                  {hall.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>{t("location")}:</strong> {hall.location}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>{t("capacity")}:</strong> {hall.capacity}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>{t("description")}:</strong> {hall.description}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>{t("phone")}:</strong> {hall.phone}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>{t("average_rating")}:</strong> {hall.averageRating}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => openRestoreDialog(hall)}
+                  style={{ marginTop: "10px" }}
+                >
+                  {t("restore_hall")}
+                </Button>
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}
 
       {/* Pagination */}
-      <div className="deleted-halls-pagination-controls-unique">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index}
-            className={`pagination-button-unique ${
-              page === index + 1 ? "active" : ""
-            }`}
-            onClick={() => handlePageChange(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+      <Pagination
+        count={totalPages}
+        page={page}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="primary"
+        className="deleted-halls-pagination-controls-unique"
+      />
 
       {/* Confirmation Dialog */}
       <Dialog
@@ -160,18 +171,20 @@ const DeletedHallsPage = () => {
         onClose={closeDialog}
         aria-labelledby="confirm-restore-dialog"
       >
-        <DialogTitle id="confirm-restore-dialog">Restore Hall</DialogTitle>
+        <DialogTitle id="confirm-restore-dialog">
+          {t("restore_hall")}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to restore the hall "{hallToRestore?.name}"?
+            {t("are_you_sure_you_want_to_restore_this_hall")} "{hallToRestore?.name}"?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog} color="primary">
-            Cancel
+            {t("cancel")}
           </Button>
-          <Button onClick={restoreHall} color="primary" autoFocus>
-            Confirm
+          <Button onClick={restoreHall} color="secondary" autoFocus>
+            {t("confirm")}
           </Button>
         </DialogActions>
       </Dialog>

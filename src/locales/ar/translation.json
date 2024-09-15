@@ -205,12 +205,16 @@
   "update_hall": "تعديل القاعة",
   "delete_hall": "حذف القاعة",
   "average_rating": "التقييم",
-  "select_a_city" : "اختر مدينة",
+  "select_a_city": "اختر مدينة",
   "deleted_halls": "القاعات المحذوفة",
   "are_you_sure_you_want_to_delete_this_hall": "هل أنت متأكد أنك تريد حذف هذه القاعة؟",
   "confirm_delete": "تأكيد الحذف",
   "show_more": "عرض المزيد",
   "feedback": "آراء العملاء",
-  "financial_report": "التقرير المالي"
-
+  "financial_report": "التقرير المالي",
+  "password_min_length": "يجب أن يكون على الأقل ٨ أحرف",
+  "password_uppercase": "يجب أن يحتوي على حرف كبير واحد على الأقل",
+  "password_lowercase": "يجب أن يحتوي على حرف صغير واحد على الأقل",
+  "password_number": "يجب أن يحتوي على رقم واحد على الأقل",
+  "password_special_char": "يجب أن يحتوي على حرف خاص واحد على الأقل (مثل @، #، $، إلخ.)"
 }

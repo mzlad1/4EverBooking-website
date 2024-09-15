@@ -14,11 +14,11 @@ import AddNewHall from "./hall_owner/AddNewHall";
 import MyHalls from "./hall_owner/MyHalls";
 import UpdateHallPage from "./hall_owner/updateHall";
 import AllUsers from "./admin/AllUsers";
-import AddNewAdmin from "./admin/AddNewAdmin";
+import ProcessHalls from "./admin/ProcessHalls";
 import DeleteUser from "./admin/DeleteUser";
 import DeletedHalls from "./hall_owner/DeletedHalls";
 import { useTranslation } from "react-i18next";
-import FinancialReport from './hall_owner/FinancialReport';
+import FinancialReport from "./hall_owner/FinancialReport";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -95,8 +95,8 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to={`${url}/add-new-admin`} className="nav-link">
-                  {t("add_new_admin")}
+                <NavLink to={`${url}/procces-halls`} className="nav-link">
+                  {t("Process halls")}
                 </NavLink>
               </li>
               <li className="nav-item">
@@ -154,8 +154,8 @@ const Dashboard = () => {
             allowedRoles={["ADMIN"]}
           />
           <ProtectedRoute
-            path={`${path}/add-new-admin`}
-            component={AddNewAdmin}
+            path={`${path}/procces-halls`}
+            component={ProcessHalls}
             allowedRoles={["ADMIN"]}
           />
           <ProtectedRoute

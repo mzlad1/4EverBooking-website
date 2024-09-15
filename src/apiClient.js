@@ -14,39 +14,38 @@ const processQueue = (error, token = null) => {
 };
 
 // Helper function to refresh the access token
+// Helper function to refresh the access token
 export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem("refreshToken");
-  console.log("Refresh Token:", refreshToken);
+  console.log("Refreshing Token:", refreshToken);
 
   try {
     // Call the refresh token API
-    const response = await fetchWithAuth(
-      "http://localhost:8080/auth/refresh-token",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-          "Content-Type": "application/json", // Ensure this is included
-          Accept: "*/*", // Match the curl request
-        },
-      }
-    );
+    const response = await fetch("http://localhost:8080/auth/refresh-token", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${refreshToken}`, // Use refreshToken in the Authorization header
+        "Content-Type": "application/json", // Ensure the content type is correct
+        Accept: "*/*", // Accept any content type
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to refresh token");
     }
 
-    // Parse the response and get new tokens
+    // Parse the response to extract new tokens
     const data = await response.json();
     const newAccessToken = data.access_token;
     const newRefreshToken = data.refresh_token;
 
-    // Store new tokens in localStorage
+    console.log("New access token:", newAccessToken);
+    console.log("New refresh token:", newRefreshToken);
+
+    // Update tokens in localStorage
     localStorage.setItem("accessToken", newAccessToken);
     localStorage.setItem("refreshToken", newRefreshToken);
-    console.log("Token refreshed successfully");
-    console.log("New access token:", newAccessToken);
-    console.log("Refresh token:", newRefreshToken);
+    console.log("Token refreshed successfully. New access token:", newAccessToken);
 
     return newAccessToken; // Return the new access token
   } catch (error) {
@@ -54,6 +53,7 @@ export const refreshAccessToken = async () => {
     throw error;
   }
 };
+
 
 // Wrapper function around fetch to handle access token expiration and refresh token logic
 // Utility to check whether the request has already been retried
@@ -93,7 +93,7 @@ export const fetchWithAuth = async (url, options = {}, retryAttempt = 0) => {
       return new Promise((resolve, reject) => {
         failedQueue.push({
           resolve: (token) => {
-            // Retry the original request with the new access token, but only once
+            // Retry the original request with the new access token
             options.headers["Authorization"] = `Bearer ${token}`;
             resolve(fetchWithAuth(url, options, retryAttempt + 1)); // Increment retryAttempt
           },

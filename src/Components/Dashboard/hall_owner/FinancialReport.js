@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../Context/AuthContext"; // Assuming you need the token from AuthContext
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css"; // Import react-pdf styles
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Alert from "@mui/material/Alert";
 import "./financial.css";
 import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 
@@ -22,7 +27,7 @@ const FinancialReport = () => {
           throw new Error("Owner ID not found");
         }
 
-        // First API call to get the PDF filename from the report URL
+        // API call to get the PDF filename from the report URL
         const response = await fetchWithAuth(
           `http://localhost:8080/hallOwner/hallsReservationReport/${ownerId}`, // Use dynamic owner ID
           {
@@ -57,7 +62,7 @@ const FinancialReport = () => {
     try {
       const token = localStorage.getItem("accessToken"); // Get access token from localStorage
 
-      // Second API call to download the file using the filename
+      // API call to download the file using the filename
       const downloadUrl = `http://localhost:8080/hallOwner/download/${pdfFilename}`; // Use the filename for the download API
 
       const response = await fetchWithAuth(downloadUrl, {
@@ -86,16 +91,30 @@ const FinancialReport = () => {
   };
 
   if (loading) {
-    return <div>Loading Financial Report...</div>;
+    return (
+      <Container className="financial-report-container" align="center">
+        <CircularProgress /> {/* Material-UI loading spinner */}
+        <Typography variant="h6" style={{ marginTop: "20px" }}>
+          Loading Financial Report...
+        </Typography>
+      </Container>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <Container className="financial-report-container" align="center">
+        <Alert severity="error">Error: {error}</Alert>
+      </Container>
+    );
   }
 
   return (
-    <div className="financial-report-container">
-      <h1>Financial Report</h1>
+    <Container className="financial-report-container" align="center">
+      <Typography variant="h4" gutterBottom>
+        Financial Report
+      </Typography>
+
       {pdfUrl ? (
         <>
           {/* Render the PDF using react-pdf-viewer */}
@@ -108,16 +127,21 @@ const FinancialReport = () => {
           </div>
 
           {/* Download Button */}
-          <div className="download-button-container">
-            <button onClick={handleDownload} className="download-btn">
-              Download Report
-            </button>
-          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDownload}
+            style={{ marginTop: "20px" }}
+          >
+            Download Report
+          </Button>
         </>
       ) : (
-        <p>Unable to display the report.</p>
+        <Typography variant="body1" color="textSecondary">
+          Unable to display the report.
+        </Typography>
       )}
-    </div>
+    </Container>
   );
 };
 

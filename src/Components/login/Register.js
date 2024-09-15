@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./register.css";
 import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+import zxcvbn from "zxcvbn";
 
 const Register = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -18,7 +19,14 @@ const Register = () => {
   const [error, setError] = useState("");
   const [userType, setUserType] = useState("user"); // "user" or "hallOwner"
   const [companyName, setCompanyName] = useState("");
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(null);
 
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    setPasswordStrength(zxcvbn(value)); // Evaluate password strength
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
@@ -45,7 +53,7 @@ const Register = () => {
       }
 
       try {
-        const response = await fetchWithAuth(apiUrl, {
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -178,11 +186,45 @@ const Register = () => {
                   type="password"
                   name="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t("password")}
+                  onChange={handlePasswordChange}
+                  onFocus={() => setIsPasswordFocused(true)} // Show conditions box
+                  onBlur={() => setIsPasswordFocused(false)} // Hide conditions box
+                  placeholder="Enter Password"
                   className="register-input-field"
                   required
                 />
+                {isPasswordFocused && (
+                  <div className="password-conditions-box">
+                    <ul>
+                      <li>Must be at least 8 characters long</li>
+                      <li>Must contain at least one uppercase letter</li>
+                      <li>Must contain at least one lowercase letter</li>
+                      <li>Must contain at least one number</li>
+                      <li>
+                        Must contain at least one special character (e.g., @, #,
+                        $, etc.)
+                      </li>
+                    </ul>
+
+                    {/* Password Strength Meter */}
+                    {passwordStrength && (
+                      <div className="password-strength-meter">
+                        <progress
+                          value={passwordStrength.score}
+                          max="4"
+                          className={`strength-${passwordStrength.score}`}
+                        ></progress>
+                        <p className="strength-text">
+                          {
+                            ["Weak", "Fair", "Good", "Strong", "Very Strong"][
+                              passwordStrength.score
+                            ]
+                          }
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <input
                   type="password"
                   name="confirmPassword"

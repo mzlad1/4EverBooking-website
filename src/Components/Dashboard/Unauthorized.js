@@ -5,8 +5,14 @@ import "./Unauthorized.css"; // Import the CSS for styling
 const Unauthorized = () => {
   const history = useHistory();
 
+  const userRole = localStorage.getItem("role"); // Get the user's role from localStorage
+
   const goHome = () => {
-    history.push("/");
+    if (userRole === "ADMIN") {
+      history.push("/dashboard/edit-profile"); // Admin's settings page
+    } else {
+      history.push("/"); // Home page for other roles
+    }
   };
 
   return (
@@ -19,7 +25,7 @@ const Unauthorized = () => {
           signed in with the right account.
         </p>
         <button className="unauthorized-btn" onClick={goHome}>
-          Go to Home
+          {userRole === "ADMIN" ? "Go to settings" : "Go to Home"}
         </button>
       </div>
     </div>

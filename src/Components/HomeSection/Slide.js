@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom"; 
+import { useHistory } from "react-router-dom";
 import Data from "./Data";
 import "./slide.css";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [current, setCurrent] = useState(0);
-  const [searchTerm, setSearchTerm] = useState(""); 
-  const [showSearchInput, setShowSearchInput] = useState(false); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSearchInput, setShowSearchInput] = useState(false);
   const length = Data.length;
   const history = useHistory();
-
+  const userRole = localStorage.getItem("role");
   const nextSlide = () => {
     setCurrent(current === length - 1 ? 0 : current + 1);
   };
@@ -21,12 +21,12 @@ const Home = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value); 
+    setSearchTerm(e.target.value);
   };
 
   const handleSearch = () => {
     if (!showSearchInput) {
-      setShowSearchInput(true); 
+      setShowSearchInput(true);
     } else {
       history.push(`/halls?search=${encodeURIComponent(searchTerm)}`);
     }
@@ -60,20 +60,24 @@ const Home = () => {
         ))}
 
         <div className="welcome-message">
-          <h1>{t('welcome_message')}</h1>
-          <p>{t('find_best_halls_home')}</p>
-          <div className="search1-container">
-            <input
-              type="text"
-              placeholder={t('search_placeholder')}
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className={showSearchInput ? "visible" : ""}
-            />
-            <button className="search-button" onClick={handleSearch}>
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
+          <h1>{t("welcome_message")}</h1>
+          <p>{t("find_best_halls_home")}</p>
+
+          {/* Conditionally render the search container if userRole is NOT "HALL_OWNER" */}
+          {userRole !== "HALL_OWNER" && (
+            <div className="search1-container">
+              <input
+                type="text"
+                placeholder={t("search_placeholder")}
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className={showSearchInput ? "visible" : ""}
+              />
+              <button className="search-button" onClick={handleSearch}>
+                <i className="fas fa-search"></i>
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </>

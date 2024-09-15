@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./ReservedHalls.css";
 import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
-
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination"; // Import Pagination from Material-UI
 
 const ReservedHalls = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -10,6 +17,9 @@ const ReservedHalls = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [serviceHeaders, setServiceHeaders] = useState([]);
+  const [page, setPage] = useState(1); // Current page state
+  const [totalPages, setTotalPages] = useState(1); // Total pages state
+  const rowsPerPage = 10; // Rows per page
 
   useEffect(() => {
     const fetchReservedHalls = async (userId, role) => {
@@ -18,9 +28,9 @@ const ReservedHalls = () => {
         let apiUrl = "";
 
         if (role === "CUSTOMER") {
-          apiUrl = `http://localhost:8080/customer/getAll?page=1&size=10&customerId=${userId}`;
+          apiUrl = `http://localhost:8080/customer/getAll?page=${page}&size=${rowsPerPage}&customerId=${userId}`;
         } else if (role === "HALL_OWNER") {
-          apiUrl = `http://localhost:8080/hallOwner/getReservedHalls?page=1&size=10&ownerId=${userId}`;
+          apiUrl = `http://localhost:8080/hallOwner/getReservedHalls?page=${page}&size=${rowsPerPage}&ownerId=${userId}`;
         }
 
         const response = await fetchWithAuth(apiUrl, {
@@ -37,6 +47,8 @@ const ReservedHalls = () => {
 
         const data = await response.json();
         setHalls(data.content);
+        setTotalPages(data.totalPages); // Assuming the API returns total pages
+        setLoading(false);
 
         // Extract unique services from the fetched halls
         const services = new Set();
@@ -47,7 +59,6 @@ const ReservedHalls = () => {
         });
 
         setServiceHeaders([...services]);
-        setLoading(false);
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -66,7 +77,7 @@ const ReservedHalls = () => {
     } else {
       fetchReservedHalls(userId, role);
     }
-  }, [t]);
+  }, [page, t]); // Refetch data when the page changes
 
   if (loading) return <p>{t("loading")}</p>; // Translated loading message
   if (error)
@@ -81,47 +92,81 @@ const ReservedHalls = () => {
     return t(category.toLowerCase()) || category; // Translate known categories or return original
   };
 
+  const handlePageChange = (event, value) => {
+    setPage(value); // Update the page when pagination controls are clicked
+  };
+
   return (
     <div className="reserved-halls-container-modern">
       <h1 className="reserved-halls-title-modern">{t("reserved_halls")}</h1>{" "}
       {/* Translated "Reserved Halls" */}
-      <table className="reserved-halls-table-modern">
-        <thead className="reserved-halls-thead-modern">
-          <tr className="reserved-halls-header-row-modern">
-            <th>{t("hall_name")}</th> {/* Translated "Hall Name" */}
-            <th>{t("category")}</th> {/* Translated "Category" */}
-            <th>{t("time")}</th> {/* Translated "Time" */}
-            <th>{t("end_time")}</th> {/* Translated "End Time" */}
-            {serviceHeaders.map((service, index) => (
-              <th key={index}>
-                {service.charAt(0).toUpperCase() + service.slice(1)} {t("cost")}{" "}
-                {/* Translated "Cost" */}
-              </th>
-            ))}
-            <th>{t("total_price")}</th> {/* Translated "Total Price" */}
-          </tr>
-        </thead>
-        <tbody className="reserved-halls-tbody-modern">
-          {halls.map((hall, index) => (
-            <tr key={index} className="reserved-halls-row-modern">
-              <td>{hall.hallName}</td>
-              <td>{translateCategory(hall.category)}</td>{" "}
-              {/* Translated category */}
-              <td>{new Date(hall.time).toLocaleString()}</td>
-              <td>
-                {hall.endTime
-                  ? new Date(hall.endTime).toLocaleString()
-                  : t("N/A")}
-              </td>{" "}
-              {/* Translated "N/A" */}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                {t("hall_name")}
+              </TableCell>{" "}
+              {/* Translated "Hall Name" */}
+              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                {t("category")}
+              </TableCell>{" "}
+              {/* Translated "Category" */}
+              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                {t("time")}
+              </TableCell>{" "}
+              {/* Translated "Time" */}
+              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                {t("end_time")}
+              </TableCell>{" "}
+              {/* Translated "End Time" */}
               {serviceHeaders.map((service, index) => (
-                <td key={index}>{hall.services[service] || t("N/A")}</td>
+                <TableCell
+                  sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  key={index}
+                >
+                  {service.charAt(0).toUpperCase() + service.slice(1)}{" "}
+                  {t("cost")} {/* Translated "Cost" */}
+                </TableCell>
               ))}
-              <td>{hall.totalPrice}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                {t("total_price")}
+              </TableCell>{" "}
+              {/* Translated "Total Price" */}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {halls.map((hall, index) => (
+              <TableRow key={index}>
+                <TableCell>{hall.hallName}</TableCell>
+                <TableCell>{translateCategory(hall.category)}</TableCell>
+                <TableCell>{new Date(hall.time).toLocaleString()}</TableCell>
+                <TableCell>
+                  {hall.endTime
+                    ? new Date(hall.endTime).toLocaleString()
+                    : t("N/A")}
+                </TableCell>
+                {serviceHeaders.map((service, index) => (
+                  <TableCell key={index}>
+                    {hall.services[service] || t("N/A")}
+                  </TableCell>
+                ))}
+                <TableCell>{hall.totalPrice}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* Custom Pagination */}
+      <div className="pagination-controls">
+        <Pagination
+          count={totalPages} // Total number of pages
+          page={page} // Current page number
+          variant="outlined"
+          onChange={handlePageChange} // Function to handle page change
+          color="primary" // Color for pagination controls
+        />
+      </div>
     </div>
   );
 };

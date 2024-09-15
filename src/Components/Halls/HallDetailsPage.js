@@ -77,7 +77,7 @@ const HallDetailsPage = () => {
   const fetchReservedDays = async (year, month) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetchWithAuth(
+      const response = await fetch(
         `http://localhost:8080/whitelist/${id}/reserved-days?year=${year}&month=${month}`,
         {
           headers: {
@@ -97,7 +97,7 @@ const HallDetailsPage = () => {
   useEffect(() => {
     const fetchHallDetails = async () => {
       try {
-        const response = await fetchWithAuth(
+        const response = await fetch(
           `http://localhost:8080/whitelist/${id}`
         );
         const data = await response.json();

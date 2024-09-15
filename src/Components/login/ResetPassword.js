@@ -25,7 +25,7 @@ const ResetPassword = () => {
       const url = `http://localhost:8080/whitelist/send-verification-code?email=${encodeURIComponent(
         email
       )}`;
-      const response = await fetchWithAuth(url, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

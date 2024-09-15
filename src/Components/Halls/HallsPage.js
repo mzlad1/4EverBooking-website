@@ -71,7 +71,7 @@ const HallsPage = () => {
     console.log("API URL:", apiUrl);
 
     try {
-      const response = await fetchWithAuth(apiUrl);
+      const response = await fetch(apiUrl);
       const data = await response.json();
 
       const filteredHalls = data.content.filter((hall) => {

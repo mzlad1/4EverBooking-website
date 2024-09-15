@@ -77,7 +77,7 @@ const UpdateHall = () => {
     const fetchHallDetails = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await fetchWithAuth(
+        const response = await fetch(
           `http://localhost:8080/whitelist/${hallId}`,
           {
             headers: {

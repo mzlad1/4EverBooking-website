@@ -4,18 +4,20 @@ import { useAuth } from "../../Context/AuthContext"; // Ensure the path is corre
 
 const ProtectedRoute = ({ component: Component, allowedRoles, ...rest }) => {
   const { isLoggedIn } = useAuth();
-  const userRole = localStorage.getItem("role"); // Get the user's role
+  const userRole = localStorage.getItem("role"); // Get the user's role from localStorage
 
   return (
     <Route
       {...rest}
-      render={(props) =>
-        isLoggedIn && allowedRoles.includes(userRole) ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/unauthorized" />
-        )
-      }
+      render={(props) => {
+        // Allow access if the user is not logged in (guest) or the role is CUSTOMER
+        if (!isLoggedIn || (isLoggedIn && allowedRoles.includes(userRole))) {
+          return <Component {...props} />;
+        }
+
+        // If the user is logged in but not a CUSTOMER, redirect to unauthorized page
+        return <Redirect to="/unauthorized" />;
+      }}
     />
   );
 };

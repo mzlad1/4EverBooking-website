@@ -23,6 +23,7 @@ import ReservationPage from "./Components/Halls/ReservationPage";
 import HallDetailsPage from "./Components/Halls/HallDetailsPage";
 import NoReserveInfo from "./Components/Halls/noreserveinfo";
 import ResetPassword from "./Components/login/ResetPassword";
+
 /*-------------blog------------ */
 
 import "./i18n"; // Import the i18n initialization
@@ -36,18 +37,23 @@ function App() {
           <Switch>
             <Route path="/detailsError" component={NoReserveInfo} />
             <Route path="/unauthorized" component={Unauthorized} />
-            <Route path="/" exact component={Home} />
+            <ProtectedRoute
+              path="/"
+              exact
+              component={Home}
+              allowedRoles={["CUSTOMER" , "HALL_OWNER"]}
+            />
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/about" exact component={About} />
             <ProtectedRoute
               path="/halls"
               component={HallsPage}
-              allowedRoles={["CUSTOMER", "ADMIN"]} // Only allow CUSTOMER and ADMIN
+              allowedRoles={["CUSTOMER"]} // Only allow CUSTOMER and ADMIN
             />{" "}
             <ProtectedRoute
               path="/hall/:id"
               component={HallDetailsPage}
-              allowedRoles={["CUSTOMER", "ADMIN"]}
+              allowedRoles={["CUSTOMER"]}
             />
             <ReservationProtectedRoute
               path="/reserve"

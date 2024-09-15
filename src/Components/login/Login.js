@@ -39,7 +39,7 @@ const Login = () => {
       console.log("accessToken:", data.access_token);
       console.log("refreshToken:", data.refresh_token);
       // Fetch the user ID and role using the access token
-      const userResponse = await fetchWithAuth(
+      const userResponse = await fetch(
         `http://localhost:8080/whitelist/getUser`, // Fixed backticks
         {
           method: "GET",
@@ -107,9 +107,13 @@ const Login = () => {
         localStorage.setItem("companyName", companyName);
       }
 
-      history.push("/"); // Redirect to home
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, Opera
+      if (userData.role === "ADMIN") {
+        history.push("/dashboard/edit-profile"); // Redirect to home page
+      } else {
+        history.push("/"); // Redirect to home
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, Opera
+      }
     } catch (error) {
       console.error("Login Error:", error);
       setError(t("login_error")); // Set translated error message

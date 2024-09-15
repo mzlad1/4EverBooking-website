@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import { useTranslation } from "react-i18next";
+import { fetchWithAuth } from "../../apiClient";
+import Alert from "@mui/material/Alert";
 import "./EditProfile.css";
-import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+
+const primaryColor = "#cba36b"; // Your primary color
 
 const EditProfile = () => {
-  const { t } = useTranslation(); // Initialize the translation hook
+  const { t } = useTranslation();
   const [profile, setProfile] = useState({
     id: null,
     firstName: "",
@@ -25,16 +33,16 @@ const EditProfile = () => {
     confirmPassword: "",
   });
 
-  const [message, setMessage] = useState(null); // State for displaying messages
-  const [passwordMessage, setPasswordMessage] = useState(null); // State for password change messages
+  const [message, setMessage] = useState(null);
+  const [passwordMessage, setPasswordMessage] = useState(null);
 
-  const userRole = localStorage.getItem("role"); // Get the user's role (CUSTOMER or HALL_OWNER)
+  const userRole = localStorage.getItem("role");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await fetchWithAuth(
+        const response = await fetch(
           "http://localhost:8080/whitelist/getUser",
           {
             method: "GET",
@@ -52,7 +60,6 @@ const EditProfile = () => {
         const user = await response.json();
         const dob = new Date(user.dateOfBirth).toISOString().split("T")[0];
 
-        // Get companyName from localStorage if the user is a hall owner
         const companyName =
           userRole === "HALL_OWNER"
             ? localStorage.getItem("companyName") || ""
@@ -67,7 +74,7 @@ const EditProfile = () => {
           email: user.email,
           dateOfBirth: dob,
           image: user.image || "/Images/user.png",
-          companyName, // Set companyName from localStorage if available
+          companyName,
         });
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -101,7 +108,6 @@ const EditProfile = () => {
       let body = {};
 
       if (userRole === "CUSTOMER") {
-        // CUSTOMER profile update
         apiEndpoint = `http://localhost:8080/customer/updateProfile/${profile.id}`;
         body = {
           firstName: profile.firstName,
@@ -111,7 +117,6 @@ const EditProfile = () => {
           dateOfBirth: profile.dateOfBirth,
         };
       } else if (userRole === "HALL_OWNER") {
-        // HALL_OWNER profile update with company name
         apiEndpoint = `http://localhost:8080/hallOwner/UpdateProfile/${profile.id}`;
         body = {
           firstName: profile.firstName,
@@ -119,7 +124,7 @@ const EditProfile = () => {
           address: profile.address,
           phone: profile.phone,
           dateOfBirth: profile.dateOfBirth,
-          companyName: profile.companyName, // Include company name for hall owner
+          companyName: profile.companyName,
         };
       }
 
@@ -136,18 +141,18 @@ const EditProfile = () => {
         throw new Error("Failed to save profile");
       }
 
-      // Update companyName in localStorage if the user is a HALL_OWNER
       if (userRole === "HALL_OWNER") {
         localStorage.setItem("companyName", profile.companyName);
       }
-      setMessage(t("profile_updated_success")); // Set translated success message
+      setMessage(t("profile_updated_success"));
     } catch (error) {
-      setMessage(`${t("error_saving_profile")} ${error.message}`); // Set translated error message
+      setMessage(`${t("error_saving_profile")} ${error.message}`);
     }
   };
+
   const handlePasswordSave = async () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
-      alert(t("passwords_do_not_match")); // Translated password mismatch message
+      alert(t("passwords_do_not_match"));
       return;
     }
 
@@ -174,14 +179,14 @@ const EditProfile = () => {
         throw new Error("Failed to change password");
       }
 
-      setPasswordMessage(t("password_changed_success")); // Set translated success message
+      setPasswordMessage(t("password_changed_success"));
       setPasswords({
         oldPassword: "",
         newPassword: "",
         confirmPassword: "",
       });
     } catch (error) {
-      setPasswordMessage(`${t("error_changing_password")} ${error.message}`); // Set translated error message
+      setPasswordMessage(`${t("error_changing_password")} ${error.message}`);
     }
   };
 
@@ -223,11 +228,17 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="edit-profile-container-modern">
-      <div className="edit-profile-modern">
-        <h2>{t("edit_profile")}</h2> {/* Translated Edit Profile */}
-        <div className="profile-picture-modern">
-          <img src={profile.image} alt="Profile" />
+    <Box className="edit-profile-container-modern" p={3}>
+      <Box className="edit-profile-modern" mb={3}>
+        <Typography variant="h4" >
+          {t("edit_profile")}
+        </Typography>
+        <Box className="profile-picture-modern" my={3}>
+          <Avatar
+            src={profile.image}
+            alt="Profile"
+            sx={{ width: 100, height: 100 }}
+          />
           <input
             type="file"
             id="profileImage"
@@ -236,140 +247,158 @@ const EditProfile = () => {
             onChange={handleImageChange}
           />
           <label htmlFor="profileImage" className="change-picture-btn-modern">
-            {t("change_picture")} {/* Translated Change Picture */}
+            {t("change_picture")}
           </label>
-        </div>
-        <div className="profile-info-modern">
-          <div className="form-row-modern">
-            <div className="form-group-modern">
-              <label>{t("first_name")}:</label> {/* Translated First Name */}
-              <input
-                type="text"
-                name="firstName"
-                value={profile.firstName}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group-modern">
-              <label>{t("last_name")}:</label> {/* Translated Last Name */}
-              <input
-                type="text"
-                name="lastName"
-                value={profile.lastName}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-group-modern">
-            <label>{t("email")}:</label> {/* Translated Email */}
-            <input
-              type="email"
-              name="email"
-              value={profile.email}
+        </Box>
+        <Box className="profile-info-modern">
+          <Box className="form-row-modern">
+            <TextField
+              label={t("first_name")}
+              name="firstName"
+              value={profile.firstName}
               onChange={handleChange}
-              disabled
+              fullWidth
+              margin="normal"
             />
-          </div>
-          <div className="form-group-modern">
-            <label>{t("address")}:</label> {/* Translated Address */}
-            <input
-              type="text"
-              name="address"
-              value={profile.address}
+            <TextField
+              label={t("last_name")}
+              name="lastName"
+              value={profile.lastName}
               onChange={handleChange}
+              fullWidth
+              margin="normal"
             />
-          </div>
-          <div className="form-group-modern">
-            <label>{t("phone")}:</label> {/* Translated Phone */}
-            <input
-              type="text"
-              name="phone"
-              value={profile.phone}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group-modern">
-            <label>{t("date_of_birth")}:</label>{" "}
-            {/* Translated Date of Birth */}
-            <input
-              type="date"
-              name="dateOfBirth"
-              value={profile.dateOfBirth}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Render the Company Name field only for Hall Owners */}
+          </Box>
+          <TextField
+            label={t("email")}
+            name="email"
+            value={profile.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            disabled
+          />
+          <TextField
+            label={t("address")}
+            name="address"
+            value={profile.address}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label={t("phone")}
+            name="phone"
+            value={profile.phone}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label={t("date_of_birth")}
+            name="dateOfBirth"
+            type="date"
+            value={profile.dateOfBirth}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
           {userRole === "HALL_OWNER" && (
-            <div className="form-group-modern">
-              <label>{t("company_name")}:</label>{" "}
-              {/* Translated Company Name */}
-              <input
-                type="text"
-                name="companyName"
-                value={profile.companyName}
-                onChange={handleChange}
-              />
-            </div>
+            <TextField
+              label={t("company_name")}
+              name="companyName"
+              value={profile.companyName}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
           )}
-
-          <button onClick={handleSave} className="save-btn-modern">
-            {t("save_profile")} {/* Translated Save Profile */}
-          </button>
-        </div>
+          <Button
+            variant="contained"
+            onClick={handleSave}
+            fullWidth
+            sx={{
+              mt: 2,
+              backgroundColor: primaryColor,
+              "&:hover": { backgroundColor: "#b5884e" },
+            }}
+          >
+            {t("save_profile")}
+          </Button>
+        </Box>
         {message && (
-          <div className="message-modern">
-            <CheckCircleOutlineIcon color="success" /> {message}
-          </div>
+          <Alert severity="success" sx={{ mt: 2 }}>
+            <CheckCircleOutlineIcon color="success" sx={{ mr: 1 }} />
+            {message}
+          </Alert>
         )}
-      </div>
-      <div className="utils-modern">
-        <div className="change-password-section-modern">
-          <h2>{t("change_password")}</h2> {/* Translated Change Password */}
-          <div className="form-group-modern">
-            <label>{t("old_password")}:</label> {/* Translated Old Password */}
-            <input
-              type="password"
-              name="oldPassword"
-              value={passwords.oldPassword}
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <div className="form-group-modern">
-            <label>{t("new_password")}:</label> {/* Translated New Password */}
-            <input
-              type="password"
-              name="newPassword"
-              value={passwords.newPassword}
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <div className="form-group-modern">
-            <label>{t("confirm_new_password")}:</label>{" "}
-            {/* Translated Confirm New Password */}
-            <input
-              type="password"
-              name="confirmPassword"
-              value={passwords.confirmPassword}
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <button onClick={handlePasswordSave} className="save-btn-modern">
-            {t("change_password")} {/* Translated Change Password */}
-          </button>
+      </Box>
+
+      <Box className="utils-modern">
+        <Box className="change-password-section-modern" mb={3}>
+          <Typography variant="h5" >
+            {t("change_password")}
+          </Typography>
+          <TextField
+            label={t("old_password")}
+            type="password"
+            name="oldPassword"
+            value={passwords.oldPassword}
+            onChange={handlePasswordChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label={t("new_password")}
+            type="password"
+            name="newPassword"
+            value={passwords.newPassword}
+            onChange={handlePasswordChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label={t("confirm_new_password")}
+            type="password"
+            name="confirmPassword"
+            value={passwords.confirmPassword}
+            onChange={handlePasswordChange}
+            fullWidth
+            margin="normal"
+          />
+          <Button
+            variant="contained"
+            onClick={handlePasswordSave}
+            fullWidth
+            sx={{
+              mt: 2,
+              backgroundColor: primaryColor,
+              "&:hover": { backgroundColor: "#b5884e" },
+            }}
+          >
+            {t("change_password")}
+          </Button>
           {passwordMessage && (
-            <div className="message-modern">
+            <Alert
+              severity={
+                passwordMessage.startsWith("Error") ? "error" : "success"
+              }
+              sx={{ mt: 2 }}
+            >
               {passwordMessage.startsWith("Error") ? (
-                <ErrorOutlineIcon color="error" />
+                <ErrorOutlineIcon color="error" sx={{ mr: 1 }} />
               ) : (
-                <CheckCircleOutlineIcon color="success" />
+                <CheckCircleOutlineIcon color="success" sx={{ mr: 1 }} />
               )}
               {passwordMessage}
-            </div>
+            </Alert>
           )}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

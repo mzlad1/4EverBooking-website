@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch } from "react-router-dom"; // Import useRouteMatch hook
-import { useHistory } from "react-router-dom"; // Import navigation hook
+import { useRouteMatch, useHistory } from "react-router-dom"; // Import necessary hooks
 import { useTranslation } from "react-i18next"; // i18n for translation
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,6 +7,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination"; // Import Pagination component
 import "./MyHalls.css"; // CSS for styling the halls page
 import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 
@@ -102,11 +106,9 @@ const MyHalls = () => {
       // Display the response message
       alert(data.message); // This will show the message "Hall deleted successfully"
 
-      // Continue with the rest of the deletion logic...
       const updatedHalls = halls.filter((hall) => hall.id !== hallId);
       if (updatedHalls.length < 12 && currentPage < totalPages) {
-        // Fetch next page halls if needed
-        // Fetch logic remains the same
+        fetchHalls(currentPage); // Fetch updated halls
       } else {
         setHalls(updatedHalls);
       }
@@ -116,7 +118,7 @@ const MyHalls = () => {
   };
 
   const handleUpdateHall = (hallId) => {
-    history.push(`update-hall/${hallId}`); // Construct the full path
+    history.push(`update-hall/${hallId}`); // Navigate to the update hall page
   };
 
   const handleDialogClose = () => {
@@ -139,66 +141,60 @@ const MyHalls = () => {
       <h1 className="my-halls-title">{t("my_halls")}</h1>
       <div className="halls-list-modern">
         {halls.map((hall) => (
-          <div key={hall.id} className="myhall-card-modern">
-            <img
-              src={getValidImage(hall.image)}
+          <Card key={hall.id} className="myhall-card-modern">
+            <CardMedia
+              component="img"
+              height="140"
+              image={getValidImage(hall.image)}
               alt={hall.name}
-              className="hall-image-modern"
             />
-            <div className="hall-info-modern">
-              <h2 className="hall-name-modern">{hall.name}</h2>
-              <p className="hall-location-modern">
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {hall.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
                 {t("location")}: {t(`west_bank_cities.${hall.location}`)}
-              </p>
-              <p className="hall-capacity-modern">
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
                 {t("capacity")}: {hall.capacity}
-              </p>
-              <p className="hall-rating-modern">
-                {t("average_rating")}: {hall.averageRating}
-              </p>
-              <p className="hall-phone-modern">
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {t("average_rating")}: {hall.averageRating.toFixed(2)}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
                 {t("phone")}: {hall.phone}
-              </p>
-              {/* Update and Delete Buttons */}
+              </Typography>
               <div className="hall-actions-modern">
-                <button
-                  className="button-update-modern"
+                <Button
+                  variant="contained"
+                  color="primary"
                   onClick={() => handleUpdateHall(hall.id)}
+                  style={{ marginRight: "10px" }}
                 >
                   {t("update_hall")}
-                </button>
-                <button
-                  className="button-delete-modern"
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
                   onClick={() => handleOpenDialog(hall)}
                 >
                   {t("delete_hall")}
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
+
       {/* Pagination Controls */}
       <div className="pagination-modern">
-        <button
-          className="pagination-button-modern"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-        >
-          {t("previous")}
-        </button>
-        <span className="pagination-info-modern">
-          {t("page")} {currentPage} {t("of")} {totalPages}
-        </span>
-        <button
-          className="pagination-button-modern"
-          disabled={currentPage === totalPages}
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-        >
-          {t("next")}
-        </button>
+        <Pagination
+          count={totalPages} // Total number of pages
+          page={currentPage} // Current page
+          variant="outlined"
+          onChange={(event, value) => setCurrentPage(value)} // Handle page change
+          color="primary"
+        />
       </div>
 
       {/* Delete Confirmation Dialog */}

@@ -17,7 +17,7 @@ const Navbar = () => {
       const fetchProfileImage = async () => {
         try {
           const token = localStorage.getItem("accessToken");
-          const response = await fetchWithAuth(
+          const response = await fetch(
             "http://localhost:8080/whitelist/getUser",
             {
               method: "GET",
@@ -97,7 +97,7 @@ const Navbar = () => {
       <nav className="navbar-modern">
         <div className="container-modern flex-space-modern">
           <div className="logo-modern">
-            <a href="/" className="logo-link-modern" onClick={closeMobileMenu}>
+            <a className="logo-link-modern" onClick={closeMobileMenu}>
               <p>
                 4<span className="logo-highlight-modern">EVER</span>BOOKING
               </p>
@@ -109,11 +109,17 @@ const Navbar = () => {
           </div>
 
           <ul className={click ? "nav-menu-modern active" : "nav-menu-modern"}>
-            <li className="nav-item-modern">
-              <a href="/" className="nav-link-modern" onClick={closeMobileMenu}>
-                {t("home")}
-              </a>
-            </li>
+            {(!isLoggedIn || (userRole && userRole !== "ADMIN")) && (
+              <li className="nav-item-modern">
+                <a
+                  href="/"
+                  className="nav-link-modern"
+                  onClick={closeMobileMenu}
+                >
+                  {t("home")}
+                </a>
+              </li>
+            )}
             <li className="nav-item-modern">
               <a
                 href="/about"
@@ -125,7 +131,10 @@ const Navbar = () => {
             </li>
 
             {/* Conditionally render the "Halls" link based on the user role */}
-            {(!isLoggedIn || (userRole && userRole !== "HALL_OWNER")) && (
+            {(!isLoggedIn ||
+              (userRole &&
+                userRole !== "HALL_OWNER" &&
+                userRole !== "ADMIN")) && (
               <li className="nav-item-modern">
                 <a
                   href="/halls"

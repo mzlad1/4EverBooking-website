@@ -1,146 +1,222 @@
 /* Container styling */
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f4f4f9;
-    padding: 30px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f9;
+  padding: 30px;
+}
+
+.register-sign-box {
+  background-color: white;
+  padding: 50px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 700px; /* Increased width to fit the 2-column layout */
+  width: 100%;
+  animation: fadeIn 0.6s ease-in-out;
+  text-align: center;
+}
+
+.register-sign-box p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Toggle button styling */
+.register-toggle-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  gap: 10px;
+}
+
+.register-toggle-buttons button {
+  background-color: #f4f4f9;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.register-toggle-buttons button.active {
+  background-color: #cba36b; /* Background color for selected state */
+  color: white; /* White text for the selected state */
+}
+
+.register-toggle-buttons button:hover {
+  background-color: #cba36b;
+  color: white;
+}
+
+/* Input fields container for two-column layout */
+.register-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two-column layout */
+  gap: 20px; /* Space between inputs */
+  margin-bottom: 30px;
+}
+
+.register-form-grid .register-input-field {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f9;
+  font-size: 16px;
+  color: #333;
+}
+
+.register-form-grid .register-input-field::placeholder {
+  color: #aaa;
+}
+
+.register-form-grid .register-input-field:focus {
+  outline: none;
+  border-color: #cba36b;
+  box-shadow: 0 0 5px rgba(203, 163, 107, 0.5);
+}
+
+/* Full width input field (for elements that need to span both columns) */
+.register-full-width {
+  grid-column: span 1; /* Span across two columns */
+}
+
+/* Error message styling */
+.register-error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* Button styling */
+.register-primary-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #cba36b;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.register-primary-btn:hover {
+  background-color: #b99a5b;
+  transform: translateY(-3px);
+}
+
+/* Link and text below the button */
+.register-sign-box p {
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.register-signin-link {
+  color: #cba36b;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-signin-link:hover {
+  color: #b99a5b;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .register-sign-box {
-    background-color: white;
-    padding: 50px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-width: 700px; /* Increased width to fit the 2-column layout */
-    width: 100%;
-    animation: fadeIn 0.6s ease-in-out;
-    text-align: center;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .register-sign-box p {
-    font-size: 20px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 30px;
-  }
-  
-  /* Toggle button styling */
-  .register-toggle-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-    gap: 10px;
-  }
-  
-  .register-toggle-buttons button {
-    background-color: #f4f4f9;
-    border: 1px solid #ccc;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .register-toggle-buttons button.active {
-    background-color: #cba36b; /* Background color for selected state */
-    color: white; /* White text for the selected state */
-  }
-  
-  .register-toggle-buttons button:hover {
-    background-color: #cba36b;
-    color: white;
-  }
-  
-  /* Input fields container for two-column layout */
-  .register-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two-column layout */
-    gap: 20px; /* Space between inputs */
-    margin-bottom: 30px;
-  }
-  
-  .register-form-grid .register-input-field {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #f4f4f9;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .register-form-grid .register-input-field::placeholder {
-    color: #aaa;
-  }
-  
-  .register-form-grid .register-input-field:focus {
-    outline: none;
-    border-color: #cba36b;
-    box-shadow: 0 0 5px rgba(203, 163, 107, 0.5);
-  }
-  
-  /* Full width input field (for elements that need to span both columns) */
-  .register-full-width {
-    grid-column: span 1; /* Span across two columns */
-  }
-  
-  /* Error message styling */
-  .register-error {
-    color: red;
-    font-size: 14px;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    text-align: left;
-  }
-  
-  /* Button styling */
-  .register-primary-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: #cba36b;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .register-primary-btn:hover {
-    background-color: #b99a5b;
-    transform: translateY(-3px);
-  }
-  
-  /* Link and text below the button */
-  .register-sign-box p {
-    font-size: 14px;
-    margin-top: 20px;
-  }
-  
-  .register-signin-link {
-    color: #cba36b;
-    font-weight: bold;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .register-signin-link:hover {
-    color: #b99a5b;
-  }
-  
-  /* Animation */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
+}
+.password-conditions-box {
+  position: absolute;
+  top: 200px;
+  right: 75%; /* Positioned left of the input field */
+  background-color: #fff; /* White background for a clean look */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px;
+  width: 350px; /* Wider for better readability */
+  font-size: 14px;
+  font-family: "Arial", sans-serif; /* Modern, clean font */
+  color: #333; /* Dark gray for text */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  z-index: 100;
+  line-height: 1.6; /* Spacing between lines */
+}
+
+.password-conditions-box ul {
+  padding-left: 20px; /* Indentation for list */
+}
+
+.password-conditions-box li {
+  margin-bottom: 10px; /* Space between list items */
+}
+
+.password-conditions-box li::before {
+  content: "✔"; /* Checkmark icon for each condition */
+  color: #28a745; /* Green color */
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.password-strength-meter {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.password-strength-meter progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  appearance: none;
+}
+
+.password-strength-meter progress::-webkit-progress-bar {
+  background-color: #f3f3f3; /* Background for meter */
+  border-radius: 5px;
+}
+
+.password-strength-meter progress::-webkit-progress-value {
+  border-radius: 5px;
+}
+
+/* Color based on strength */
+.strength-0::-webkit-progress-value {
+  background-color: #dc3545;
+} /* Weak */
+.strength-1::-webkit-progress-value {
+  background-color: #ffc107;
+} /* Fair */
+.strength-2::-webkit-progress-value {
+  background-color: #fd7e14;
+} /* Good */
+.strength-3::-webkit-progress-value {
+  background-color: #28a745;
+} /* Strong */
+.strength-4::-webkit-progress-value {
+  background-color: #007bff;
+} /* Very Strong */
+
+.strength-text {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}

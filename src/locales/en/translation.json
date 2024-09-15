@@ -212,5 +212,11 @@
   "confirm_delete": "Confirm Delete",
   "show_more": "Show More",
   "feedback": "Feedback",
-  "financial_report": "Financial Report"
+  "financial_report": "Financial Report",
+  "password_min_length": "Must be at least 8 characters long",
+  "password_uppercase": "Must contain at least one uppercase letter",
+  "password_lowercase": "Must contain at least one lowercase letter",
+  "password_number": "Must contain at least one number",
+  "password_special_char": "Must contain at least one special character (e.g., @, #, $, etc.)"
+
 }
