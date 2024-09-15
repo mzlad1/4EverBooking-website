@@ -10,6 +10,8 @@ const Navbar = () => {
   const [profileImage, setProfileImage] = useState("/Images/user.png"); // Default profile picture
   const { isLoggedIn, logout } = useAuth(); // Use logout directly from the context
 
+  const [userRole, setUserRole] = useState(null); // State to store the user role
+
   useEffect(() => {
     if (isLoggedIn) {
       const fetchProfileImage = async () => {
@@ -39,7 +41,14 @@ const Navbar = () => {
         }
       };
 
+      // Fetch the user role from localStorage
+      const role = localStorage.getItem("role");
+      console.log("User role from localStorage:", role); // Debugging
+      setUserRole(role); // Set the role in state
+
       fetchProfileImage();
+    } else {
+      setUserRole(null); // Reset role when logged out
     }
   }, [isLoggedIn]);
 
@@ -78,6 +87,8 @@ const Navbar = () => {
     }
   };
 
+  console.log("Current user role state:", userRole); // Debugging
+
   return (
     <>
       <nav className="navbar-modern">
@@ -110,15 +121,18 @@ const Navbar = () => {
               </a>
             </li>
 
-            <li className="nav-item-modern">
-              <a
-                href="/halls"
-                className="nav-link-modern"
-                onClick={closeMobileMenu}
-              >
-                {t("halls")}
-              </a>
-            </li>
+            {/* Conditionally render the "Halls" link based on the user role */}
+            {(!isLoggedIn || (userRole && userRole !== "HALL_OWNER")) && (
+              <li className="nav-item-modern">
+                <a
+                  href="/halls"
+                  className="nav-link-modern"
+                  onClick={closeMobileMenu}
+                >
+                  {t("halls")}
+                </a>
+              </li>
+            )}
 
             <li className="nav-item-modern">
               <a

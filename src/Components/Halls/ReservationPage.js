@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import DatePicker from "react-datepicker"; // Import React Date Picker
 import "react-datepicker/dist/react-datepicker.css"; // Import Date Picker styles
@@ -17,6 +17,10 @@ const ReservationPage = () => {
   const location = useLocation();
   const history = useHistory(); // For navigating
 
+  // Try to get reservation details from localStorage or location.state
+  const reservationDetails =
+    JSON.parse(localStorage.getItem("reservationDetails")) || location.state;
+
   const {
     hallId,
     customerId,
@@ -25,9 +29,32 @@ const ReservationPage = () => {
     selectedCategory,
     fromDate,
     toDate,
-  } = location.state || {};
+  } = reservationDetails || {}; // Use reservation details or destructure empty object
 
-  console.log("services", selectedServices);
+  // Redirect to HallDetailsPage if reservation details are missing
+  useEffect(() => {
+    if (
+      !hallId ||
+      !customerId ||
+      !totalPrice ||
+      !selectedServices ||
+      !selectedCategory ||
+      !fromDate
+    ) {
+      // If required details are missing, redirect to HallDetailsPage
+      history.push("/hall-details");
+    }
+  }, [
+    hallId,
+    customerId,
+    totalPrice,
+    selectedServices,
+    selectedCategory,
+    fromDate,
+    history,
+  ]);
+
+  // Rest of your component code remains the same
 
   // Form state for billing information
   const [billingAddress, setBillingAddress] = useState({
@@ -158,17 +185,18 @@ const ReservationPage = () => {
   // Handle cancel button click
   const handleCancel = () => {
     history.goBack(); // Navigate to the previous page
+    localStorage.removeItem("reservationDetails"); // Clear reservation details
   };
 
   return (
     <div className="reservation-confirmation-page">
       <h1 className="reservation-fade-in-title">Reservation Confirmation</h1>
-  
+
       <div className="reservation-total-price-box reservation-fade-in">
         <p>Total Price:</p>
         <h2>${totalPrice}</h2>
       </div>
-  
+
       <form onSubmit={handleSubmit} className="reservation-form" noValidate>
         <div className="reservation-form-boxes reservation-fade-in">
           <div className="reservation-billing-box">
@@ -189,7 +217,7 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.fullName}</p>
               )}
             </div>
-  
+
             <div className="reservation-form-group">
               <label>Address:</label>
               <div className="reservation-input-with-icon">
@@ -206,7 +234,7 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.address}</p>
               )}
             </div>
-  
+
             <div className="reservation-form-group">
               <label>Phone Number:</label>
               <div className="reservation-input-with-icon">
@@ -220,14 +248,16 @@ const ReservationPage = () => {
                 />
               </div>
               {errors.phoneNumber && (
-                <p className="reservation-error-message">{errors.phoneNumber}</p>
+                <p className="reservation-error-message">
+                  {errors.phoneNumber}
+                </p>
               )}
             </div>
           </div>
-  
+
           <div className="reservation-payment-box">
             <h2>Payment Information</h2>
-  
+
             <div className="reservation-form-group">
               <label>Credit Card Number:</label>
               <div className="reservation-input-with-icon">
@@ -245,7 +275,7 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.cardNumber}</p>
               )}
             </div>
-  
+
             <div className="reservation-form-group">
               <label>Expiry Date:</label>
               <div className="reservation-input-with-icon-date">
@@ -268,7 +298,7 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.expiryDate}</p>
               )}
             </div>
-  
+
             <div className="reservation-form-group">
               <label>CVV:</label>
               <div className="reservation-input-with-icon">
@@ -288,7 +318,7 @@ const ReservationPage = () => {
             </div>
           </div>
         </div>
-  
+
         <div className="reservation-button-container reservation-fade-in">
           <button type="submit" className="reservation-submit-button">
             Confirm Reservation
@@ -304,7 +334,6 @@ const ReservationPage = () => {
       </form>
     </div>
   );
-  
 };
 
 export default ReservationPage;

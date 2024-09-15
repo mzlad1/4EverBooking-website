@@ -136,8 +136,26 @@
   background-color: #b38d5c;
 }
 
+/* Success message styling */
 .success-message {
-  color: green;
-  font-size: 1.2rem;
-  margin-bottom: 20px;
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 12px 20px;
+  margin-top: 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Error message styling */
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.5;
 }

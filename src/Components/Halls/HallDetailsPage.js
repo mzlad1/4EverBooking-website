@@ -168,6 +168,18 @@ const HallDetailsPage = () => {
 
     // If no errors, proceed with navigation
     const totalPrice = calculateTotalPrice();
+    localStorage.setItem(
+      "reservationDetails",
+      JSON.stringify({
+        hallId: hall.id,
+        customerId: localStorage.getItem("customerId"),
+        totalPrice,
+        selectedServices,
+        selectedCategory: cleanCategory,
+        fromDate,
+        toDate,
+      })
+    );
     history.push({
       pathname: `/reserve`,
       state: {

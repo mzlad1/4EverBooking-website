@@ -6,6 +6,7 @@ import './financial.css';
 
 const FinancialReport = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfFilename, setPdfFilename] = useState(null); // To store the filename
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { isLoggedIn } = useAuth();
@@ -20,6 +21,7 @@ const FinancialReport = () => {
           throw new Error('Owner ID not found');
         }
 
+        // First API call to get the PDF filename from the report URL
         const response = await fetch(
           `http://localhost:8080/hallOwner/hallsReservationReport/${ownerId}`, // Use dynamic owner ID
           {
@@ -35,8 +37,11 @@ const FinancialReport = () => {
           throw new Error('Failed to fetch financial report');
         }
 
-        const pdfUrl = await response.text(); // Response body will be the PDF URL
+        const pdfUrl = await response.text(); // Response body contains the PDF URL
+        const filename = pdfUrl.split('/').pop(); // Extract the filename from the URL
         setPdfUrl(pdfUrl);
+        setPdfFilename(filename); // Store the filename for download
+
       } catch (error) {
         setError(error.message);
       } finally {
@@ -46,6 +51,39 @@ const FinancialReport = () => {
 
     fetchFinancialReport();
   }, [isLoggedIn]);
+
+  // Function to handle direct download from the second API
+  const handleDownload = async () => {
+    try {
+      const token = localStorage.getItem('accessToken'); // Get access token from localStorage
+
+      // Second API call to download the file using the filename
+      const downloadUrl = `http://localhost:8080/hallOwner/download/${pdfFilename}`; // Use the filename for the download API
+
+      const response = await fetch(downloadUrl, {
+        method: 'GET',
+        headers: {
+          Accept: '*/*',
+          Authorization: `Bearer ${token}`, // Include Authorization header
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to download report');
+      }
+
+      const blob = await response.blob(); // Get the file as a blob
+      const url = window.URL.createObjectURL(blob); // Create a temporary URL for the file
+      const link = document.createElement('a'); // Create a temporary download link
+      link.href = url;
+      link.setAttribute('download', pdfFilename); // Set the file name dynamically
+      document.body.appendChild(link);
+      link.click(); // Trigger the download
+      link.remove(); // Clean up the link
+    } catch (error) {
+      console.error('Download error:', error);
+    }
+  };
 
   if (loading) {
     return <div>Loading Financial Report...</div>;
@@ -69,9 +107,9 @@ const FinancialReport = () => {
 
           {/* Download Button */}
           <div className="download-button-container">
-            <a href={pdfUrl} download className="download-btn">
+            <button onClick={handleDownload} className="download-btn">
               Download Report
-            </a>
+            </button>
           </div>
         </>
       ) : (

@@ -6,7 +6,8 @@ import Unauthorized from "./Components/Dashboard/Unauthorized"; // Error page fo
 //import Destinations from "./Components/Destinations/Destinations"
 //import DHome from "./Components/Destinations/Home"
 import ReservationSuccess from "./Components/Halls/ReservationSuccess";
-
+import ProtectedRoute from "./Components/Dashboard/ProtectedRoute";
+import ReservationProtectedRoute from "./Components/Halls/ReservationProtectedRoute";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext"; // Adjust the path as needed
@@ -20,6 +21,7 @@ import Register from "./Components/login/Register";
 import HallsPage from "./Components/Halls/HallsPage";
 import ReservationPage from "./Components/Halls/ReservationPage";
 import HallDetailsPage from "./Components/Halls/HallDetailsPage";
+import NoReserveInfo from "./Components/Halls/noreserveinfo";
 import ResetPassword from "./Components/login/ResetPassword";
 /*-------------blog------------ */
 
@@ -32,14 +34,29 @@ function App() {
         <Router>
           <Navbar />
           <Switch>
+            <Route path="/detailsError" component={NoReserveInfo} />
             <Route path="/unauthorized" component={Unauthorized} />
             <Route path="/" exact component={Home} />
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/about" exact component={About} />
-            <Route path="/halls" exact component={HallsPage} />
-            <Route path="/hall/:id" component={HallDetailsPage} />
-            <Route path="/reserve" component={ReservationPage} />
-            <Route path="/reservation-success" component={ReservationSuccess} />
+            <ProtectedRoute
+              path="/halls"
+              component={HallsPage}
+              allowedRoles={["CUSTOMER", "ADMIN"]} // Only allow CUSTOMER and ADMIN
+            />{" "}
+            <ProtectedRoute
+              path="/hall/:id"
+              component={HallDetailsPage}
+              allowedRoles={["CUSTOMER", "ADMIN"]}
+            />
+            <ReservationProtectedRoute
+              path="/reserve"
+              component={ReservationPage}
+            />
+            <ReservationProtectedRoute
+              path="/reservation-success"
+              component={ReservationSuccess}
+            />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/halls" exact component={HallsPage} />
             <Route path="/testimonial" component={Testimonial} />
