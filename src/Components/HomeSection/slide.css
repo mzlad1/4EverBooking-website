@@ -6,7 +6,6 @@
   animation: fadeInBackground 1.5s ease-in-out; /* Fade-in animation for the slider */
 }
 
-
 /* Control buttons styling */
 .control-btn {
   position: absolute;
@@ -22,7 +21,6 @@
 }
 
 /* Rest of your styles here... */
-
 
 .control-btn button {
   background-color: rgba(0, 0, 0, 0.5);
@@ -97,7 +95,8 @@
 }
 
 @keyframes blink-caret {
-  from, to {
+  from,
+  to {
     border-right-color: transparent;
   }
   50% {
@@ -112,18 +111,17 @@
   padding: 0.5em 0; /* Spacing for aesthetics */
   color: #fff;
   text-shadow: 2px 2px 4px #000000;
-  
+
   /* Typewriter effect */
   white-space: nowrap; /* Prevents text from wrapping */
   overflow: hidden; /* Ensures the text is clipped when it's not fully typed out */
   border-right: 2px solid white; /* Make the caret smaller (2px instead of 4px) */
   width: 0; /* Initial width is 0 to be animated */
-  
+
   /* Typewriter animation */
   animation: typing 3.5s steps(30, end), blink-caret 0.75s step-end 3.5s; /* Typing animation with blinking caret, but stops after 3.5s */
   animation-fill-mode: forwards; /* Keep the final state of the animation */
 }
-
 
 /* Welcome message paragraph with fade-in delay */
 .welcome-message p {
@@ -164,7 +162,12 @@
   height: 50px;
   opacity: 1;
   color: #000;
-  background-color: rgba(255, 255, 255, 0.9); /* White background when visible */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.9
+  ); /* White background when visible */
   border: 2px solid #cba36b; /* Match the button color */
 }
 
