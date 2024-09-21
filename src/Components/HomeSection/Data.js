@@ -1,18 +1,19 @@
 const Data = [
   {
-    image: "images/slider-1.jpg",
+    image:
+      "https://res.cloudinary.com/dykzph9bu/image/upload/v1726928043/slider-1_z5deiu.jpg",
   },
   {
-    image: "images/slider-2.jpg",
+    image: "https://res.cloudinary.com/dykzph9bu/image/upload/v1726928043/slider-2_lljcag.jpg",
   },
   {
-    image: "images/slider-3.jpg",
+    image: "https://res.cloudinary.com/dykzph9bu/image/upload/v1726928043/slider-3_gj9et5.jpg",
   },
   {
-    image: "images/slider-4.jpg",
+    image: "https://res.cloudinary.com/dykzph9bu/image/upload/v1726928043/slider-4_yiek1m.jpg",
   },
   {
-    image: "images/slider-5.jpg",
+    image: "https://res.cloudinary.com/dykzph9bu/image/upload/v1726928044/slider-5_fqh9t6.jpg",
   },
 ];
 export default Data;

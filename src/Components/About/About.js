@@ -57,7 +57,7 @@ const About = () => {
           <div className="about-unique-card about-unique-mtop about-unique-flex-space">
             <div className="about-unique-row about-unique-image-left">
               <img
-                src="/images/about-img-11.jpg"
+                src="https://res.cloudinary.com/dykzph9bu/image/upload/v1726928042/about-img-11_j5qzap.jpg"
                 alt=""
                 className="about-unique-image"
               />
@@ -85,7 +85,7 @@ const About = () => {
             <p>{t("what_makes_us_special")}</p>
           </div>
           <div className="about-unique-row about-unique-image">
-            <img src="/images/about-img-22.jpg" alt="" />
+            <img src="https://res.cloudinary.com/dykzph9bu/image/upload/v1726928042/about-img-22_iaaeyq.png" alt="" />
             <div className="about-unique-control-btn"></div>
           </div>
         </div>
