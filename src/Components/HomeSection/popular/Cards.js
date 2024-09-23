@@ -49,20 +49,8 @@ const PrevArrow = (props) => {
   );
 };
 
-// HallSlider Component (Updated to skip videos)
+// HallSlider Component (Updated to correctly use images)
 const HallSlider = ({ images }) => {
-  // Define image extensions to filter valid image files
-  const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
-
-  // Function to check if the URL is an image by matching its extension
-  const isImage = (url) => {
-    const extension = url.split(".").pop().toLowerCase(); // Get file extension
-    return imageExtensions.includes(extension); // Check if it's an image extension
-  };
-
-  // Filter the images array to skip any video files
-  const filteredImages = images.filter(isImage);
-
   const settings = {
     dots: false,
     infinite: true,
@@ -76,9 +64,13 @@ const HallSlider = ({ images }) => {
 
   return (
     <Slider {...settings}>
-      {filteredImages.map((imageUrl, index) => (
+      {images.map((imageUrl, index) => (
         <div key={index}>
-          <img src={imageUrl} alt={`Slide ${index + 1}`} />
+          <img
+            src={imageUrl}
+            alt={`Slide ${index + 1}`}
+            style={{ width: "100%", height: "auto" }} // Ensures the image fits correctly
+          />
         </div>
       ))}
     </Slider>
@@ -202,13 +194,16 @@ const Cards = () => {
   return (
     <Slider {...settings}>
       {popularHalls.map((value) => {
-        const imageUrls = value.image ? value.image.split(",") : [];
+        // Split the image URLs and trim any spaces, then pass them as an array to HallSlider
+        const imageUrls = value.image
+          ? value.image.split(",").map((url) => url.trim())
+          : [];
 
         return (
           <div className="cards" key={value.id}>
             <div className="item">
               <div className="image">
-                <HallSlider images={imageUrls} />
+                <HallSlider images={imageUrls} /> {/* Pass parsed image URLs */}
               </div>
               <div className="details">
                 <div className="price">

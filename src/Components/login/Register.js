@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import HeadTitle from "../../Common/HeadTitle/HeadTitle";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./register.css";
-import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 import zxcvbn from "zxcvbn";
 
 const Register = () => {
@@ -120,7 +118,6 @@ const Register = () => {
 
   return (
     <>
-      <HeadTitle />
       <section className="register-forms top">
         <div className="register-container">
           <div className="register-sign-box">

@@ -2,15 +2,19 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import "./halls.css";
 import AspectRatio from "@mui/joy/AspectRatio";
-import Button from "@mui/joy/Button";
+import { Button, IconButton } from "@mui/material";
+
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import HeadTitle from "../../Common/HeadTitle/HeadTitle";
 import FilterBar from "./Filterbar";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Pagination from "./Pagination";
 import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
+import { CircularProgress } from "@mui/material"; // Import CircularProgress
 
 import {
   People,
@@ -25,14 +29,40 @@ const HallsPage = () => {
   const { t } = useTranslation(); // Initialize translation hook
   const [filters, setFilters] = useState({});
   const [halls, setHalls] = useState([]);
+  const [favorites, setFavorites] = useState([]); // Store favorite hall IDs
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const loader = useRef(null);
-
   const history = useHistory();
   const location = useLocation();
+  const userId = localStorage.getItem("userId"); // Get userId from localStorage
+  const token = localStorage.getItem("accessToken"); // Get the token from localStorage
+
+  // Fetch favorites on component mount
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+
+  // Fetch user's favorite halls
+  const fetchFavorites = async () => {
+    const url = `http://localhost:8080/customer/${userId}/favorites?page=1&size=100`;
+    try {
+      const response = await fetchWithAuth(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      // Store only the IDs of the favorite halls
+      setFavorites(data.content.map((hall) => hall.id));
+    } catch (error) {
+      console.error("Failed to fetch favorites:", error);
+    }
+  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -125,6 +155,52 @@ const HallsPage = () => {
           ))}
       </>
     );
+  };
+
+  // Toggle favorite status for a specific hall
+  const handleFavoriteClick = async (hallId) => {
+    // Check if the user is logged in
+    if (!userId || !token) {
+      // Redirect to sign-in page if not logged in
+      history.push("/sign-in");
+      return;
+    }
+    try {
+      // Check if the hall is already in favorites
+      const isFavorited = favorites.includes(hallId);
+
+      // Define the API endpoint
+      const url = `http://localhost:8080/customer/${userId}/favorites`;
+
+      // Choose between POST and DELETE based on the current favorite status
+      const method = isFavorited ? "DELETE" : "POST"; // DELETE if already favorited, POST if not
+
+      // Make the API request using fetch
+      const response = await fetchWithAuth(url, {
+        method: method,
+        headers: {
+          Authorization: `Bearer ${token}`, // Authorization with Bearer token
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: hallId, // Sending only the hallId
+        }),
+      });
+
+      // Check if the response is successful
+      if (response.ok) {
+        setFavorites((prevFavorites) =>
+          isFavorited
+            ? prevFavorites.filter((id) => id !== hallId)
+            : [...prevFavorites, hallId]
+        ); // Toggle favorite status on success
+        console.log("Favorite status updated successfully");
+      } else {
+        console.error("Failed to update favorite status", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to favorite the hall", error);
+    }
   };
 
   const handlePageChange = (newPage) => {
@@ -269,7 +345,18 @@ const HallsPage = () => {
                     </Typography>
                   </div>
                 </CardContent>
-                <CardOverflow className="card-footer-modern">
+                <CardOverflow
+                  className="card-footer-modern"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row", // Ensures the layout is horizontal (row)
+                    justifyContent: "space-between", // Spread items across the row
+                    alignItems: "center", // Vertically center items in the row
+                    padding: "10px 15px",
+                    backgroundColor: "#f5f5f5", // Optional: background color
+                    borderTop: "1px solid #e0e0e0", // Optional: subtle top border
+                  }}
+                >
                   <Button
                     variant="solid"
                     size="lg"
@@ -277,6 +364,7 @@ const HallsPage = () => {
                     sx={{
                       backgroundColor: "#CBA36B",
                       color: "#ffffff",
+                      width: "250px", // Set a fixed width for the button
                       "&:hover": {
                         backgroundColor: "#A97C50",
                         color: "#ffffff",
@@ -286,12 +374,40 @@ const HallsPage = () => {
                   >
                     {t("book_now")} {/* Translated text for "Book Now" */}
                   </Button>
+
+                  {/* Favorite Icon */}
+                  <IconButton
+                    size="small"
+                    sx={{
+                      color: favorites.includes(hall.id) ? "red" : "#CBA36B",
+                      padding: 0,
+                      marginLeft: "10px", // Space between button and icon
+                    }}
+                    onClick={() => handleFavoriteClick(hall.id)} // Handle click for individual hall
+                  >
+                    {favorites.includes(hall.id) ? (
+                      <FavoriteIcon />
+                    ) : (
+                      <FavoriteBorderIcon />
+                    )}
+                  </IconButton>
                 </CardOverflow>
               </Card>
             );
           })}
-          {loading && <p className="loading-text-modern">{t("loading")}</p>}{" "}
-          {/* Translated loading text */}
+          {loading && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "100px",
+              }}
+            >
+              <CircularProgress size={50} />{" "}
+              {/* Circular spinner with a size of 50px */}
+            </div>
+          )}{" "}
           <div ref={loader} style={{ height: "20px" }}></div>
         </div>
       </div>

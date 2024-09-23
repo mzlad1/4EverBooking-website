@@ -230,9 +230,7 @@ const EditProfile = () => {
   return (
     <Box className="edit-profile-container-modern" p={3}>
       <Box className="edit-profile-modern" mb={3}>
-        <Typography variant="h4" >
-          {t("edit_profile")}
-        </Typography>
+        <Typography variant="h4">{t("edit_profile")}</Typography>
         <Box className="profile-picture-modern" my={3}>
           <Avatar
             src={profile.image}
@@ -331,7 +329,6 @@ const EditProfile = () => {
         </Box>
         {message && (
           <Alert severity="success" sx={{ mt: 2 }}>
-            <CheckCircleOutlineIcon color="success" sx={{ mr: 1 }} />
             {message}
           </Alert>
         )}
@@ -339,9 +336,7 @@ const EditProfile = () => {
 
       <Box className="utils-modern">
         <Box className="change-password-section-modern" mb={3}>
-          <Typography variant="h5" >
-            {t("change_password")}
-          </Typography>
+          <Typography variant="h5">{t("change_password")}</Typography>
           <TextField
             label={t("old_password")}
             type="password"
@@ -388,11 +383,6 @@ const EditProfile = () => {
               }
               sx={{ mt: 2 }}
             >
-              {passwordMessage.startsWith("Error") ? (
-                <ErrorOutlineIcon color="error" sx={{ mr: 1 }} />
-              ) : (
-                <CheckCircleOutlineIcon color="success" sx={{ mr: 1 }} />
-              )}
               {passwordMessage}
             </Alert>
           )}

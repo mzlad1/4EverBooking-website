@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "../../Context/AuthContext"; // Adjust the path as needed
-import HeadTitle from "../../Common/HeadTitle/HeadTitle";
 import { useLocation, Link, useHistory, Redirect } from "react-router-dom"; // Make sure Redirect is imported
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
@@ -105,6 +104,7 @@ const Login = () => {
         // Store the hall owner ID and company name in localStorage
         localStorage.setItem("hallOwnerId", hallOwnerId);
         localStorage.setItem("companyName", companyName);
+        console.log("Hall Owner ID saved:", hallOwnerId);
       }
 
       if (userData.role === "ADMIN") {
@@ -122,12 +122,19 @@ const Login = () => {
 
   return (
     <>
-      <HeadTitle />
       <section className="login-form-section">
         <div className="login-form-container">
           <div className="login-form-box">
-            <p className="login-form-title">{t("login_prompt")}</p>{" "}
-            {/* Translated login prompt */}
+            <Link to="/">
+              <img
+                src="https://res.cloudinary.com/dykzph9bu/image/upload/v1726955497/logo1_nw0jcc.png"
+                alt="Website Logo"
+                className="login-logo"
+              />
+            </Link>
+
+            {/* Update the title */}
+            <p className="login-form-title">{t("Log in to your account")}</p>
             <form onSubmit={handleSubmit} className="login-form">
               <div className="login-input-wrapper">
                 <input
@@ -166,7 +173,7 @@ const Login = () => {
               {error && (
                 <div className="login-error">
                   <ErrorOutlineIcon color="error" />
-                  {error} {/* Error message */}
+                  {error}
                 </div>
               )}
 

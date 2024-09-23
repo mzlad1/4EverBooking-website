@@ -1,39 +1,43 @@
-/* Overall page section */
+/* Beautiful background with primary color accents */
 .login-form-section {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #e2e2e2,
-    #fafafa
-  ); /* Subtle gradient for background */
+  background: linear-gradient(135deg, #f9f3e1, #f3ebd6); /* Subtle neutral gradient to complement primary color */
+  background-size: 300% 300%;
+  animation: gradientBackground 8s ease infinite;
   padding: 20px;
-  animation: fadeInBackground 1.5s ease-in-out; /* Fade-in for the whole section */
+  position: relative;
+  overflow: hidden;
 }
 
-/* Fade-in background animation */
-@keyframes fadeInBackground {
-  from {
-    opacity: 0;
+@keyframes gradientBackground {
+  0% {
+    background-position: 0% 50%;
   }
-  to {
-    opacity: 1;
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
+/* Glassmorphism effect for the login form */
 .login-form-container {
   max-width: 600px;
   width: 100%;
   padding: 50px 40px;
-  background-color: #ffffff;
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px); /* Glassmorphism */
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease;
   opacity: 0;
   transform: translateY(50px); /* Start position for slide-up animation */
-  animation: slideUp 1s ease-out forwards; /* Apply slide-up animation */
+  animation: slideUp 1s ease-out forwards;
 }
 
 /* Slide-up animation */
@@ -50,12 +54,12 @@
 
 /* Title styling */
 .login-form-title {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: bold;
-  color: #333;
+  color: #cba36b; /* Primary color */
   margin-bottom: 25px;
   text-align: center;
-  animation: fadeIn 1s ease-in-out 0.5s forwards; /* Fade in the title */
+  animation: fadeIn 1s ease-in-out 0.5s forwards;
   opacity: 0;
 }
 
@@ -63,24 +67,29 @@
 .login-input-wrapper {
   position: relative;
   margin-bottom: 25px;
-  animation: fadeIn 1s ease-in-out 0.7s forwards; /* Delay for input fade-in */
+  animation: fadeIn 1s ease-in-out 0.7s forwards;
   opacity: 0;
 }
 
 .login-input-field {
   width: 100%;
   padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  border: none;
   font-size: 16px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  background-color: #f7f7f7;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.3); /* Transparent glass effect */
+  color: #333; /* Darker color for readability */
+}
+
+.login-input-field::placeholder {
+  color: rgba(51, 51, 51, 0.5); /* Subtle placeholder */
 }
 
 .login-input-field:focus {
-  border-color: #cba36b;
-  box-shadow: 0 0 5px rgba(203, 163, 107, 0.5);
+  box-shadow: 0 0 10px rgba(203, 163, 107, 0.8); /* Primary color shadow on focus */
   outline: none;
+  transform: translateY(-3px); /* Subtle lift on focus */
 }
 
 /* Checkbox and Forgot Password section */
@@ -89,7 +98,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
-  animation: fadeIn 1s ease-in-out 0.9s forwards; /* Delay for fade-in */
+  animation: fadeIn 1s ease-in-out 0.9s forwards;
   opacity: 0;
 }
 
@@ -104,18 +113,17 @@
 
 .login-forgot-password {
   font-size: 14px;
-  color: #777;
+  color: #cba36b; /* Primary color */
 }
 
 .login-forgot-password a {
-  color: #cba36b;
-  text-decoration: none;
+  color: #cba36b; /* Primary color */
+  text-decoration: underline;
   transition: color 0.3s ease;
 }
 
 .login-forgot-password a:hover {
-  color: #b08e5a;
-  text-decoration: underline;
+  color: #b08e5a; /* Darker shade of the primary color */
 }
 
 /* Error message styling */
@@ -125,7 +133,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
-  animation: fadeIn 1s ease-in-out 1.1s forwards; /* Delay fade-in */
+  animation: fadeIn 1s ease-in-out 1.1s forwards;
   opacity: 0;
 }
 
@@ -133,26 +141,26 @@
   margin-right: 8px;
 }
 
-/* Submit button */
+/* Submit button with primary color */
 .login-submit-btn {
   width: 100%;
   padding: 15px;
-  background-color: #cba36b;
-  color: white;
+  background-color: #cba36b; /* Primary color */
   border: none;
+  color: white;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  animation: fadeIn 1s ease-in-out 1.3s forwards; /* Delay fade-in for the button */
+  transition: all 0.3s ease;
+  animation: fadeIn 1s ease-in-out 1.3s forwards;
   opacity: 0;
 }
 
 .login-submit-btn:hover {
-  background-color: #b08e5a;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  background-color: #b08e5a; /* Darker shade for hover */
+  box-shadow: 0 0 15px rgba(203, 163, 107, 0.5), 0 0 30px rgba(203, 163, 107, 0.3); /* Glowing effect */
+  transform: translateY(-5px);
 }
 
 /* Signup prompt section */
@@ -161,19 +169,19 @@
   color: #777;
   margin-top: 30px;
   text-align: center;
-  animation: fadeIn 1s ease-in-out 1.5s forwards; /* Delay fade-in for signup prompt */
+  animation: fadeIn 1s ease-in-out 1.5s forwards;
   opacity: 0;
 }
 
 .login-signup-link {
-  color: #cba36b;
+  color: #cba36b; /* Primary color */
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
 }
 
 .login-signup-link:hover {
-  color: #b08e5a;
+  color: #b08e5a; /* Darker shade for hover */
 }
 
 /* Fade-in animation for elements */
@@ -206,4 +214,14 @@
   .login-signup-prompt {
     font-size: 13px;
   }
+}
+/* Logo Styling */
+.login-logo {
+  display: block;
+  margin: 0 auto 20px auto; /* Centered and with some margin below */
+  max-width: 150px; /* Adjust the size as necessary */
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); /* Drop shadow effect */
+  animation: fadeIn 1s ease-in-out 0.5s forwards;
+  opacity: 0;
 }

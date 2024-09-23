@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import HeadTitle from "../../Common/HeadTitle/HeadTitle";
 import { Link } from "react-router-dom";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"; // Import success icon
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
-import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 
 import "./resetpassword.css"; // Ensure this path is correct to apply your CSS styles
 
@@ -53,7 +51,6 @@ const ResetPassword = () => {
 
   return (
     <>
-      <HeadTitle />
       <section className="reset-form-section top">
         <div className="reset-container">
           <div className="reset-sign-box">

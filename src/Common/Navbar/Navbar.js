@@ -182,6 +182,15 @@ const Navbar = () => {
                     </a>
                   </li>
                   <li>
+                    <a
+                      href="/favorites" // Link to the Favorites page
+                      className="dropdown-link-modern"
+                      onClick={closeMobileMenu}
+                    >
+                      <i className="fas fa-heart"></i> {t("Saved")}{" "}
+                    </a>
+                  </li>
+                  <li>
                     <a className="dropdown-link-modern" onClick={handleLogout}>
                       <i className="fas fa-sign-out-alt"></i> {t("logout")}
                     </a>
