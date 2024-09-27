@@ -148,11 +148,11 @@ const Navbar = () => {
 
             <li className="nav-item-modern">
               <a
-                href="/contact"
+                href="/download"
                 className="nav-link-modern"
                 onClick={closeMobileMenu}
               >
-                {t("contact_us")}
+                {t("Download")}
               </a>
             </li>
           </ul>

@@ -4,6 +4,7 @@ import Hero from "../HomeSection/Hero";
 import HomeAbout from "../HomeSection/HomeAbout";
 import MostPopular from "../HomeSection/popular/MostPopular";
 import Download from "../HomeSection/Download/Download";
+import DownloadAppPage from "../../Common/Navbar/DownloadAppPage";
 import Works from "../HomeSection/Works/Works";
 
 const Home = () => {
@@ -63,7 +64,7 @@ const Home = () => {
         <HomeAbout />
       </div>
       <div ref={downloadRef} className="hidden-section">
-        <Download />
+        <DownloadAppPage />
       </div>
       <div ref={worksRef} className="hidden-section">
         <Works />

@@ -7,6 +7,7 @@ import "./login.css";
 import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
 
 const Login = () => {
+
   const { t } = useTranslation(); // Initialize translation hook
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

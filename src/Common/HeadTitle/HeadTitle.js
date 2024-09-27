@@ -10,7 +10,7 @@ const HeadTitle = () => {
   // Create a mapping of route paths to translation keys
   const routeNames = {
     "": "home",
-    about: "about",
+    about: "about us",
     gallery: "gallery",
     halls: "halls",
     hall: "hall_details",

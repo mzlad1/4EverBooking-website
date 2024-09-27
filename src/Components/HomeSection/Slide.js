@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Data from "./Data";
 import "./slide.css";
 import { useTranslation } from "react-i18next";
+import ReactTypingEffect from "react-typing-effect";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -60,10 +61,22 @@ const Home = () => {
         ))}
 
         <div className="welcome-message">
-          <h1>{t("welcome_message")}</h1>
+          <h1>
+            <ReactTypingEffect
+              text={[
+                t("welcome_message"), // First message
+                t("find_your_perfect_venue"), // Second message
+                t("book_your_dream_event"), // Third message
+                t("discover_unforgettable_halls"), // Fourth message
+              ]}
+              speed={100} // Typing speed
+              eraseDelay={3000} // Delay before erasing
+              typingDelay={500} // Delay before typing starts
+              eraseSpeed={80} // Speed of erasing the text
+            />
+          </h1>
           <p>{t("find_best_halls_home")}</p>
 
-          {/* Conditionally render the search container if userRole is NOT "HALL_OWNER" */}
           {userRole !== "HALL_OWNER" && (
             <div className="search1-container">
               <input
