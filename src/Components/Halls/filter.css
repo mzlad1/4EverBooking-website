@@ -1,51 +1,119 @@
-.filter-bar-label-modern {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 15px;
-  text-align: center;
-  padding: 10px;
-  background-color: #f9f9f9; /* Light background color */
-  border-bottom: 2px solid #ddd; /* Adds a bottom border to the label */
-  width: 100%;
-}
-
-.filter-bar-modern {
+/* Filter Bar Container */
+.filter-bar-container-modern {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  padding: 20px;
-  border-radius: 15px;
-  background-color: #ffffff;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
-  margin-left: 20px; /* Space between the filter bar and the halls */
+  max-width: 350px; /* Set fixed width for professional layout */
+  background: #ffffff; /* Clean white background */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  padding: 25px;
+  position: sticky; /* Sticky filter bar for scrolling */
+  top: 20px; /* Sticks at the top with spacing */
+  margin-right: 20px;
+  margin: 20px;
 }
 
-.filter-bar-modern .MuiFormControl-root {
-  width: 100%; /* Full width for each form control */
-  margin-bottom: 15px;
+/* Filter Bar Title */
+.filter-bar-label-modern {
+  font-size: 1.8rem; /* Large title size */
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase; /* Professional uppercase title */
+  letter-spacing: 1px;
+  background: linear-gradient(to right, #cba36b, #a97c50);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* Gradient text effect */
 }
 
-.filter-bar-modern .MuiInputBase-root {
-  background-color: #ffffff;
-  border-radius: 5px;
-}
-
-.filter-bar-modern .MuiFilledInput-root {
-  background-color: #ffffff;
-}
-
-.filter-bar-modern input,
-.filter-bar-modern select {
+/* Form Control Styling */
+.form-control-modern {
   width: 100%;
-  padding: 20;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  margin-bottom: 15px; /* Add spacing between fields */
+}
+
+/* Input Fields */
+.text-field-modern input,
+.text-field-modern select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out;
+}
+
+.text-field-modern input:focus,
+.text-field-modern select:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 8px rgba(203, 163, 107, 0.5);
+  border: 1px solid #cba36b;
+}
+
+/* Date Picker Input */
+.text-field-modern[type="date"] input {
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+
+/* Dropdown Menu */
+.form-control-modern .MuiSelect-root {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+}
+
+.form-control-modern .MuiSelect-root:focus {
+  background-color: #ffffff;
+  border-color: #cba36b;
+}
+
+/* Button Styling */
+.filter-bar-modern button {
+  background: linear-gradient(135deg, #cba36b, #a97c50);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 12px 20px;
+  width: 100%;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-bar-modern button:hover {
+  background: linear-gradient(135deg, #a97c50, #cba36b);
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .filter-bar-container-modern {
+    max-width: 300px;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 768px) {
-  .filter-bar-modern {
-    width: 90%; /* Make it responsive for smaller screens */
+  .filter-bar-container-modern {
+    width: 100%;
+    margin: 0 auto;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .filter-bar-modern button {
+    font-size: 0.9rem;
   }
 }

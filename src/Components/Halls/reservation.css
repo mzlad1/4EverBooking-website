@@ -15,6 +15,18 @@
   margin-bottom: 30px;
   animation: fadeIn 0.5s ease-in-out;
 }
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it appears above everything */
+}
 
 /* Total Price Box */
 .reservation-total-price-box {

@@ -1,0 +1,39 @@
+.feedback-container {
+  margin-top: 30px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-title {
+  text-align: center;
+  font-weight: bold;
+  color: #cba36b;
+  margin-bottom: 20px;
+}
+
+.rating-section,
+.comment-section {
+  margin-bottom: 20px;
+}
+
+.rating-label,
+.comment-label {
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+}
+
+.comment-input {
+  font-size: 1rem;
+}
+
+.feedback-form button {
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}

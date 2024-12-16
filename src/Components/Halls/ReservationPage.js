@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css"; // Import Date Picker style
 import "./reservation.css"; // Custom CSS for styling the form
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
-
 import {
   faUser,
   faHome,
@@ -15,11 +14,13 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
+// Import a spinner from a library or create your own
+import { CircularProgress } from "@mui/material";
+
 const ReservationPage = () => {
   const location = useLocation();
-  const history = useHistory(); // For navigating
+  const history = useHistory();
 
-  // Try to get reservation details from localStorage or location.state
   const reservationDetails =
     JSON.parse(localStorage.getItem("reservationDetails")) || location.state;
 
@@ -31,9 +32,8 @@ const ReservationPage = () => {
     selectedCategory,
     fromDate,
     toDate,
-  } = reservationDetails || {}; // Use reservation details or destructure empty object
+  } = reservationDetails || {};
 
-  // Redirect to HallDetailsPage if reservation details are missing
   useEffect(() => {
     if (
       !hallId ||
@@ -43,7 +43,6 @@ const ReservationPage = () => {
       !selectedCategory ||
       !fromDate
     ) {
-      // If required details are missing, redirect to HallDetailsPage
       history.push("/hall-details");
     }
   }, [
@@ -56,26 +55,21 @@ const ReservationPage = () => {
     history,
   ]);
 
-  // Rest of your component code remains the same
-
-  // Form state for billing information
   const [billingAddress, setBillingAddress] = useState({
     fullName: "",
     address: "",
     phoneNumber: "",
   });
 
-  // State for payment information
   const [paymentInfo, setPaymentInfo] = useState({
     cardNumber: "",
-    expiryDate: null, // Use null for DatePicker
+    expiryDate: null,
     cvv: "",
   });
 
-  // State for error messages
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Loading state
 
-  // Handle billing address input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBillingAddress({
@@ -84,45 +78,46 @@ const ReservationPage = () => {
     });
   };
 
-  // Handle credit card input and format to accept max 16 digits
   const handleCardNumberChange = (e) => {
     const { value } = e.target;
-    const formattedValue = value.replace(/\D/g, "").slice(0, 16); // Allow only digits and max length 16
+    const formattedValue = value.replace(/\D/g, "").slice(0, 16);
     setPaymentInfo({ ...paymentInfo, cardNumber: formattedValue });
   };
 
-  // Handle CVV input and restrict to max 3 digits
   const handleCvvChange = (e) => {
     const { value } = e.target;
-    const formattedValue = value.replace(/\D/g, "").slice(0, 3); // Max length 3
+    const formattedValue = value.replace(/\D/g, "").slice(0, 3);
     setPaymentInfo({ ...paymentInfo, cvv: formattedValue });
   };
 
-  // Create a service object where service names map to their prices
   const getServiceObject = (servicesArray) => {
     const servicesObject = {};
     servicesArray.forEach((service) => {
-      servicesObject[service.name] = service.price; // Assuming service is an object with `name` and `price`
+      servicesObject[service.name] = service.price;
     });
-    console.log("Selected Services: ", servicesObject);
     return servicesObject;
   };
 
-  // Form submission and validation
+  const toUTCDate = (date) => {
+    const utcDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    return utcDate;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Show confirmation dialog
+    setLoading(true); // Show loader
+
     const isConfirmed = window.confirm(
       "Are you sure you want to confirm the reservation?"
     );
     if (!isConfirmed) {
-      return; // If user cancels, don't proceed
+      setLoading(false); // Hide loader if canceled
+      return;
     }
-  
+
     const newErrors = {};
-  
-    // Basic validation
     if (!billingAddress.fullName) newErrors.fullName = "Full name is required.";
     if (!billingAddress.address) newErrors.address = "Address is required.";
     if (!billingAddress.phoneNumber || billingAddress.phoneNumber.length < 10)
@@ -133,22 +128,16 @@ const ReservationPage = () => {
       newErrors.expiryDate = "Valid expiry date is required (MM/YY).";
     if (!paymentInfo.cvv || paymentInfo.cvv.length !== 3)
       newErrors.cvv = "Valid 3-digit CVV is required.";
-  
+
     setErrors(newErrors);
-  
-    // If no errors, proceed with the API call
+
     if (Object.keys(newErrors).length === 0) {
-      console.log("Billing Info: ", billingAddress);
-      console.log("Payment Info: ", paymentInfo);
-      console.log("Total Price: ", totalPrice);
-  
       const servicesObject = getServiceObject(selectedServices);
-  
-      // Ensure fromDate and toDate are valid Date objects
-      const fromDateObject = new Date(fromDate); // Convert fromDate to Date object if it's not
-      const toDateObject = toDate ? new Date(toDate) : fromDateObject; // Convert toDate if provided, or use fromDate
-  
-      // Prepare the request payload
+      const fromDateObject = toUTCDate(new Date(fromDate));
+      const toDateObject = toDate
+        ? toUTCDate(new Date(toDate))
+        : fromDateObject;
+
       const reservationData = {
         hallId,
         customerId,
@@ -158,9 +147,9 @@ const ReservationPage = () => {
         services: servicesObject,
         expiryDate: paymentInfo.expiryDate
           ? paymentInfo.expiryDate.toISOString()
-          : null, // Send expiry date as ISO string
+          : null,
       };
-  
+
       try {
         const response = await fetchWithAuth(
           "http://localhost:8080/customer/reserveHall",
@@ -173,30 +162,35 @@ const ReservationPage = () => {
             body: JSON.stringify(reservationData),
           }
         );
-  
+
         const result = await response.json();
         console.log("Reservation successful: ", result);
-  
-        // Redirect on successful reservation
+
         history.push({
           pathname: "/reservation-success",
           state: { message: "Reservation successful!", goToHalls: true },
         });
       } catch (error) {
         console.error("Reservation failed: ", error);
+      } finally {
+        setLoading(false); // Hide loader
       }
+    } else {
+      setLoading(false); // Hide loader if errors
     }
   };
-  
 
-  // Handle cancel button click
   const handleCancel = () => {
-    history.goBack(); // Navigate to the previous page
-    localStorage.removeItem("reservationDetails"); // Clear reservation details
+    history.goBack();
+    localStorage.removeItem("reservationDetails");
   };
-
   return (
     <div className="reservation-confirmation-page">
+      {loading && (
+        <div className="loading-overlay">
+          <CircularProgress size={80} />
+        </div>
+      )}
       <h1 className="reservation-fade-in-title">Reservation Confirmation</h1>
 
       <div className="reservation-total-price-box reservation-fade-in">

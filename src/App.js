@@ -5,6 +5,7 @@ import About from "./Components/About/About";
 import Unauthorized from "./Components/Dashboard/Unauthorized";
 import ReservationSuccess from "./Components/Halls/ReservationSuccess";
 import ProtectedRoute from "./Components/Dashboard/ProtectedRoute";
+import FeedbackPage from "./Components/Dashboard/FeedbackPage";
 import ReservationProtectedRoute from "./Components/Halls/ReservationProtectedRoute";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import {
@@ -72,6 +73,7 @@ function MainApp() {
             {/* Add the download page route */}
             <Route path="/detailsError" component={NoReserveInfo} />
             <Route path="/unauthorized" component={Unauthorized} />
+            <Route path="/feedback/:hallId" component={FeedbackPage} />
             <ProtectedRoute
               path="/"
               exact

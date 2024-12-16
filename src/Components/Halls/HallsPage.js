@@ -90,43 +90,23 @@ const HallsPage = () => {
       minCapacity = "",
       maxCapacity = "",
       search = "",
+      startDate = "",
+      endDate = "",
     } = appliedFilters;
 
-    const apiUrl = `http://localhost:8080/whitelist/getAll?page=${page}&size=12&search=${encodeURIComponent(
+    const apiUrl = `http://localhost:8080/whitelist/getAll?page=${page}&size=6&search=${encodeURIComponent(
       search
     )}&location=${encodeURIComponent(city)}&category=${encodeURIComponent(
       category
-    )}&minPrice=${minPrice}&maxPrice=${maxPrice}&minCapacity=${minCapacity}&maxCapacity=${maxCapacity}`;
-
-    console.log("API URL:", apiUrl);
+    )}&minPrice=${minPrice}&maxPrice=${maxPrice}&minCapacity=${minCapacity}&maxCapacity=${maxCapacity}${
+      startDate ? `&startDate=${startDate}` : ""
+    }${endDate ? `&endDate=${endDate}` : ""}`;
 
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
 
-      const filteredHalls = data.content.filter((hall) => {
-        const categoryPrices = Object.values(hall.categories || {});
-        if (categoryPrices.length === 0) return false;
-
-        const lowPrice = Math.min(...categoryPrices);
-        const highPrice = Math.max(...categoryPrices);
-
-        const servicePrices = Object.values(hall.services || {});
-        const totalServicesPrice = servicePrices.reduce(
-          (total, price) => total + price,
-          0
-        );
-
-        const highPriceWithServices = highPrice + totalServicesPrice;
-
-        const isPriceValid =
-          (!minPrice || lowPrice >= minPrice) &&
-          (!maxPrice || highPriceWithServices <= maxPrice);
-
-        return isPriceValid;
-      });
-
-      setHalls(filteredHalls);
+      setHalls(data.content);
       setTotalPages(data.totalPages);
     } catch (error) {
       console.error("Failed to fetch halls:", error);
@@ -246,7 +226,11 @@ const HallsPage = () => {
         }}
       >
         <FilterBar onFilterChange={handleFilterChange} />
-        <div className="page-container-modern">
+        <div
+          className={`page-container-modern ${
+            halls.length <= 3 ? "few-cards" : ""
+          } ${halls.length === 1 ? "single-card" : ""}`}
+        >
           {halls.length === 0 && searchQuery && !loading && (
             <p className="no-results-modern">
               {t("no_halls_found", { query: searchQuery })} {/* Translated */}

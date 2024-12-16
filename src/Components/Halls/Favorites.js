@@ -14,6 +14,7 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useHistory } from "react-router-dom";
 import Pagination from "./Pagination"; // Assuming you have a Pagination component
+import "./favorites.css"; // Import the new styles
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -29,7 +30,6 @@ const Favorites = () => {
     fetchFavoriteHalls(page);
   }, [page]);
 
-  // Fetch user's favorite halls
   const fetchFavoriteHalls = async (currentPage) => {
     setLoading(true);
     const url = `http://localhost:8080/customer/${userId}/favorites?page=${currentPage}&size=10`;
@@ -53,7 +53,6 @@ const Favorites = () => {
     }
   };
 
-  // Unfavorite a specific hall
   const handleUnfavoriteClick = async (hallId) => {
     const url = `http://localhost:8080/customer/${userId}/favorites`;
     try {
@@ -67,7 +66,6 @@ const Favorites = () => {
       });
 
       if (response.ok) {
-        // Remove from favorites on successful unfavorite
         setFavorites((prevFavorites) =>
           prevFavorites.filter((hall) => hall.id !== hallId)
         );
@@ -79,36 +77,28 @@ const Favorites = () => {
     }
   };
 
-  // Handle booking a hall
   const handleBookClick = (hallId) => {
     history.push(`/hall/${hallId}`); // Redirect to hall booking page
   };
 
   return (
-    <Container sx={{ marginTop: 4 }}>
-      <Typography
-        variant="h4"
-        align="center"
-        gutterBottom
-        sx={{ fontWeight: "bold", color: "#333" }}
-      >
-        Your Favorite Halls
-      </Typography>
+    <div className="favorites-page-container">
+      <Typography className="favorites-title">Your Favorite Halls</Typography>
 
       {loading ? (
-        <div style={{ textAlign: "center" }}>
+        <div className="loader-container">
           <CircularProgress />
         </div>
       ) : (
-        <Grid container spacing={4} justifyContent="center">
+        <>
           {favorites.length === 0 ? (
-            <Typography variant="h6" align="center">
+            <Typography className="no-favorites-message">
               No favorite halls found.
             </Typography>
           ) : (
-            favorites.map((hall) => (
-              <Grid item key={hall.id} xs={12} sm={6} md={4}>
-                <Card sx={{ maxWidth: 345, boxShadow: 3 }}>
+            <div className="favorites-grid-container">
+              {favorites.map((hall) => (
+                <Card key={hall.id} sx={{ maxWidth: 345, boxShadow: 3 }}>
                   <CardMedia
                     component="img"
                     height="200"
@@ -131,9 +121,6 @@ const Favorites = () => {
                       sx={{ marginBottom: 1 }}
                     >
                       {hall.location} | {hall.capacity} guests
-                    </Typography>
-                    <Typography variant="body1" color="text.primary">
-                      {hall.description}
                     </Typography>
                   </CardContent>
                   <CardActions sx={{ justifyContent: "space-between" }}>
@@ -159,20 +146,20 @@ const Favorites = () => {
                     </IconButton>
                   </CardActions>
                 </Card>
-              </Grid>
-            ))
+              ))}
+            </div>
           )}
-        </Grid>
+        </>
       )}
 
-      {/* Pagination */}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={(newPage) => setPage(newPage)}
-        sx={{ marginTop: 3 }}
-      />
-    </Container>
+      <div className="pagination-container">
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      </div>
+    </div>
   );
 };
 

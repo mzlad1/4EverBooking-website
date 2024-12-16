@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ReservedHalls.css";
-import { fetchWithAuth } from "../../apiClient"; // Import the fetchWithAuth function
-import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import { fetchWithAuth } from "../../apiClient";
+import { useTranslation } from "react-i18next";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,17 +9,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Pagination from "@mui/material/Pagination"; // Import Pagination from Material-UI
+import Pagination from "@mui/material/Pagination";
+import Button from "@mui/material/Button";
+import { useHistory } from "react-router-dom";
 
 const ReservedHalls = () => {
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation();
+  const history = useHistory(); // To navigate to feedback page
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [serviceHeaders, setServiceHeaders] = useState([]);
-  const [page, setPage] = useState(1); // Current page state
-  const [totalPages, setTotalPages] = useState(1); // Total pages state
-  const rowsPerPage = 10; // Rows per page
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const rowsPerPage = 10;
 
   useEffect(() => {
     const fetchReservedHalls = async (userId, role) => {
@@ -47,17 +50,15 @@ const ReservedHalls = () => {
 
         const data = await response.json();
         setHalls(data.content);
-        setTotalPages(data.totalPages); // Assuming the API returns total pages
+        setTotalPages(data.totalPages);
         setLoading(false);
 
-        // Extract unique services from the fetched halls
         const services = new Set();
         data.content.forEach((hall) => {
           Object.keys(hall.services).forEach((service) =>
             services.add(service)
           );
         });
-
         setServiceHeaders([...services]);
       } catch (err) {
         setError(err.message);
@@ -72,67 +73,75 @@ const ReservedHalls = () => {
     const role = localStorage.getItem("role");
 
     if (!userId) {
-      setError(t("user_id_not_found")); // Error if user ID is missing
+      setError(t("user_id_not_found"));
       setLoading(false);
     } else {
       fetchReservedHalls(userId, role);
     }
-  }, [page, t]); // Refetch data when the page changes
+  }, [page, t]);
 
-  if (loading) return <p>{t("loading")}</p>; // Translated loading message
+  const translateCategory = (category) => {
+    if (!category) return t("N/A");
+    return t(category.toLowerCase()) || category;
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  // Navigate to Feedback Page
+  const handleFeedbackClick = (hallId) => {
+    history.push(`/feedback/${hallId}`);
+  };
+
+  const checkFeedbackAvailability = (endTime) => {
+    const today = new Date();
+    const reservationEnd = new Date(endTime);
+    return today > reservationEnd; // Check if today is after the reservation end date
+  };
+
+  if (loading) return <p>{t("loading")}</p>;
   if (error)
     return (
       <p>
         {t("error")}: {error}
       </p>
-    ); // Translated error message
-
-  const translateCategory = (category) => {
-    if (!category) return t("N/A"); // Translate "N/A" if no category is available
-    return t(category.toLowerCase()) || category; // Translate known categories or return original
-  };
-
-  const handlePageChange = (event, value) => {
-    setPage(value); // Update the page when pagination controls are clicked
-  };
+    );
 
   return (
     <div className="reserved-halls-container-modern">
-      <h1 className="reserved-halls-title-modern">{t("reserved_halls")}</h1>{" "}
-      {/* Translated "Reserved Halls" */}
+      <h1 className="reserved-halls-title-modern">{t("reserved_halls")}</h1>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
                 {t("hall_name")}
-              </TableCell>{" "}
-              {/* Translated "Hall Name" */}
+              </TableCell>
               <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
                 {t("category")}
-              </TableCell>{" "}
-              {/* Translated "Category" */}
+              </TableCell>
               <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
                 {t("time")}
-              </TableCell>{" "}
-              {/* Translated "Time" */}
+              </TableCell>
               <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
                 {t("end_time")}
-              </TableCell>{" "}
-              {/* Translated "End Time" */}
+              </TableCell>
               {serviceHeaders.map((service, index) => (
                 <TableCell
                   sx={{ backgroundColor: "#cba36b", color: "white" }}
                   key={index}
                 >
                   {service.charAt(0).toUpperCase() + service.slice(1)}{" "}
-                  {t("cost")} {/* Translated "Cost" */}
+                  {t("cost")}
                 </TableCell>
               ))}
               <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
                 {t("total_price")}
-              </TableCell>{" "}
-              {/* Translated "Total Price" */}
+              </TableCell>
+              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                {t("feedback")}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -152,19 +161,36 @@ const ReservedHalls = () => {
                   </TableCell>
                 ))}
                 <TableCell>{hall.totalPrice}</TableCell>
+                <TableCell>
+                  {hall.feedbackSent ? (
+                    <span style={{ color: "green", fontWeight: "bold" }}>
+                      Feedback Sent
+                    </span>
+                  ) : hall.endTime &&
+                    checkFeedbackAvailability(hall.endTime) ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleFeedbackClick(hall.hallId)}
+                    >
+                      {t("give_feedback")}
+                    </Button>
+                  ) : (
+                    <span>{t("feedback_available_after")}</span>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {/* Custom Pagination */}
       <div className="pagination-controls">
         <Pagination
-          count={totalPages} // Total number of pages
-          page={page} // Current page number
+          count={totalPages}
+          page={page}
           variant="outlined"
-          onChange={handlePageChange} // Function to handle page change
-          color="primary" // Color for pagination controls
+          onChange={handlePageChange}
+          color="primary"
         />
       </div>
     </div>

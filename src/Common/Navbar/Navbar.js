@@ -83,7 +83,7 @@ const Navbar = () => {
       localStorage.removeItem("userRole");
 
       // Redirect to sign-in page after successful logout
-      window.location.href = "/sign-in";
+      window.location.href = "/";
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout Error:", error);
@@ -156,7 +156,8 @@ const Navbar = () => {
               </a>
             </li>
           </ul>
-
+          {/* Language switcher here */}
+          <LanguageSwitcher />
           <div className="login-area-modern flex-modern">
             {isLoggedIn ? (
               <li className="profile-dropdown-modern">
@@ -182,13 +183,15 @@ const Navbar = () => {
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="/favorites" // Link to the Favorites page
-                      className="dropdown-link-modern"
-                      onClick={closeMobileMenu}
-                    >
-                      <i className="fas fa-heart"></i> {t("Saved")}{" "}
-                    </a>
+                    {localStorage.getItem("role") === "CUSTOMER" && (
+                      <a
+                        href="/favorites" // Link to the Favorites page
+                        className="dropdown-link-modern"
+                        onClick={closeMobileMenu}
+                      >
+                        <i className="fas fa-heart"></i> {t("Saved")}
+                      </a>
+                    )}
                   </li>
                   <li>
                     <a className="dropdown-link-modern" onClick={handleLogout}>
@@ -220,8 +223,6 @@ const Navbar = () => {
               </>
             )}
           </div>
-          {/* Language switcher here */}
-          <LanguageSwitcher />
         </div>
       </nav>
     </>

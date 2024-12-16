@@ -28,8 +28,8 @@ const FinancialReport = () => {
         }
 
         // API call to get the PDF filename from the report URL
-        const response = await fetchWithAuth(
-          `http://localhost:8080/hallOwner/hallsReservationReport/${ownerId}`, // Use dynamic owner ID
+        const response = await fetch(
+          `http://localhost:8080/hallOwner/hallsReservationReport/${ownerId}`,
           {
             method: "GET",
             headers: {
@@ -61,10 +61,13 @@ const FinancialReport = () => {
   const handleDownload = async () => {
     try {
       const token = localStorage.getItem("accessToken"); // Get access token from localStorage
-
-      // API call to download the file using the filename
-      const downloadUrl = `http://localhost:8080/hallOwner/download/${pdfFilename}`; // Use the filename for the download API
-
+  
+      // Use regex to extract the filename starting from "HallReport_" and ending with ".pdf"
+      const cleanedFilename = pdfFilename.match(/HallReport_.*\.pdf/)[0]; // Extracts the correct filename
+  
+      // Construct the API URL using the cleaned filename
+      const downloadUrl = `http://localhost:8080/hallOwner/download/${cleanedFilename}`;
+  
       const response = await fetchWithAuth(downloadUrl, {
         method: "GET",
         headers: {
@@ -72,23 +75,25 @@ const FinancialReport = () => {
           Authorization: `Bearer ${token}`, // Include Authorization header
         },
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to download report");
       }
-
-      const blob = await response.blob(); // Get the file as a blob
-      const url = window.URL.createObjectURL(blob); // Create a temporary URL for the file
-      const link = document.createElement("a"); // Create a temporary download link
+  
+      // Create a Blob from the response and trigger the download
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", pdfFilename); // Set the file name dynamically
+      link.setAttribute("download", cleanedFilename); // Set the correct file name for the download
       document.body.appendChild(link);
-      link.click(); // Trigger the download
+      link.click();
       link.remove(); // Clean up the link
     } catch (error) {
       console.error("Download error:", error);
     }
   };
+  
 
   if (loading) {
     return (

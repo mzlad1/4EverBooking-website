@@ -1,0 +1,79 @@
+/* General Page Styling */
+body {
+  font-family: "Poppins", sans-serif; /* Modern font */
+  background-color: #faf6f0; /* Subtle off-white background */
+  margin: 0;
+  padding: 0;
+}
+
+.favorites-page-container {
+  padding: 40px 20px; /* Space around the page */
+
+  min-height: 100vh; /* Ensure full viewport height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.favorites-title {
+  font-size: 2.5rem; /* Larger title font */
+  font-weight: bold;
+  text-align: center;
+  color: #c29d6d; /* Elegant gold color */
+  margin-bottom: 20px;
+  text-transform: uppercase; /* Capitalize the title */
+  letter-spacing: 1.2px; /* Add space between letters */
+}
+
+.no-favorites-message {
+  font-size: 1.25rem; /* Slightly larger font */
+  color: #999999; /* Neutral gray color */
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Loader Styling */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh; /* Center the loader vertically */
+}
+
+/* Grid Container */
+.favorites-grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px; /* Space between cards */
+  flex-wrap: wrap; /* Wrap cards to new rows on smaller screens */
+  padding: 20px;
+  max-width: 1200px; /* Limit max width for better readability */
+}
+
+/* Pagination Styling */
+.pagination-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination-container button {
+  margin: 0 5px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background-color: #cba36b;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-container button:hover {
+  background-color: #a97c50;
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
