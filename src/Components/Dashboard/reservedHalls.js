@@ -90,8 +90,11 @@ const ReservedHalls = () => {
   };
 
   // Navigate to Feedback Page
-  const handleFeedbackClick = (hallId) => {
-    history.push(`/feedback/${hallId}`);
+  const handleFeedbackClick = (reservationId, hallId) => {
+    history.push({
+      pathname: `/feedback/${hallId}`,
+      state: { reservationId },
+    });
   };
 
   const checkFeedbackAvailability = (endTime) => {
@@ -100,6 +103,17 @@ const ReservedHalls = () => {
     return today > reservationEnd; // Check if today is after the reservation end date
   };
 
+  useEffect(() => {
+    const blockUnauthorizedAccess = () => {
+      const feedbackState = history.location.state;
+      if (feedbackState && feedbackState.feedbackSent) {
+        history.replace("/unauthorized");
+      }
+    };
+
+    blockUnauthorizedAccess();
+  }, [history]);
+
   if (loading) return <p>{t("loading")}</p>;
   if (error)
     return (
@@ -107,6 +121,8 @@ const ReservedHalls = () => {
         {t("error")}: {error}
       </p>
     );
+
+  const role = localStorage.getItem("role");
 
   return (
     <div className="reserved-halls-container-modern">
@@ -139,9 +155,13 @@ const ReservedHalls = () => {
               <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
                 {t("total_price")}
               </TableCell>
-              <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
-                {t("feedback")}
-              </TableCell>
+              {role === "CUSTOMER" && (
+                <TableCell
+                  sx={{ backgroundColor: "#cba36b", color: "white" }}
+                >
+                  {t("feedback")}
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -161,24 +181,26 @@ const ReservedHalls = () => {
                   </TableCell>
                 ))}
                 <TableCell>{hall.totalPrice}</TableCell>
-                <TableCell>
-                  {hall.feedbackSent ? (
-                    <span style={{ color: "green", fontWeight: "bold" }}>
-                      Feedback Sent
-                    </span>
-                  ) : hall.endTime &&
-                    checkFeedbackAvailability(hall.endTime) ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleFeedbackClick(hall.hallId)}
-                    >
-                      {t("give_feedback")}
-                    </Button>
-                  ) : (
-                    <span>{t("feedback_available_after")}</span>
-                  )}
-                </TableCell>
+                {role === "CUSTOMER" && (
+                  <TableCell>
+                    {hall.rated ? (
+                      <span style={{ color: "green", fontWeight: "bold" }}>
+                        {t("rated_successfully")}
+                      </span>
+                    ) : hall.endTime &&
+                      checkFeedbackAvailability(hall.endTime) ? (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleFeedbackClick(hall.id, hall.hallId)}
+                      >
+                        {t("give_feedback")}
+                      </Button>
+                    ) : (
+                      <span>{t("feedback_available_after")}</span>
+                    )}
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

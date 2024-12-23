@@ -127,3 +127,157 @@
 .pagination-button-modern:hover:enabled {
   background-color: #0056b3;
 }
+/* Dialog Container */
+.feedback-dialog {
+  width: 90%;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 10px; /* Smooth rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Subtle shadow for elevation */
+  overflow: hidden; /* Ensure content stays within rounded corners */
+  animation: fadeIn 0.3s ease-in-out; /* Smooth entrance animation */
+}
+
+/* Dialog Title */
+.feedback-dialog-title {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4a4a4a; /* Neutral modern color */
+  background: linear-gradient(90deg, #cba36b, #d4af37); /* Elegant gradient */
+  color: white;
+  padding: 15px 20px;
+  margin: 0;
+  text-transform: uppercase; /* Adds a unique style */
+  letter-spacing: 1px;
+}
+
+/* Dialog Content */
+.feedback-dialog-content {
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: #fefefe;
+  padding: 20px;
+  scrollbar-width: thin; /* Modern thin scrollbar */
+  scrollbar-color: #cba36b #f3f3f3; /* Custom scrollbar colors */
+}
+
+.feedback-dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.feedback-dialog-content::-webkit-scrollbar-thumb {
+  background-color: #cba36b;
+  border-radius: 10px;
+}
+
+.feedback-dialog-content::-webkit-scrollbar-track {
+  background-color: #f3f3f3;
+}
+
+/* Feedback Item */
+.feedback-dialog-item {
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  background: linear-gradient(90deg, #fdfdfd, #fafafa); /* Subtle gradient */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effects */
+}
+
+.feedback-dialog-item:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.feedback-dialog-rating,
+.feedback-dialog-comment,
+.feedback-dialog-date {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #5a5a5a; /* Neutral, modern color */
+  font-family: "Roboto", sans-serif; /* Modern font family */
+}
+
+.feedback-dialog-comment {
+  color: #333; /* Slightly darker for emphasis */
+  line-height: 1.6; /* Improved readability */
+  word-wrap: break-word; /* Ensures long words wrap */
+  white-space: pre-wrap; /* Preserves line breaks and ensures wrapping */
+}
+
+
+/* "No Feedbacks" Message */
+.feedback-dialog-no-feedbacks {
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, #fafafa, #f7f7f7); /* Gentle background */
+  padding: 15px;
+  border-radius: 5px;
+}
+
+/* Dialog Actions */
+.feedback-dialog-actions {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+
+.feedback-dialog-actions button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg, #cba36b, #d4af37); /* Matching gradient */
+  border: none;
+  border-radius: 30px; /* Pill-shaped buttons */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.feedback-dialog-actions button:hover {
+  background: linear-gradient(90deg, #b99a5b, #c1a033); /* Slightly darker on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Separator */
+.feedback-dialog-separator {
+  margin: 15px 0;
+  border: none;
+  border-top: 1px solid #eaeaea;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .feedback-dialog-content {
+    max-height: 400px;
+  }
+
+  .feedback-dialog-title {
+    font-size: 1.3rem;
+    padding: 10px 15px;
+  }
+
+  .feedback-dialog-actions button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}

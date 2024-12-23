@@ -92,6 +92,10 @@ const HallsPage = () => {
       search = "",
       startDate = "",
       endDate = "",
+      sortBy = "",
+      latitude = "",
+      longitude = "",
+      userId = "",
     } = appliedFilters;
 
     const apiUrl = `http://localhost:8080/whitelist/getAll?page=${page}&size=6&search=${encodeURIComponent(
@@ -100,7 +104,17 @@ const HallsPage = () => {
       category
     )}&minPrice=${minPrice}&maxPrice=${maxPrice}&minCapacity=${minCapacity}&maxCapacity=${maxCapacity}${
       startDate ? `&startDate=${startDate}` : ""
-    }${endDate ? `&endDate=${endDate}` : ""}`;
+    }${endDate ? `&endDate=${endDate}` : ""}${
+      sortBy === "location"
+        ? `&filterByProximity=true&latitude=${latitude}&longitude=${longitude}&radius=15`
+        : ""
+    }${
+      sortBy === "recommended"
+        ? `&sortByRecommendation=true&userId=${userId}`
+        : ""
+    }${
+      sortBy === "price" ? "&sortByPrice=true" : "" // Ensure sortByPrice is included when "price" is selected
+    }`;
 
     try {
       const response = await fetch(apiUrl);
@@ -108,6 +122,7 @@ const HallsPage = () => {
 
       setHalls(data.content);
       setTotalPages(data.totalPages);
+      console.log("API URL:", apiUrl);
     } catch (error) {
       console.error("Failed to fetch halls:", error);
     } finally {

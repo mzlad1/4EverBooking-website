@@ -52,17 +52,11 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 768px) {
-  .menu-icon-modern {
-    display: block;
-  }
-}
-
 /* Navigation Menu */
 .nav-menu-modern {
   display: flex;
   list-style: none;
-  gap: 10px;
+  gap: 20px;
   transition: all 0.5s ease;
 }
 
@@ -80,7 +74,7 @@
   color: #ffffff;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 10px;
+  padding: 10px 15px;
   position: relative;
   transition: color 0.3s ease;
 }
@@ -120,7 +114,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 .profile-text-modern {
@@ -146,7 +140,7 @@
 .dropdown-link-modern {
   color: #ffffff;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 15px 20px;
   font-size: 1rem;
   display: block;
 }
@@ -160,10 +154,10 @@
 .login-area-modern {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
 
 .login-link-modern {
-  margin-left: 15px;
   list-style: none;
 }
 
@@ -171,73 +165,6 @@
   margin-right: 5px;
 }
 
-/* Responsive Layout Changes */
-/* Media Query for Tablets and Larger Mobile Devices */
-@media screen and (max-width: 992px) {
-  .container-modern {
-    max-width: 960px;
-    padding: 0 15px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .nav-menu-modern {
-    gap: 8px;
-  }
-
-  .nav-link-modern {
-    font-size: 0.9rem;
-  }
-
-  .profile-text-modern {
-    font-size: 0.9rem;
-  }
-
-  .login-link-modern {
-    margin-left: 10px;
-  }
-}
-
-/* Media Query for Mobile Devices */
-@media screen and (max-width: 768px) {
-  .container-modern {
-    max-width: 100%;
-    padding: 0 10px;
-    flex-direction: column;
-  }
-
-  .nav-menu-modern {
-    display: none;
-    flex-direction: column;
-    background-color: #2d2f33;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    gap: 30px;
-    width: 100%;
-    height: calc(100vh - 70px);
-    justify-content: center;
-    align-items: center;
-  }
-
-  .nav-menu-modern.active {
-    display: flex;
-  }
-
-  .nav-link-modern {
-    padding: 20px;
-    font-size: 1.2rem;
-  }
-
-  .profile-image-modern {
-    width: 30px;
-    height: 30px;
-  }
-
-  .profile-text-modern {
-    font-size: 0.8rem;
-  }
-}
 /* Keyframes for Fade-in */
 @keyframes fadeIn {
   from {
@@ -295,4 +222,66 @@
   opacity: 0;
   animation: fadeIn 1s ease forwards;
   animation-delay: 0.9s; /* Fade in after the menu */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container-modern {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .menu-icon-modern {
+    display: block;
+  }
+
+  .nav-menu-modern {
+    flex-direction: column;
+    gap: 15px;
+    display: none;
+    width: 100%;
+  }
+
+  .nav-menu-modern.active {
+    display: flex;
+  }
+
+  .nav-link-modern {
+    font-size: 1.2rem;
+  }
+
+  .dropdown-menu-modern {
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .language-switcher-modern {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-modern {
+    font-size: 1.5rem;
+  }
+
+  .nav-link-modern {
+    font-size: 1rem;
+  }
+
+  .dropdown-link-modern {
+    font-size: 0.9rem;
+  }
+
+  .profile-image-modern {
+    width: 30px;
+    height: 30px;
+  }
+
+  .language-switcher-modern {
+    font-size: 0.7rem;
+    justify-content: start;
+  }
 }

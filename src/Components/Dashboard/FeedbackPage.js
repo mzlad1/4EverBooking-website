@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import "./FeedbackPage.css";
 import { fetchWithAuth } from "../../apiClient";
@@ -19,18 +19,28 @@ const FeedbackPage = () => {
   const parsedHallId = Number(hallId);
   const history = useHistory();
   const userId = Number(localStorage.getItem("userId"));
+  const location = useLocation();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const location = useLocation();
-  const { setFeedbackSent } = location.state || {};
+
+  useEffect(() => {
+    const { reservationId } = location.state || {};
+    if (!reservationId) {
+      history.replace("/unauthorized"); // Redirect if reservationId is missing
+    }
+  }, [location.state, history]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (setFeedbackSent) {
-      setFeedbackSent(); // Update feedback status on ReservedHalls page
+
+    const { reservationId } = location.state || {};
+    if (!reservationId) {
+      history.replace("/unauthorized");
+      return;
     }
+
     if (!rating || rating < 1 || rating > 5) {
       setError("Please provide a rating between 1 and 5 stars.");
       return;
@@ -41,6 +51,7 @@ const FeedbackPage = () => {
       const payload = {
         userId,
         hallId: parsedHallId,
+        reservationId, // Include reservationId
         rating,
         comment,
       };
@@ -69,7 +80,7 @@ const FeedbackPage = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    history.push("/dashboard/reserved-halls"); // Redirect back to Reserved Halls
+    history.replace("/dashboard/reserved-halls", {}); // Redirect back to Reserved Halls and clear state
   };
 
   return (

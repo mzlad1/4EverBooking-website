@@ -19,7 +19,10 @@ const AddNewHall = () => {
     phone: "",
     price: "",
     description: "",
-    services: [{ serviceName: "", servicePrice: "" }],
+    services: [
+      { serviceName: "Cake", servicePrice: "" },
+      { serviceName: "Drinks", servicePrice: "" },
+    ], // Default services
     categories: [],
     latitude: "",
     longitude: "",
@@ -532,7 +535,7 @@ const AddNewHall = () => {
             )}
           </div>
 
-          {/* Section 3: Services */}
+          {/* Section: Services */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">Services</h2>
             {hallData.services.map((service, index) => (
@@ -553,11 +556,6 @@ const AddNewHall = () => {
                   }
                   placeholder="Service Price"
                 />
-                {errors[`servicePrice-${index}`] && (
-                  <p className="error-message">
-                    {errors[`servicePrice-${index}`]}
-                  </p>
-                )}
                 <button
                   type="button"
                   className="remove-service-btn-unique"

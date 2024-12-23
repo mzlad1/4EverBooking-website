@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch, useHistory } from "react-router-dom"; // Import necessary hooks
-import { useTranslation } from "react-i18next"; // i18n for translation
+import { useRouteMatch, useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Pagination from "@mui/material/Pagination"; // Import Pagination component
-import "./MyHalls.css"; // CSS for styling the halls page
-import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
+import Pagination from "@mui/material/Pagination";
+import "./MyHalls.css";
+import { fetchWithAuth } from "../../../apiClient";
 
 const MyHalls = () => {
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation();
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const history = useHistory(); // Initialize navigation hook
-  const [selectedHall, setSelectedHall] = useState(null); // For storing the selected hall for deletion
-  const [openDialog, setOpenDialog] = useState(false); // State to manage dialog visibility
-  const { url } = useRouteMatch(); // This gives you the base URL
+  const [selectedFeedbacks, setSelectedFeedbacks] = useState([]); // Store feedbacks for selected hall
+  const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false); // Manage feedback dialog visibility
+  const [selectedHall, setSelectedHall] = useState(null); // Store selected hall for deletion
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false); // Manage delete dialog visibility
+  const history = useHistory();
+  const { url } = useRouteMatch();
 
   const fetchHalls = async (page) => {
     try {
@@ -56,39 +57,31 @@ const MyHalls = () => {
     }
   };
 
-  // Check if the URL is a video
-  const isVideo = (url) => {
-    return url.match(/\.(mp4|webm|ogg)$/i);
+  const handleOpenFeedbackDialog = (feedbacks) => {
+    setSelectedFeedbacks(feedbacks);
+    setOpenFeedbackDialog(true);
   };
 
-  // Get valid image URL
-  const getValidImage = (imageUrls) => {
-    const images = imageUrls.split(",");
-    if (isVideo(images[0])) {
-      return images[1] ? images[1] : "/default-placeholder.jpg"; // If the second one is valid, use it, otherwise show a placeholder
-    }
-    return images[0]; // If the first is not a video, use it
+  const handleCloseFeedbackDialog = () => {
+    setOpenFeedbackDialog(false);
+    setSelectedFeedbacks([]);
   };
 
-  useEffect(() => {
-    fetchHalls(currentPage); // Fetch halls when component mounts or page changes
-  }, [currentPage]);
+  const handleOpenDeleteDialog = (hallId) => {
+    setSelectedHall(hallId);
+    setOpenDeleteDialog(true);
+  };
 
-  if (loading) return <p>{t("loading")}</p>; // Translated loading message
-  if (error)
-    return (
-      <p>
-        {t("error")}: {error}
-      </p>
-    ); // Translated error message
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelectedHall(null);
+  };
 
-  // Function to handle hall deletion
-  const handleDeleteHall = async (hallId) => {
+  const handleDeleteHall = async () => {
     try {
       const token = localStorage.getItem("accessToken");
       const ownerId = localStorage.getItem("hallOwnerId");
-
-      const deleteUrl = `http://localhost:8080/hallOwner/?id=${hallId}&OwnerId=${ownerId}`;
+      const deleteUrl = `http://localhost:8080/hallOwner/delete?id=${selectedHall}&ownerId=${ownerId}`;
 
       const response = await fetchWithAuth(deleteUrl, {
         method: "DELETE",
@@ -98,22 +91,12 @@ const MyHalls = () => {
         },
       });
 
-      const data = await response.json(); // Parse the response
-      if (!response.ok) {
-        throw new Error(t("failed_to_delete_hall"));
-      }
+      if (!response.ok) throw new Error(t("failed_to_delete_hall"));
 
-      // Display the response message
-      alert(data.message); // This will show the message "Hall deleted successfully"
-
-      const updatedHalls = halls.filter((hall) => hall.id !== hallId);
-      if (updatedHalls.length < 12 && currentPage < totalPages) {
-        fetchHalls(currentPage); // Fetch updated halls
-      } else {
-        setHalls(updatedHalls);
-      }
+      setHalls(halls.filter((hall) => hall.id !== selectedHall));
+      handleCloseDeleteDialog();
     } catch (err) {
-      setError(err.message);
+      console.error(err.message);
     }
   };
 
@@ -121,20 +104,17 @@ const MyHalls = () => {
     history.push(`update-hall/${hallId}`); // Navigate to the update hall page
   };
 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setSelectedHall(null);
-  };
+  useEffect(() => {
+    fetchHalls(currentPage);
+  }, [currentPage]);
 
-  const handleOpenDialog = (hall) => {
-    setSelectedHall(hall);
-    setOpenDialog(true);
-  };
-
-  const confirmDelete = () => {
-    handleDeleteHall(selectedHall.id);
-    handleDialogClose();
-  };
+  if (loading) return <p>{t("loading")}</p>;
+  if (error)
+    return (
+      <p>
+        {t("error")}: {error}
+      </p>
+    );
 
   return (
     <div className="my-halls-container-modern">
@@ -145,7 +125,7 @@ const MyHalls = () => {
             <CardMedia
               component="img"
               height="140"
-              image={getValidImage(hall.image)}
+              image={hall.image.split(",")[0]} // Use the first image
               alt={hall.name}
             />
             <CardContent>
@@ -153,13 +133,13 @@ const MyHalls = () => {
                 {hall.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {t("location")}: {t(`west_bank_cities.${hall.location}`)}
+                {t("location")}: {hall.location}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {t("capacity")}: {hall.capacity}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {t("average_rating")}: {hall.averageRating.toFixed(2)}
+                {t("average_rating")}: {hall.averageRating?.toFixed(2)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {t("phone")}: {hall.phone}
@@ -175,8 +155,16 @@ const MyHalls = () => {
                 </Button>
                 <Button
                   variant="contained"
+                  color="secondary"
+                  onClick={() => handleOpenFeedbackDialog(hall.HallRatings)}
+                  style={{ marginRight: "10px" }}
+                >
+                  {t("feedbacks")}
+                </Button>
+                <Button
+                  variant="contained"
                   color="error"
-                  onClick={() => handleOpenDialog(hall)}
+                  onClick={() => handleOpenDeleteDialog(hall.id)}
                 >
                   {t("delete_hall")}
                 </Button>
@@ -189,27 +177,78 @@ const MyHalls = () => {
       {/* Pagination Controls */}
       <div className="pagination-modern">
         <Pagination
-          count={totalPages} // Total number of pages
-          page={currentPage} // Current page
+          count={totalPages}
+          page={currentPage}
           variant="outlined"
-          onChange={(event, value) => setCurrentPage(value)} // Handle page change
+          onChange={(event, value) => setCurrentPage(value)}
           color="primary"
         />
       </div>
 
+      {/* Feedbacks Dialog */}
+      <Dialog
+        open={openFeedbackDialog}
+        onClose={handleCloseFeedbackDialog}
+        sx={{ "& .MuiDialog-paper": { width: "80%", maxWidth: "800px" } }} // Inline styling for width
+        className="feedback-dialog"
+      >
+        <DialogTitle className="feedback-dialog-title">
+          {t("hall_feedbacks")}
+        </DialogTitle>
+        <DialogContent className="feedback-dialog-content">
+          {selectedFeedbacks.length > 0 ? (
+            selectedFeedbacks.map((feedback) => (
+              <div key={feedback.id} className="feedback-dialog-item">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="feedback-dialog-rating"
+                >
+                  {t("rating")}: {feedback.rating}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="feedback-dialog-comment"
+                >
+                  {t("comment")}: {feedback.comment}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="feedback-dialog-date"
+                >
+                  {t("date")}: {new Date(feedback.createdDate).toLocaleString()}
+                </Typography>
+                <hr className="feedback-dialog-separator" />
+              </div>
+            ))
+          ) : (
+            <Typography className="feedback-dialog-no-feedbacks">
+              {t("no_feedbacks")}
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions className="feedback-dialog-actions">
+          <Button onClick={handleCloseFeedbackDialog} color="primary">
+            {t("close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Delete Confirmation Dialog */}
-      <Dialog open={openDialog} onClose={handleDialogClose}>
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>{t("confirm_delete")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <Typography>
             {t("are_you_sure_you_want_to_delete_this_hall")}
-          </DialogContentText>
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
+          <Button onClick={handleCloseDeleteDialog} color="primary">
             {t("cancel")}
           </Button>
-          <Button onClick={confirmDelete} color="secondary">
+          <Button onClick={handleDeleteHall} color="error">
             {t("delete")}
           </Button>
         </DialogActions>

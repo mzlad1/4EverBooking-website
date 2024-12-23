@@ -5,6 +5,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { useTranslation } from "react-i18next";
 import "./filter.css";
 
@@ -17,8 +19,20 @@ const FilterBar = ({ onFilterChange }) => {
   const [maxPrice, setMaxPrice] = useState("");
   const [minCapacity, setMinCapacity] = useState("");
   const [maxCapacity, setMaxCapacity] = useState("");
-  const [startDate, setStartDate] = useState(""); // State for start date
-  const [endDate, setEndDate] = useState(""); // State for end date
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const userRole = localStorage.getItem("role") || ""; // Retrieve the user's role from localStorage
+  const userId = localStorage.getItem("userId") || null; // Retrieve the user's ID from localStorage
+
+  useEffect(() => {
+    if (sortBy === "price" && !category) {
+      alert(t("please_select_category"));
+      setSortBy("");
+    }
+  }, [sortBy, category, t]);
 
   useEffect(() => {
     onFilterChange({
@@ -30,6 +44,10 @@ const FilterBar = ({ onFilterChange }) => {
       maxCapacity,
       startDate,
       endDate,
+      sortBy,
+      latitude,
+      longitude,
+      userId: sortBy === "recommended" ? userId : null, // Include userId only if sorting by recommendation
     });
   }, [
     city,
@@ -40,6 +58,10 @@ const FilterBar = ({ onFilterChange }) => {
     maxCapacity,
     startDate,
     endDate,
+    sortBy,
+    latitude,
+    longitude,
+    userId,
   ]);
 
   const westBankCities = [
@@ -79,12 +101,90 @@ const FilterBar = ({ onFilterChange }) => {
     setMaxCapacity("");
     setStartDate("");
     setEndDate("");
+    setSortBy("");
+    setLatitude(null);
+    setLongitude(null);
+  };
+
+  const handleSortChange = (type) => {
+    if (type === "location") {
+      if (sortBy === "location") {
+        setSortBy("");
+        setLatitude(null);
+        setLongitude(null);
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLatitude(latitude);
+            setLongitude(longitude);
+            setSortBy("location");
+          },
+          (error) => {
+            alert(t("location_access_denied"));
+            setSortBy("");
+          }
+        );
+      }
+    } else {
+      setSortBy((prev) => (prev === type ? "" : type));
+    }
   };
 
   return (
     <div className="filter-bar-container-modern">
       <div className="filter-bar-modern">
         <div className="filter-bar-label-modern">{t("advanced_search")}</div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={sortBy === "price"}
+              onChange={() => handleSortChange("price")}
+              style={{
+                marginLeft: "15px",
+                width: "20px",
+                height: "20px",
+                accentColor: "#c29d6d",
+                transition: "transform 0.3s ease, background-color 0.3s ease",
+              }}
+            />
+          }
+          label={<span style={{ marginLeft: "10px" }}>{t("sort_by_price")}</span>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={sortBy === "location"}
+              onChange={() => handleSortChange("location")}
+              style={{
+                marginLeft: "15px",
+                width: "20px",
+                height: "20px",
+                accentColor: "#c29d6d",
+                transition: "transform 0.3s ease, background-color 0.3s ease",
+              }}
+            />
+          }
+          label={<span style={{ marginLeft: "10px" }}>{t("sort_by_location")}</span>}
+        />
+        {userRole === "CUSTOMER" && userId && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={sortBy === "recommended"}
+                onChange={() => handleSortChange("recommended")}
+                style={{
+                  marginLeft: "15px",
+                  width: "20px",
+                  height: "20px",
+                  accentColor: "#c29d6d",
+                  transition: "transform 0.3s ease, background-color 0.3s ease",
+                }}
+              />
+            }
+            label={<span style={{ marginLeft: "10px" }}>{t("sort_by_recommended")}</span>}
+          />
+        )}
         <FormControl variant="filled" className="form-control-modern">
           <InputLabel id="city-select-label-modern">{t("city")}</InputLabel>
           <Select
@@ -166,6 +266,7 @@ const FilterBar = ({ onFilterChange }) => {
             shrink: true,
           }}
         />
+
         <Button
           variant="contained"
           color="secondary"
