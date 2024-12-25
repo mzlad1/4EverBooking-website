@@ -19,6 +19,8 @@ const Register = () => {
   const [companyName, setCompanyName] = useState("");
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(null);
+  const [loading, setLoading] = useState(false); // New loading state
+
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -28,6 +30,7 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
+      setLoading(true); // Show loading overlay
       let userData = {
         user: {
           email,
@@ -64,7 +67,61 @@ const Register = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+        console.log("Registration Data:", data);
+
+        // Extract token from the response
+        const token = data.access_token; // Updated to match the response format
+        if (!token) {
+          throw new Error("Token not found in the registration response.");
+        }
+
+        // Fetch the user ID using the token
+        const userResponse = await fetch(
+          "http://localhost:8080/whitelist/getUser",
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!userResponse.ok) {
+          throw new Error(`Get User API error! status: ${userResponse.status}`);
+        }
+
+        const userDetails = await userResponse.json();
+        const userId = userDetails.id; // Extracting the `id` field
+        console.log("User ID:", userId);
+
+        if (userType === "hallOwner") {
+          // Call API to get Stripe account setup link
+          const stripeResponse = await fetch(
+            `http://localhost:8080/whitelist/createHallOwnerStripeAccount/${userId}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "*/*",
+              },
+            }
+          );
+
+          if (!stripeResponse.ok) {
+            throw new Error(
+              `Stripe API error! status: ${stripeResponse.status}`
+            );
+          }
+
+          const stripeLink = await stripeResponse.text(); // Handle as plain text
+          console.log("Stripe Setup Link:", stripeLink);
+          setLoading(false); // Hide loading overlay before redirection
+          // Redirect to the Stripe account setup link
+          window.location.href = stripeLink;
+          return;
+        }
+
         alert(t("registration_success")); // Use translated registration success message
         // Reset form after successful registration
         setEmail("");
@@ -76,11 +133,12 @@ const Register = () => {
         setDateOfBirth("");
         setPhone("");
         setCompanyName(""); // Reset company name if it was used
-
+        setLoading(false); // Hide loading overlay before redirection
         // Redirect to login page
         window.location.href = "/sign-in";
       } catch (error) {
         console.error("Error:", error);
+        setLoading(false); // Hide loading overlay before redirection
         alert(t("registration_error")); // Use translated registration error message
       }
     }
@@ -118,6 +176,12 @@ const Register = () => {
 
   return (
     <>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+          <p>{t("loading")}</p>
+        </div>
+      )}
       <section className="register-forms top">
         <div className="register-container">
           <div className="register-sign-box">

@@ -69,7 +69,6 @@ const HallSlider = ({ images }) => {
           <img
             src={imageUrl}
             alt={`Slide ${index + 1}`}
-            style={{ width: "100%", height: "auto" }} // Ensures the image fits correctly
           />
         </div>
       ))}

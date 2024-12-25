@@ -30,6 +30,7 @@ import "./i18n"; // Import the i18n initialization
 import DownloadAppModal from "./DownloadAppModal"; // Import the modal component
 import DownloadAppPage from "./Common/Navbar/DownloadAppPage"; // Import the download page
 import { isMobile, isTablet } from "react-device-detect"; // Import both mobile and tablet detection
+import ChatOverlay from "./Components/HomeSection/ChatOverlay"; // Import ChatOverlay
 
 // Function to detect if the device is an iPad using navigator.userAgent
 const isIpadDevice = () => {
@@ -110,6 +111,7 @@ function MainApp() {
           </Switch>
           {!shouldHideHeaderFooter && <Footer />}{" "}
           {/* Show Footer unless on sign-in or register */}
+          <ChatOverlay /> {/* Add ChatOverlay here to show it on all pages */}
         </>
       )}
     </>

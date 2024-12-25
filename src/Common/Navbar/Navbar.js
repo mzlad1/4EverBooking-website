@@ -35,6 +35,7 @@ const Navbar = () => {
           const user = await response.json();
           if (user.image) {
             setProfileImage(user.image);
+            localStorage.setItem("profileImage", user.image);
           }
         } catch (error) {
           console.error("Error fetching profile image:", error);
@@ -81,6 +82,7 @@ const Navbar = () => {
       localStorage.removeItem("hallOwnerId");
       localStorage.removeItem("userId");
       localStorage.removeItem("userRole");
+      localStorage.removeItem("profileImage");
 
       // Redirect to sign-in page after successful logout
       window.location.href = "/";

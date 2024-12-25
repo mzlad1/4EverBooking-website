@@ -13,13 +13,24 @@ import {
   faCalendarAlt,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
-
-// Import a spinner from a library or create your own
 import { CircularProgress } from "@mui/material";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(
+  "pk_test_51PluNHFNc7gJPoUc9XnL6UVtt25ebwD23sv8p2JR5tu74vgYjkJ45hDSoyx1OfUF2WJetMUziuq7lJaLk1jH9pny0041T40ceT"
+);
 
 const ReservationPage = () => {
   const location = useLocation();
   const history = useHistory();
+  const stripe = useStripe();
+  const elements = useElements();
 
   const reservationDetails =
     JSON.parse(localStorage.getItem("reservationDetails")) || location.state;
@@ -29,31 +40,10 @@ const ReservationPage = () => {
     customerId,
     totalPrice,
     selectedServices,
-    selectedCategory,
+    selectedCategory, // Ensure this is correctly destructured
     fromDate,
-    toDate,
+    toDate, // Ensure this is correctly destructured
   } = reservationDetails || {};
-
-  useEffect(() => {
-    if (
-      !hallId ||
-      !customerId ||
-      !totalPrice ||
-      !selectedServices ||
-      !selectedCategory ||
-      !fromDate
-    ) {
-      history.push("/hall-details");
-    }
-  }, [
-    hallId,
-    customerId,
-    totalPrice,
-    selectedServices,
-    selectedCategory,
-    fromDate,
-    history,
-  ]);
 
   const [billingAddress, setBillingAddress] = useState({
     fullName: "",
@@ -61,14 +51,109 @@ const ReservationPage = () => {
     phoneNumber: "",
   });
 
-  const [paymentInfo, setPaymentInfo] = useState({
-    cardNumber: "",
-    expiryDate: null,
-    cvv: "",
-  });
-
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
+  const [connectedAccountId, setConnectedAccountId] = useState("");
+
+  useEffect(() => {
+    if (
+      !hallId ||
+      !customerId ||
+      !totalPrice ||
+      !selectedServices ||
+      !fromDate
+    ) {
+      history.push("/hall-details");
+    }
+  }, [hallId, customerId, totalPrice, selectedServices, fromDate, history]);
+
+  useEffect(() => {
+    const fetchConnectedAccountId = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `http://localhost:8080/customer/connectedAccountId/${hallId}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch connectedAccountId: ${response.status}`
+          );
+        }
+
+        const accountId = await response.text();
+        setConnectedAccountId(accountId);
+        console.log("Connected Account ID:", accountId);
+      } catch (error) {
+        console.error("Error fetching connectedAccountId:", error);
+        setErrors({
+          payment: "Failed to retrieve payment account. Please try again.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConnectedAccountId();
+  }, [hallId]);
+
+  useEffect(() => {
+    if (connectedAccountId) {
+      const createPaymentIntent = async () => {
+        try {
+          setLoading(true);
+
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            throw new Error("Authorization token is missing.");
+          }
+
+          const response = await fetch(
+            "http://localhost:8080/payments/create-payment-intent",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+              body: JSON.stringify({
+                amount: totalPrice * 100, // Convert to cents
+                currency: "usd",
+                connectedAccountId: connectedAccountId,
+              }),
+            }
+          );
+
+          const result = await response.json();
+          console.log("Payment Intent Response:", result);
+
+          if (!result.clientSecret || result.clientSecret === "") {
+            throw new Error("Client Secret is missing or invalid.");
+          }
+
+          setClientSecret(result.clientSecret);
+          console.log("Client Secret Set:", result.clientSecret);
+        } catch (error) {
+          console.error("Error creating payment intent:", error);
+          setErrors({
+            payment: "Failed to initialize payment. Please try again later.",
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      createPaymentIntent();
+    }
+  }, [connectedAccountId, totalPrice]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -78,42 +163,15 @@ const ReservationPage = () => {
     });
   };
 
-  const handleCardNumberChange = (e) => {
-    const { value } = e.target;
-    const formattedValue = value.replace(/\D/g, "").slice(0, 16);
-    setPaymentInfo({ ...paymentInfo, cardNumber: formattedValue });
-  };
-
-  const handleCvvChange = (e) => {
-    const { value } = e.target;
-    const formattedValue = value.replace(/\D/g, "").slice(0, 3);
-    setPaymentInfo({ ...paymentInfo, cvv: formattedValue });
-  };
-
-  const getServiceObject = (servicesArray) => {
-    const servicesObject = {};
-    servicesArray.forEach((service) => {
-      servicesObject[service.name] = service.price;
-    });
-    return servicesObject;
-  };
-
-  const toUTCDate = (date) => {
-    const utcDate = new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-    );
-    return utcDate;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Show loader
+    setLoading(true);
 
     const isConfirmed = window.confirm(
       "Are you sure you want to confirm the reservation?"
     );
     if (!isConfirmed) {
-      setLoading(false); // Hide loader if canceled
+      setLoading(false);
       return;
     }
 
@@ -122,68 +180,103 @@ const ReservationPage = () => {
     if (!billingAddress.address) newErrors.address = "Address is required.";
     if (!billingAddress.phoneNumber || billingAddress.phoneNumber.length < 10)
       newErrors.phoneNumber = "Valid phone number is required.";
-    if (!paymentInfo.cardNumber || paymentInfo.cardNumber.length < 16)
-      newErrors.cardNumber = "Valid credit card number is required.";
-    if (!paymentInfo.expiryDate)
-      newErrors.expiryDate = "Valid expiry date is required (MM/YY).";
-    if (!paymentInfo.cvv || paymentInfo.cvv.length !== 3)
-      newErrors.cvv = "Valid 3-digit CVV is required.";
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      const servicesObject = getServiceObject(selectedServices);
-      const fromDateObject = toUTCDate(new Date(fromDate));
-      const toDateObject = toDate
-        ? toUTCDate(new Date(toDate))
-        : fromDateObject;
-
-      const reservationData = {
-        hallId,
-        customerId,
-        time: fromDateObject.toISOString(),
-        endTime: toDateObject.toISOString(),
-        selectedCategory,
-        services: servicesObject,
-        expiryDate: paymentInfo.expiryDate
-          ? paymentInfo.expiryDate.toISOString()
-          : null,
-      };
-
+    if (Object.keys(newErrors).length === 0 && stripe && elements) {
       try {
-        const response = await fetchWithAuth(
-          "http://localhost:8080/customer/reserveHall",
+        const cardElement = elements.getElement(CardElement);
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(
+          clientSecret,
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            payment_method: {
+              card: cardElement,
+              billing_details: {
+                name: billingAddress.fullName,
+                address: { line1: billingAddress.address },
+                phone: billingAddress.phoneNumber,
+              },
             },
-            body: JSON.stringify(reservationData),
           }
         );
 
-        const result = await response.json();
-        console.log("Reservation successful: ", result);
+        if (error) {
+          console.error("Payment error:", error.message);
+          setErrors({ payment: error.message });
+          return;
+        }
 
-        history.push({
-          pathname: "/reservation-success",
-          state: { message: "Reservation successful!", goToHalls: true },
-        });
+        if (paymentIntent && paymentIntent.status === "succeeded") {
+          console.log("Payment succeeded:", paymentIntent);
+
+          const servicesObject = selectedServices.reduce((acc, service) => {
+            acc[service.name] = service.price;
+            return acc;
+          }, {});
+
+          const fromDateObject = new Date(fromDate);
+          fromDateObject.setHours(12, 0, 0, 0); // Adjust to noon to avoid timezone issues
+
+          const toDateObject = toDate
+            ? new Date(toDate).setHours(12, 0, 0, 0)
+            : fromDateObject;
+
+          const reservationData = {
+            hallId,
+            customerId,
+            time: new Date(fromDateObject).toISOString(),
+            endTime: new Date(toDateObject).toISOString(),
+            selectedCategory,
+            services: servicesObject,
+          };
+
+          try {
+            const response = await fetchWithAuth(
+              "http://localhost:8080/customer/reserveHall",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem(
+                    "accessToken"
+                  )}`,
+                },
+                body: JSON.stringify(reservationData),
+              }
+            );
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log("Reservation successful: ", result);
+
+              history.push({
+                pathname: "/reservation-success",
+                state: { message: "Reservation successful!", goToHalls: true },
+              });
+            } else {
+              const errorText = await response.text();
+              console.error("Reservation failed:", errorText);
+              setErrors({
+                payment: "Reservation failed. Please try again later.",
+              });
+            }
+          } catch (error) {
+            console.error("Reservation error:", error);
+            setErrors({
+              payment: "An error occurred while processing the reservation.",
+            });
+          }
+        }
       } catch (error) {
-        console.error("Reservation failed: ", error);
-      } finally {
-        setLoading(false); // Hide loader
+        console.error("Error confirming payment:", error);
+        setErrors({ payment: "Payment failed. Please try again." });
       }
-    } else {
-      setLoading(false); // Hide loader if errors
     }
+
+    setLoading(false);
   };
 
-  const handleCancel = () => {
-    history.goBack();
-    localStorage.removeItem("reservationDetails");
-  };
   return (
     <div className="reservation-confirmation-page">
       {loading && (
@@ -192,7 +285,6 @@ const ReservationPage = () => {
         </div>
       )}
       <h1 className="reservation-fade-in-title">Reservation Confirmation</h1>
-
       <div className="reservation-total-price-box reservation-fade-in">
         <p>Total Price:</p>
         <h2>${totalPrice}</h2>
@@ -218,7 +310,6 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.fullName}</p>
               )}
             </div>
-
             <div className="reservation-form-group">
               <label>Address:</label>
               <div className="reservation-input-with-icon">
@@ -235,7 +326,6 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.address}</p>
               )}
             </div>
-
             <div className="reservation-form-group">
               <label>Phone Number:</label>
               <div className="reservation-input-with-icon">
@@ -255,79 +345,30 @@ const ReservationPage = () => {
               )}
             </div>
           </div>
-
           <div className="reservation-payment-box">
             <h2>Payment Information</h2>
-
             <div className="reservation-form-group">
-              <label>Credit Card Number:</label>
-              <div className="reservation-input-with-icon">
-                <FontAwesomeIcon icon={faCreditCard} />
-                <input
-                  type="text"
-                  name="cardNumber"
-                  value={paymentInfo.cardNumber}
-                  onChange={handleCardNumberChange}
-                  placeholder="1234 5678 9123 4567"
-                  maxLength="16"
-                />
-              </div>
-              {errors.cardNumber && (
-                <p className="reservation-error-message">{errors.cardNumber}</p>
-              )}
-            </div>
-
-            <div className="reservation-form-group">
-              <label>Expiry Date:</label>
-              <div className="reservation-input-with-icon-date">
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <DatePicker
-                  selected={paymentInfo.expiryDate}
-                  onChange={(date) =>
-                    setPaymentInfo({
-                      ...paymentInfo,
-                      expiryDate: date,
-                    })
-                  }
-                  dateFormat="MM/yy"
-                  showMonthYearPicker
-                  placeholderText="MM/YY"
-                  className="reservation-datepicker-input"
-                />
-              </div>
-              {errors.expiryDate && (
-                <p className="reservation-error-message">{errors.expiryDate}</p>
-              )}
-            </div>
-
-            <div className="reservation-form-group">
-              <label>CVV:</label>
-              <div className="reservation-input-with-icon">
-                <FontAwesomeIcon icon={faLock} />
-                <input
-                  type="text"
-                  name="cvv"
-                  value={paymentInfo.cvv}
-                  onChange={handleCvvChange}
-                  placeholder="***"
-                  maxLength="3"
-                />
-              </div>
-              {errors.cvv && (
-                <p className="reservation-error-message">{errors.cvv}</p>
+              <label>Card Details:</label>
+              <CardElement className="reservation-card-element" />
+              {errors.payment && (
+                <p className="reservation-error-message">{errors.payment}</p>
               )}
             </div>
           </div>
         </div>
 
         <div className="reservation-button-container reservation-fade-in">
-          <button type="submit" className="reservation-submit-button">
+          <button
+            type="submit"
+            className="reservation-submit-button"
+            disabled={!stripe || !elements || loading}
+          >
             Confirm Reservation
           </button>
           <button
             type="button"
             className="reservation-cancel-button"
-            onClick={handleCancel}
+            onClick={() => history.goBack()}
           >
             Cancel
           </button>
@@ -337,4 +378,10 @@ const ReservationPage = () => {
   );
 };
 
-export default ReservationPage;
+const ReservationPageWithStripe = () => ( 
+  <Elements stripe={stripePromise}>
+    <ReservationPage />
+  </Elements>
+);
+
+export default ReservationPageWithStripe;
