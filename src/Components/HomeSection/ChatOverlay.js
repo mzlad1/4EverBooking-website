@@ -22,13 +22,18 @@ const ChatOverlay = () => {
 
     try {
       // Send user input to the backend
-      const response = await fetch("http://localhost:8080/chatbot/query", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: input }), // Backend expects "query"
-      });
+      const userId = localStorage.getItem("userId"); // Replace this with the actual session ID or generate it dynamically.
+
+      const response = await fetch(
+        `http://localhost:8080/chatbot/query?userId=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: input }), // Backend expects "query"
+        }
+      );
 
       const data = await response.json();
 
