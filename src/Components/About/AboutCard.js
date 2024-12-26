@@ -8,7 +8,7 @@ const AboutCard = () => {
   return (
     <>
       <div className="aboutcard-unique-heading">
-        <h1>who we are?</h1>
+        <h1>{t("who_we_are.heading")}</h1>
         <div className="aboutcard-unique-line"></div>{" "}
         {/* Divider under the heading */}
       </div>

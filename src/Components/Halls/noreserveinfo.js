@@ -1,9 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./noreserveinfo.css"; // Import the CSS for styling
 
 const Unauthorized = () => {
   const history = useHistory();
+  const { t } = useTranslation(); // Initialize the translation hook
 
   const goHome = () => {
     history.push("/");
@@ -12,14 +14,11 @@ const Unauthorized = () => {
   return (
     <div className="unauthorized-container">
       <div className="unauthorized-content">
-        <h1 className="unauthorized-heading">Error!</h1>
-        <h2 className="unauthorized-subheading">No Hall details selected</h2>
-        <p className="unauthorized-message">
-          You should select a hall details to view this page. Please make sure
-          you're already selected it right.
-        </p>
+        <h1 className="unauthorized-heading">{t("error_heading")}</h1>
+        <h2 className="unauthorized-subheading">{t("error_subheading")}</h2>
+        <p className="unauthorized-message">{t("error_message")}</p>
         <button className="unauthorized-btn" onClick={goHome}>
-          Go to Home
+          {t("go_home")}
         </button>
       </div>
     </div>

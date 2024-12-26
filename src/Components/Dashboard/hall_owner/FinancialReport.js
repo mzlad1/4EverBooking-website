@@ -9,6 +9,8 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import "./financial.css";
 import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
+import { useTranslation } from "react-i18next"; // Import useTranslation
+
 
 const FinancialReport = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
@@ -16,9 +18,12 @@ const FinancialReport = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { isLoggedIn } = useAuth();
+      const { t } = useTranslation(); // Initialize translation hook
+  
 
   useEffect(() => {
     const fetchFinancialReport = async () => {
+
       try {
         const token = localStorage.getItem("accessToken"); // Get access token from localStorage
         const ownerId = localStorage.getItem("hallOwnerId"); // Fetch owner ID from localStorage
@@ -100,7 +105,7 @@ const FinancialReport = () => {
       <Container className="financial-report-container" align="center">
         <CircularProgress /> {/* Material-UI loading spinner */}
         <Typography variant="h6" style={{ marginTop: "20px" }}>
-          Loading Financial Report...
+          {t("loading_report")}
         </Typography>
       </Container>
     );
@@ -117,9 +122,9 @@ const FinancialReport = () => {
   return (
     <Container className="financial-report-container" align="center">
       <Typography variant="h4" gutterBottom>
-        Financial Report
+        {t("financial_report")}
       </Typography>
-
+  
       {pdfUrl ? (
         <>
           {/* Render the PDF using react-pdf-viewer */}
@@ -130,7 +135,7 @@ const FinancialReport = () => {
               <Viewer fileUrl={pdfUrl} />
             </Worker>
           </div>
-
+  
           {/* Download Button */}
           <Button
             variant="contained"
@@ -138,16 +143,17 @@ const FinancialReport = () => {
             onClick={handleDownload}
             style={{ marginTop: "20px" }}
           >
-            Download Report
+            {t("download_report")}
           </Button>
         </>
       ) : (
         <Typography variant="body1" color="textSecondary">
-          Unable to display the report.
+          {t("unable_to_display_report")}
         </Typography>
       )}
     </Container>
   );
+  
 };
 
 export default FinancialReport;

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next"; // Import useTranslation
+
 import {
   GoogleMap,
   Marker,
@@ -12,6 +14,7 @@ import "./AddNewHall.css";
 const libraries = ["places"]; // Required for Places Autocomplete
 
 const AddNewHall = () => {
+      const { t } = useTranslation(); // Initialize translation hook
   const [hallData, setHallData] = useState({
     name: "",
     city: "",
@@ -362,18 +365,18 @@ const AddNewHall = () => {
 
   return (
     <div className="add-hall-unique-container">
-      <h1 className="add-hall-unique-title">Add a New Hall</h1>
+      <h1 className="add-hall-unique-title">{t("add_new_hall")}</h1>
       {successMessage && <p className="success-message">{successMessage}</p>}
       {!isProcessing ? (
         <form className="add-hall-unique-form" onSubmit={handleSubmit}>
           {/* Section 1: Basic Information */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">Basic Information</h2>
-
+            <h2 className="section-title-unique">{t("basic_information")}</h2>
+  
             {/* Hall Name */}
             <div className="form-group-unique">
               <label htmlFor="name" className="input-label-unique">
-                Hall Name
+                {t("hall_name")}
               </label>
               <input
                 type="text"
@@ -382,15 +385,15 @@ const AddNewHall = () => {
                 name="name"
                 value={hallData.name}
                 onChange={handleInputChange}
-                placeholder="Enter hall name"
+                placeholder={t("enter_hall_name")}
               />
               {errors.name && <p className="error-message">{errors.name}</p>}
             </div>
-
+  
             {/* Capacity */}
             <div className="form-group-unique">
               <label htmlFor="capacity" className="input-label-unique">
-                Capacity
+                {t("capacity")}
               </label>
               <input
                 type="number"
@@ -399,17 +402,17 @@ const AddNewHall = () => {
                 name="capacity"
                 value={hallData.capacity}
                 onChange={handleInputChange}
-                placeholder="Enter capacity"
+                placeholder={t("enter_capacity")}
               />
               {errors.capacity && (
                 <p className="error-message">{errors.capacity}</p>
               )}
             </div>
-
+  
             {/* Phone */}
             <div className="form-group-unique">
               <label htmlFor="phone" className="input-label-unique">
-                Phone
+                {t("phone")}
               </label>
               <input
                 type="tel"
@@ -418,15 +421,15 @@ const AddNewHall = () => {
                 name="phone"
                 value={hallData.phone}
                 onChange={handleInputChange}
-                placeholder="Enter phone number"
+                placeholder={t("enter_phone_number")}
               />
               {errors.phone && <p className="error-message">{errors.phone}</p>}
             </div>
-
+  
             {/* Description */}
             <div className="form-group-unique">
               <label htmlFor="description" className="input-label-unique">
-                Description
+                {t("description")}
               </label>
               <textarea
                 id="description"
@@ -434,22 +437,22 @@ const AddNewHall = () => {
                 name="description"
                 value={hallData.description}
                 onChange={handleInputChange}
-                placeholder="Enter description"
+                placeholder={t("enter_description")}
               />
               {errors.description && (
                 <p className="error-message">{errors.description}</p>
               )}
             </div>
           </div>
-
+  
           {/* Section 2: Location Information */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">Location Information</h2>
-
+            <h2 className="section-title-unique">{t("location_information")}</h2>
+  
             {/* City Selection Dropdown */}
             <div className="form-group-unique">
               <label htmlFor="city" className="input-label-unique">
-                City
+                {t("city")}
               </label>
               <select
                 id="city"
@@ -458,20 +461,20 @@ const AddNewHall = () => {
                 value={hallData.city}
                 onChange={handleInputChange}
               >
-                <option value="">Select a city</option>
+                <option value="">{t("select_city")}</option>
                 {westBankCities.map((city) => (
                   <option key={city} value={city}>
-                    {city}
+                    {t(`city_${city.toLowerCase()}`)}
                   </option>
                 ))}
               </select>
               {errors.city && <p className="error-message">{errors.city}</p>}
             </div>
-
+  
             {/* Location Search Input */}
             <div className="form-group-unique">
               <label htmlFor="location" className="input-label-unique">
-                Location
+                {t("location")}
               </label>
               <Autocomplete
                 onLoad={(autocomplete) => setAutocomplete(autocomplete)}
@@ -481,11 +484,11 @@ const AddNewHall = () => {
                   type="text"
                   id="location"
                   className="input-field-unique"
-                  placeholder="Search location"
+                  placeholder={t("search_location")}
                 />
               </Autocomplete>
             </div>
-
+  
             {/* Google Map */}
             <div className="map-container">
               <GoogleMap
@@ -498,11 +501,11 @@ const AddNewHall = () => {
                 <Marker position={markerPosition} />
               </GoogleMap>
             </div>
-
+  
             {/* Latitude and Longitude */}
             <div className="form-group-unique">
               <label htmlFor="latitude" className="input-label-unique">
-                Latitude
+                {t("latitude")}
               </label>
               <input
                 type="number"
@@ -511,13 +514,13 @@ const AddNewHall = () => {
                 name="latitude"
                 value={hallData.latitude}
                 readOnly
-                placeholder="Selected latitude"
+                placeholder={t("selected_latitude")}
               />
             </div>
-
+  
             <div className="form-group-unique">
               <label htmlFor="longitude" className="input-label-unique">
-                Longitude
+                {t("longitude")}
               </label>
               <input
                 type="number"
@@ -526,18 +529,18 @@ const AddNewHall = () => {
                 name="longitude"
                 value={hallData.longitude}
                 readOnly
-                placeholder="Selected longitude"
+                placeholder={t("selected_longitude")}
               />
             </div>
-
+  
             {errors.location && (
               <p className="error-message">{errors.location}</p>
             )}
           </div>
-
+  
           {/* Section: Services */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">Services</h2>
+            <h2 className="section-title-unique">{t("services")}</h2>
             {hallData.services.map((service, index) => (
               <div key={index} className="dynamic-service-unique">
                 <input
@@ -545,7 +548,7 @@ const AddNewHall = () => {
                   className="input-field-unique"
                   value={service.serviceName}
                   onChange={(e) => handleServiceChange(e, index, "serviceName")}
-                  placeholder={`Service #${index + 1}`}
+                  placeholder={`${t("service")} #${index + 1}`}
                 />
                 <input
                   type="number"
@@ -554,14 +557,14 @@ const AddNewHall = () => {
                   onChange={(e) =>
                     handleServiceChange(e, index, "servicePrice")
                   }
-                  placeholder="Service Price"
+                  placeholder={t("service_price")}
                 />
                 <button
                   type="button"
                   className="remove-service-btn-unique"
                   onClick={() => removeService(index)}
                 >
-                  Remove
+                  {t("remove_service")}
                 </button>
               </div>
             ))}
@@ -570,13 +573,13 @@ const AddNewHall = () => {
               className="add-service-btn-unique"
               onClick={addService}
             >
-              Add Service
+              {t("add_service")}
             </button>
           </div>
-
+  
           {/* Section 4: Categories with Price Inputs */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">Categories</h2>
+            <h2 className="section-title-unique">{t("categories")}</h2>
             <div className="category-checkboxes-unique">
               {["WEDDINGS", "BIRTHDAYS", "MEETINGS", "PARTIES", "FUNERALS"].map(
                 (category) => (
@@ -588,16 +591,22 @@ const AddNewHall = () => {
                       onChange={handleCategoryChange}
                       checked={categoryPrices.hasOwnProperty(category)}
                     />
-                    <label htmlFor={`category-${category}`}>{category}</label>
-
+                    <label htmlFor={`category-${category}`}>
+                      {t(`category_${category.toLowerCase()}`)}
+                    </label>
+  
                     {/* Show price input if category is selected */}
                     {categoryPrices.hasOwnProperty(category) && (
                       <input
                         type="number"
                         className="input-field-unique"
                         value={categoryPrices[category]}
-                        onChange={(e) => handleCategoryPriceChange(e, category)}
-                        placeholder={`Enter price for ${category}`}
+                        onChange={(e) =>
+                          handleCategoryPriceChange(e, category)
+                        }
+                        placeholder={t("enter_price", {
+                          category: t(`category_${category.toLowerCase()}`),
+                        })}
                       />
                     )}
                     {errors[`categoryPrice-${category}`] && (
@@ -613,10 +622,10 @@ const AddNewHall = () => {
               <p className="error-message">{errors.categories}</p>
             )}
           </div>
-
+  
           {/* Section 5: Upload Image */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">Upload Image</h2>
+            <h2 className="section-title-unique">{t("upload_image")}</h2>
             <div className="form-group-unique">
               <input
                 type="file"
@@ -628,10 +637,10 @@ const AddNewHall = () => {
               {errors.image && <p className="error-message">{errors.image}</p>}
             </div>
           </div>
-
+  
           {/* Section 6: Upload Proof of Ownership */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">Upload Proof of Ownership</h2>
+            <h2 className="section-title-unique">{t("upload_proof_of_ownership")}</h2>
             <div className="form-group-unique">
               <input
                 type="file"
@@ -644,21 +653,19 @@ const AddNewHall = () => {
               )}
             </div>
           </div>
-
+  
           <button type="submit" className="submit-btn-unique">
-            Submit
+            {t("submit")}
           </button>
         </form>
       ) : (
         <div>
-          <p>
-            Your hall is under processing. You will receive an email when it is
-            approved.
-          </p>
+          <p>{t("hall_under_processing")}</p>
         </div>
       )}
     </div>
   );
+  
 };
 
 export default AddNewHall;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchWithAuth } from "../../../apiClient";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,6 +18,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import './ProcessHalls.css'; // Assuming you have custom styles here
 
 const ProcessHalls = () => {
+  const { t } = useTranslation(); // Initialize translation hook
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -106,11 +108,14 @@ const ProcessHalls = () => {
   }
 
   return (
-    <div className="process-halls-container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1>Process Halls</h1>
-
+    <div
+      className="process-halls-container"
+      style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}
+    >
+      <h1>{t("process_halls")}</h1>
+  
       {halls.length === 0 ? (
-        <p>No halls to process</p>
+        <p>{t("no_halls_to_process")}</p>
       ) : (
         <>
           {/* Halls Table */}
@@ -118,13 +123,27 @@ const ProcessHalls = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Name</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Location</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Capacity</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Description</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Phone</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Proof</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Actions</TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("name")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("location")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("capacity")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("description")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("phone")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("proof")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("actions")}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -141,7 +160,7 @@ const ProcessHalls = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        View Proof
+                        {t("view_proof")}
                       </a>
                     </TableCell>
                     <TableCell>
@@ -150,7 +169,7 @@ const ProcessHalls = () => {
                         color="primary"
                         onClick={() => handleOpenDialog(hall)}
                       >
-                        Accept
+                        {t("accept")}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -158,7 +177,7 @@ const ProcessHalls = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
+  
           {/* Pagination Controls */}
           <Pagination
             count={totalPages}
@@ -166,30 +185,35 @@ const ProcessHalls = () => {
             onChange={handlePageChange}
             variant="outlined"
             color="primary"
-            style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              justifyContent: "center",
+            }}
           />
         </>
       )}
-
+  
       {/* Custom Dialog for Accept Confirmation */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Confirm Accept</DialogTitle>
+        <DialogTitle>{t("confirm_accept")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to accept the hall "{selectedHall?.name}"?
+            {t("accept_confirmation", { name: selectedHall?.name })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} color="secondary">
-            Cancel
+            {t("cancel")}
           </Button>
           <Button onClick={handleAccept} color="primary">
-            Accept
+            {t("accept")}
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
+  
 };
 
 export default ProcessHalls;

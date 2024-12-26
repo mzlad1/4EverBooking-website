@@ -5,6 +5,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useTranslation } from "react-i18next"; // Import useTranslation
+import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
 import {
   GoogleMap,
@@ -67,6 +70,7 @@ const UpdateHall = () => {
   const [existingImages, setExistingImages] = useState([]); // To store the existing images/videos
   const [newImages, setNewImages] = useState([]); // To store newly uploaded images/videos
   const [successMessage, setSuccessMessage] = useState(""); // To display success messages
+  const { t } = useTranslation(); // Initialize translation hook
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyDl-x5DoQXJ23WIsrGFLOFFTX_DcH37160", // Replace with your Google Maps API key
@@ -379,13 +383,15 @@ const UpdateHall = () => {
 
   return (
     <div className="update-hall-unique-container">
-      <h1 className="update-hall-unique-title">Update Hall</h1>
+      <h1 className="update-hall-unique-title">{t("update_hall")}</h1>
       <form onSubmit={handleSubmit}>
         {/* Section: Basic Information */}
         <div className="update-hall-box">
-          <h2 className="update-hall-section-title">Basic Information</h2>
+          <h2 className="update-hall-section-title">
+            {t("basic_information")}
+          </h2>
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Hall Name</label>
+            <label className="update-hall-input-label">{t("hall_name")}</label>
             <input
               type="text"
               name="name"
@@ -397,7 +403,7 @@ const UpdateHall = () => {
           </div>
 
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Capacity</label>
+            <label className="update-hall-input-label">{t("capacity")}</label>
             <input
               type="number"
               name="capacity"
@@ -409,7 +415,7 @@ const UpdateHall = () => {
           </div>
 
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Phone</label>
+            <label className="update-hall-input-label">{t("phone")}</label>
             <input
               type="tel"
               name="phone"
@@ -421,7 +427,9 @@ const UpdateHall = () => {
           </div>
 
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Description</label>
+            <label className="update-hall-input-label">
+              {t("description")}
+            </label>
             <textarea
               name="description"
               value={hallData.description}
@@ -434,32 +442,34 @@ const UpdateHall = () => {
 
         {/* Section: Location Information */}
         <div className="update-hall-box">
-          <h2 className="update-hall-section-title">Location Information</h2>
+          <h2 className="update-hall-section-title">
+            {t("location_information")}
+          </h2>
 
-          {/* City Selection */}
           <div className="update-hall-form-group">
-            <div className="city-select-box">
-              <label htmlFor="city">Select City</label>
-              <select
-                id="city"
-                value={hallData.location}
-                onChange={handleCityChange}
-                className="city-select"
-                required
-              >
-                <option value="">Select a city</option>
-                {westBankCities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <label htmlFor="city" className="update-hall-input-label">
+              {t("select_city")}
+            </label>
+            <select
+              id="city"
+              value={hallData.location}
+              onChange={handleCityChange}
+              className="update-hall-input-field"
+              required
+            >
+              <option value="">{t("select_city")}</option>
+              {westBankCities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Location Search */}
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Search Location</label>
+            <label className="update-hall-input-label">
+              {t("search_location")}
+            </label>
             <Autocomplete
               onLoad={(autocomplete) => setAutocomplete(autocomplete)}
               onPlaceChanged={handlePlaceSelect}
@@ -468,14 +478,13 @@ const UpdateHall = () => {
                 type="text"
                 name="location"
                 className="update-hall-input-field"
-                placeholder="Search for a location"
+                placeholder={t("search_location")}
               />
             </Autocomplete>
           </div>
 
-          {/* Display Latitude */}
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Latitude</label>
+            <label className="update-hall-input-label">{t("latitude")}</label>
             <input
               type="number"
               name="latitude"
@@ -485,9 +494,8 @@ const UpdateHall = () => {
             />
           </div>
 
-          {/* Display Longitude */}
           <div className="update-hall-form-group">
-            <label className="update-hall-input-label">Longitude</label>
+            <label className="update-hall-input-label">{t("longitude")}</label>
             <input
               type="number"
               name="longitude"
@@ -497,14 +505,13 @@ const UpdateHall = () => {
             />
           </div>
 
-          {/* Google Map with Draggable Marker */}
           <div className="update-hall-map-container">
             <GoogleMap
               mapContainerStyle={{ width: "100%", height: "300px" }}
               center={{ lat: hallData.latitude, lng: hallData.longitude }}
               zoom={13}
-              onLoad={(mapInstance) => setMap(mapInstance)} // Set the map instance on load
-              onClick={handleMapClick} // Allow user to click on the map
+              onLoad={(mapInstance) => setMap(mapInstance)}
+              onClick={handleMapClick}
             >
               <Marker
                 position={{ lat: hallData.latitude, lng: hallData.longitude }}
@@ -517,14 +524,14 @@ const UpdateHall = () => {
 
         {/* Section: Services */}
         <div className="update-hall-box">
-          <h2 className="update-hall-section-title">Services</h2>
+          <h2 className="update-hall-section-title">{t("services")}</h2>
           {hallData.services.map((service, index) => (
             <div key={index} className="update-hall-dynamic-service">
               <input
                 type="text"
                 value={service.serviceName}
                 onChange={(e) => handleServiceChange(e, index, "serviceName")}
-                placeholder={`Service #${index + 1}`}
+                placeholder={`${t("service")} #${index + 1}`}
                 className="update-hall-input-field"
                 required
               />
@@ -532,7 +539,7 @@ const UpdateHall = () => {
                 type="number"
                 value={service.servicePrice}
                 onChange={(e) => handleServiceChange(e, index, "servicePrice")}
-                placeholder="Service Price"
+                placeholder={t("service_price")}
                 className="update-hall-input-field"
                 required
               />
@@ -541,7 +548,7 @@ const UpdateHall = () => {
                 className="update-hall-remove-service-btn"
                 onClick={() => removeService(index)}
               >
-                Remove
+                {t("remove_service")}
               </button>
             </div>
           ))}
@@ -550,13 +557,13 @@ const UpdateHall = () => {
             className="update-hall-add-service-btn"
             onClick={addService}
           >
-            Add Service
+            {t("add_service")}
           </button>
         </div>
 
         {/* Section: Categories */}
         <div className="update-hall-box">
-          <h2 className="update-hall-section-title">Categories</h2>
+          <h2 className="update-hall-section-title">{t("categories")}</h2>
           <div className="update-hall-category-checkboxes">
             {Object.keys(defaultCategories).map((category) => (
               <div key={category} className="update-hall-checkbox-item">
@@ -575,7 +582,7 @@ const UpdateHall = () => {
                     value={categoryPrices[category]}
                     onChange={(e) => handleCategoryPriceChange(e, category)}
                     className="update-hall-input-field"
-                    placeholder={`Price for ${category}`}
+                    placeholder={t("price_for_category", { category })}
                   />
                 )}
               </div>
@@ -585,7 +592,9 @@ const UpdateHall = () => {
 
         {/* Existing Images Section */}
         <div className="update-hall-box">
-          <h2 className="update-hall-section-title">Existing Images/Videos</h2>
+          <h2 className="update-hall-section-title">
+            {t("existing_images_videos")}
+          </h2>
           <div className="update-hall-existing-images">
             {existingImages.map((img, index) => {
               const isVideo = img.match(/\.(mp4|webm|ogg)$/i);
@@ -610,7 +619,7 @@ const UpdateHall = () => {
                     onClick={() => handleOpenDialog(img)}
                     disabled={existingImages.length === 1}
                   >
-                    X
+                    {t("delete_update_hall")}
                   </button>
                 </div>
               );
@@ -618,25 +627,25 @@ const UpdateHall = () => {
           </div>
         </div>
 
-        {/* Dialog for delete confirmation */}
+        {/* Dialog for Delete Confirmation */}
         <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogTitle>{t("confirm_delete")}</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Are you sure you want to delete this image/video?
-            </DialogContentText>
+            <Typography>{t("delete_image_video")}</Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
+            <Button onClick={handleCloseDialog}>{t("cancel")}</Button>
             <Button onClick={handleConfirmDelete} color="secondary">
-              Delete
+              {t("delete")}
             </Button>
           </DialogActions>
         </Dialog>
 
         {/* File Upload */}
         <div className="update-hall-box">
-          <h2 className="update-hall-section-title">Add New Images/Videos</h2>
+          <h2 className="update-hall-section-title">
+            {t("add_new_images_videos")}
+          </h2>
           <input
             type="file"
             multiple
@@ -648,10 +657,10 @@ const UpdateHall = () => {
 
         {/* Submit Button */}
         <button type="submit" className="update-hall-submit-btn">
-          Update Hall
+          {t("update_hall")}
         </button>
         {successMessage && (
-          <p className="update-hall-success-message">{successMessage}</p>
+          <p className="update-hall-success-message">{t("success_message")}</p>
         )}
       </form>
     </div>

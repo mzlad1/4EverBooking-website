@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import "./App.css";
 import Navbar from "./Common/Navbar/Navbar";
 import Home from "./Components/pages/Home";
@@ -16,7 +17,6 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext";
 import Testimonial from "./Components/Testimonial/Testimonial";
-import Contact from "./Components/Contact/Contact";
 import Footer from "./Common/footer/Footer";
 import Login from "./Components/login/Login";
 import Register from "./Components/login/Register";
@@ -31,6 +31,7 @@ import DownloadAppModal from "./DownloadAppModal"; // Import the modal component
 import DownloadAppPage from "./Common/Navbar/DownloadAppPage"; // Import the download page
 import { isMobile, isTablet } from "react-device-detect"; // Import both mobile and tablet detection
 import ChatOverlay from "./Components/HomeSection/ChatOverlay"; // Import ChatOverlay
+import i18n from "./i18n"; // Import i18n instance
 
 // Function to detect if the device is an iPad using navigator.userAgent
 const isIpadDevice = () => {
@@ -40,6 +41,12 @@ const isIpadDevice = () => {
 };
 
 function App() {
+  useEffect(() => {
+    // Load the saved language from localStorage
+    const savedLanguage = localStorage.getItem("language") || "en"; // Default to English if no language is saved
+    i18n.changeLanguage(savedLanguage); // Set the language in i18n
+  }, []); // Only runs once on app startup
+
   return (
     <AuthProvider>
       <Router>
@@ -105,7 +112,6 @@ function MainApp() {
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/halls" exact component={HallsPage} />
             <Route path="/testimonial" component={Testimonial} />
-            <Route path="/contact" component={Contact} />
             <Route path="/sign-in" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>

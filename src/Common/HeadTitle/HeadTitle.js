@@ -4,22 +4,17 @@ import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./HeadTitle.css";
 
 const HeadTitle = () => {
-  const location = useLocation();
+  const location = useLocation(); // Get current location
   const { t } = useTranslation(); // Initialize translation hook
 
-  // Create a mapping of route paths to translation keys
+  // Mapping of route paths to translation keys
   const routeNames = {
     "": "home",
-    about: "about us",
+    about: "about_us",
     gallery: "gallery",
     halls: "halls",
     hall: "hall_details",
     dashboard: "dashboard",
-    destinations: "destinations",
-    singlepage: "single_page",
-    blogsingle: "blog_single",
-    testimonial: "testimonial",
-    contact: "contact",
     "sign-in": "sign_in",
     register: "register",
     "reset-password": "reset_password",
@@ -27,7 +22,7 @@ const HeadTitle = () => {
 
   // Extract the base route name from the path
   const currentPath = location.pathname.split("/")[1];
-  const title = t(routeNames[currentPath]) || t("home"); // Default to "home" if path is not found
+  const title = t(routeNames[currentPath] || "home"); // Default to "home" if path is not found
 
   return (
     <section className="headtitle-image-heading">

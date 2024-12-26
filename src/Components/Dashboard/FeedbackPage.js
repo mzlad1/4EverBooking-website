@@ -13,8 +13,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
+import { useTranslation } from "react-i18next";
 
 const FeedbackPage = () => {
+  const { t } = useTranslation(); // Initialize the translation hook
+
   const { hallId } = useParams();
   const parsedHallId = Number(hallId);
   const history = useHistory();
@@ -86,7 +89,7 @@ const FeedbackPage = () => {
   return (
     <Container className="feedback-container" maxWidth="sm">
       <Typography variant="h4" gutterBottom className="feedback-title">
-        Leave Feedback
+        {t("leave_feedback")}
       </Typography>
 
       {error && <Alert severity="error">{error}</Alert>}
@@ -94,7 +97,7 @@ const FeedbackPage = () => {
       <form onSubmit={handleSubmit} className="feedback-form">
         <div className="rating-section">
           <Typography variant="h6" className="rating-label">
-            Rating:
+            {t("rating")}:
           </Typography>
           <Rating
             name="rating"
@@ -102,22 +105,22 @@ const FeedbackPage = () => {
             precision={1}
             onChange={(event, newValue) => setRating(newValue)}
             sx={{
-              "& .MuiRating-iconFilled": { color: "#CBA36B" }, // Set filled stars color
-              "& .MuiRating-iconHover": { color: "#A97C50" }, // Set hover color
+              "& .MuiRating-iconFilled": { color: "#CBA36B" },
+              "& .MuiRating-iconHover": { color: "#A97C50" },
             }}
           />
         </div>
 
         <div className="comment-section">
           <Typography variant="h6" className="comment-label">
-            Comment:
+            {t("comment")}:
           </Typography>
           <TextField
             variant="outlined"
             multiline
             rows={4}
             fullWidth
-            placeholder="Write your comment here..."
+            placeholder={t("write_your_comment_here")}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             className="comment-input"
@@ -138,26 +141,27 @@ const FeedbackPage = () => {
             },
           }}
         >
-          Submit Feedback
+          {t("submit_feedback")}
         </Button>
       </form>
 
       {/* Success Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Feedback Sent</DialogTitle>
+        <DialogTitle>{t("feedback_sent")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Your feedback has been submitted successfully!
+            {t("feedback_success_message")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary" autoFocus>
-            OK
+            {t("ok")}
           </Button>
         </DialogActions>
       </Dialog>
     </Container>
   );
+
 };
 
 export default FeedbackPage;

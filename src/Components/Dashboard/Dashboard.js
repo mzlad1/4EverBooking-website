@@ -103,7 +103,7 @@ const Dashboard = () => {
               </li>
               <li className="nav-item">
                 <NavLink to={`${url}/procces-halls`} className="nav-link">
-                  <FaCog /> {t("Process halls")}
+                  <FaCog /> {t("Process_halls")}
                 </NavLink>
               </li>
               <li className="nav-item">

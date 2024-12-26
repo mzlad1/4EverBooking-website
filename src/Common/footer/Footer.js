@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Importing the translation hook
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -7,20 +8,18 @@ import logo from "./logo1.png";
 import "./Footer.css"; // Assuming this is where the CSS will be placed
 
 const Footer = () => {
+  const { t } = useTranslation(); // Initialize translation hook
+
   return (
     <>
       <footer className="foote-unique-footer">
         <div className="foote-unique-container foote-unique-grid">
           {/* About Us Section */}
           <div className="foote-unique-box">
-            <h2>ABOUT US</h2>
-            <p>
-              4EverBooking is a website created especially for event organizers
-              and halls' owners. Hoping to help these two categories in finding
-              a suitable hall, and organizing their reservations, respectively.
-            </p>
+            <h2>{t("about_us")}</h2>
+            <p>{t("about_us_description")}</p>
             <br />
-            <p>Find The Best Halls For Your Event.</p>
+            <p>{t("find_best_halls")}</p>
             <div className="foote-unique-icon foote-unique-flex_space">
               <i className="fab fa-facebook-f"></i>
               <i className="fab fa-twitter"></i>
@@ -33,22 +32,22 @@ const Footer = () => {
             <img
               src={logo}
               className="foote-unique-footer_logo"
-              alt="Footer Logo"
+              alt={t("footer_logo_alt", { defaultValue: "Footer Logo" })}
             />
           </div>
 
           {/* Contact Section */}
           <div className="foote-unique-box-contact">
-            <h2>CONTACTS</h2>
+            <h2>{t("contacts")}</h2>
             <ul>
               <li>
-                <PhoneIcon /> +880 170 1111 000
+                <PhoneIcon /> {t("phone_number_footer")}
               </li>
               <li>
-                <EmailIcon /> info@example.com
+                <EmailIcon /> {t("email_address_footer")}
               </li>
               <li>
-                <LocationOnIcon /> Ramallah, Palestine
+                <LocationOnIcon /> {t("location_footer")}
               </li>
             </ul>
           </div>
@@ -56,7 +55,7 @@ const Footer = () => {
       </footer>
       <div className="foote-unique-legal">
         <p>
-          ©opyright 2025 <Link to="/">4EverBooking</Link>
+          {t("copyright")} <Link to="/">{t("footer_link")}</Link>
         </p>
       </div>
     </>

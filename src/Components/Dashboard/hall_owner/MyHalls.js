@@ -159,7 +159,7 @@ const MyHalls = () => {
                   onClick={() => handleOpenFeedbackDialog(hall.HallRatings)}
                   style={{ marginRight: "10px" }}
                 >
-                  {t("feedbacks")}
+                  {t("feedbacks_button")}
                 </Button>
                 <Button
                   variant="contained"

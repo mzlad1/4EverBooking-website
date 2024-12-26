@@ -1,10 +1,13 @@
 import React from "react";
 import { Box, Typography, Button, Stack, Grid } from "@mui/material";
+import { useTranslation } from "react-i18next"; // Import translation hook
 import AndroidIcon from "@mui/icons-material/Android";
 import AppleIcon from "@mui/icons-material/Apple";
 import QRCode from "react-qr-code"; // Optional: Install react-qr-code
 
 const DownloadAppPage = () => {
+  const { t } = useTranslation(); // Initialize translation hook
+
   return (
     <Box
       sx={{
@@ -13,7 +16,7 @@ const DownloadAppPage = () => {
         justifyContent: "center",
         textAlign: "center",
         minHeight: "80vh",
-        background: "linear-gradient(135deg, #461270, #A237AE)", // Custom gradient matching phone background
+        background: "linear-gradient(135deg, #461270, #A237AE)", // Custom gradient
         p: 4,
       }}
     >
@@ -25,11 +28,11 @@ const DownloadAppPage = () => {
             sx={{
               fontWeight: "bold",
               fontFamily: "'Poppins', sans-serif",
-              color: "#fff", // White text for better contrast on dark background
+              color: "#fff", // White text for better contrast
               mb: 3,
             }}
           >
-            Download Our App
+            {t("download_app_title")}
           </Typography>
 
           <Typography
@@ -38,14 +41,13 @@ const DownloadAppPage = () => {
               fontSize: "18px",
               color: "#e0e0e0", // Light grey for softer contrast
               mb: 5,
-             marginLeft: "60px",
+              marginLeft: "60px",
               maxWidth: "600px", // Limit text width for readability
               lineHeight: "1.6",
               fontFamily: "'Roboto', sans-serif",
             }}
           >
-            Experience the best of our platform on mobile. Download our app from
-            the Google Play Store or the Apple App Store and get started today!
+            {t("download_app_description")}
           </Typography>
 
           {/* Buttons for Android and iOS */}
@@ -72,7 +74,7 @@ const DownloadAppPage = () => {
               href="https://play.google.com/store" // Link to Google Play
               target="_blank" // Open in a new tab
             >
-              Download for Android
+              {t("download_android")}
             </Button>
 
             <Button
@@ -92,7 +94,7 @@ const DownloadAppPage = () => {
               href="https://www.apple.com/app-store/" // Link to App Store
               target="_blank" // Open in a new tab
             >
-              Download for iOS
+              {t("download_ios")}
             </Button>
 
             {/* Optional: QR code for direct download */}
@@ -104,7 +106,7 @@ const DownloadAppPage = () => {
                   mb: 2,
                 }}
               >
-                Scan the QR code to download:
+                {t("qr_code_instruction")}
               </Typography>
               <QRCode
                 value="https://play.google.com/store" // URL for app download
@@ -126,7 +128,7 @@ const DownloadAppPage = () => {
           >
             <img
               src="https://res.cloudinary.com/dykzph9bu/image/upload/v1727104880/psd_phone_template_with_blank_frame_for_design_oujptd.png"
-              alt="Phone displaying app"
+              alt={t("app_display_image_alt")}
               style={{
                 maxWidth: "100%",
                 height: "auto", // Ensures the image scales properly

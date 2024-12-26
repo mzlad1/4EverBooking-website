@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import DatePicker from "react-datepicker"; // Import React Date Picker
+import { useTranslation } from "react-i18next";
+
 import "react-datepicker/dist/react-datepicker.css"; // Import Date Picker styles
 import "./reservation.css"; // Custom CSS for styling the form
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,6 +36,7 @@ const ReservationPage = () => {
 
   const reservationDetails =
     JSON.parse(localStorage.getItem("reservationDetails")) || location.state;
+  const { t } = useTranslation();
 
   const {
     hallId,
@@ -284,18 +287,20 @@ const ReservationPage = () => {
           <CircularProgress size={80} />
         </div>
       )}
-      <h1 className="reservation-fade-in-title">Reservation Confirmation</h1>
+      <h1 className="reservation-fade-in-title">
+        {t("reservation_confirmation")}
+      </h1>
       <div className="reservation-total-price-box reservation-fade-in">
-        <p>Total Price:</p>
+        <p>{t("total_price")}:</p>
         <h2>${totalPrice}</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="reservation-form" noValidate>
         <div className="reservation-form-boxes reservation-fade-in">
           <div className="reservation-billing-box">
-            <h2>Billing Information</h2>
+            <h2>{t("billing_information")}</h2>
             <div className="reservation-form-group">
-              <label>Full Name:</label>
+              <label>{t("full_name")}:</label>
               <div className="reservation-input-with-icon">
                 <FontAwesomeIcon icon={faUser} />
                 <input
@@ -303,7 +308,7 @@ const ReservationPage = () => {
                   name="fullName"
                   value={billingAddress.fullName}
                   onChange={handleInputChange}
-                  placeholder="John Doe"
+                  placeholder={t("full_name")}
                 />
               </div>
               {errors.fullName && (
@@ -311,7 +316,7 @@ const ReservationPage = () => {
               )}
             </div>
             <div className="reservation-form-group">
-              <label>Address:</label>
+              <label>{t("address")}:</label>
               <div className="reservation-input-with-icon">
                 <FontAwesomeIcon icon={faHome} />
                 <input
@@ -319,7 +324,7 @@ const ReservationPage = () => {
                   name="address"
                   value={billingAddress.address}
                   onChange={handleInputChange}
-                  placeholder="123 Main St, City, Country"
+                  placeholder={t("address")}
                 />
               </div>
               {errors.address && (
@@ -327,7 +332,7 @@ const ReservationPage = () => {
               )}
             </div>
             <div className="reservation-form-group">
-              <label>Phone Number:</label>
+              <label>{t("phone_number")}:</label>
               <div className="reservation-input-with-icon">
                 <FontAwesomeIcon icon={faPhone} />
                 <input
@@ -335,7 +340,7 @@ const ReservationPage = () => {
                   name="phoneNumber"
                   value={billingAddress.phoneNumber}
                   onChange={handleInputChange}
-                  placeholder="1234567890"
+                  placeholder={t("phone_number")}
                 />
               </div>
               {errors.phoneNumber && (
@@ -346,9 +351,9 @@ const ReservationPage = () => {
             </div>
           </div>
           <div className="reservation-payment-box">
-            <h2>Payment Information</h2>
+            <h2>{t("payment_information")}</h2>
             <div className="reservation-form-group">
-              <label>Card Details:</label>
+              <label>{t("card_details")}:</label>
               <CardElement className="reservation-card-element" />
               {errors.payment && (
                 <p className="reservation-error-message">{errors.payment}</p>
@@ -363,14 +368,14 @@ const ReservationPage = () => {
             className="reservation-submit-button"
             disabled={!stripe || !elements || loading}
           >
-            Confirm Reservation
+            {t("confirm_reservation")}
           </button>
           <button
             type="button"
             className="reservation-cancel-button"
             onClick={() => history.goBack()}
           >
-            Cancel
+            {t("cancel")}
           </button>
         </div>
       </form>
@@ -378,7 +383,7 @@ const ReservationPage = () => {
   );
 };
 
-const ReservationPageWithStripe = () => ( 
+const ReservationPageWithStripe = () => (
   <Elements stripe={stripePromise}>
     <ReservationPage />
   </Elements>

@@ -97,9 +97,7 @@ const HallDetailsPage = () => {
   useEffect(() => {
     const fetchHallDetails = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8080/whitelist/${id}`
-        );
+        const response = await fetch(`http://localhost:8080/whitelist/${id}`);
         const data = await response.json();
 
         // Log the entire data to see if 'image' field exists
@@ -540,7 +538,7 @@ const HallDetailsPage = () => {
               )}
             </div>
           ) : (
-            <p>{t("no_feedback")}</p>
+            <p style={{ color: "#ffffff" }}>{t("no_feedback")}</p>
           )}
         </div>
       </div>
@@ -559,12 +557,12 @@ const HallDetailsPage = () => {
               {hall.categories &&
                 Object.keys(hall.categories).map((category) => (
                   <option key={category} value={category}>
-                    {category} - ${hall.categories[category]}
+                    {t(category.toLowerCase())} - ${hall.categories[category]}
                   </option>
                 ))}
             </select>
             {errors.categoryError && (
-              <p className="error-message">{errors.categoryError}</p>
+              <p className="error-message">{t(errors.categoryError)}</p>
             )}
           </div>
 

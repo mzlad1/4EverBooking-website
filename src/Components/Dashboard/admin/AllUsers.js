@@ -14,8 +14,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useTranslation } from "react-i18next"; // Import useTranslation
+
 
 const AllUsers = () => {
+  const { t } = useTranslation(); // Initialize translation hook
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -136,10 +140,10 @@ const AllUsers = () => {
       className="all-users-container"
       style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}
     >
-      <h1>All Users</h1>
-
+      <h1>{t("all_users")}</h1>
+  
       {users.length === 0 ? (
-        <p>No users found</p>
+        <p>{t("no_users")}</p>
       ) : (
         <>
           {/* Users Table */}
@@ -147,11 +151,21 @@ const AllUsers = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>ID</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Email</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Phone</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Role</TableCell>
-                  <TableCell sx={{ backgroundColor: '#cba36b', color: 'white' }}>Actions</TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("user_id")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("email")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("phone")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("role")}
+                  </TableCell>
+                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                    {t("actions")}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -168,14 +182,14 @@ const AllUsers = () => {
                         onClick={() => handleViewDetails(user.id)}
                         style={{ marginRight: "10px" }}
                       >
-                        View Details
+                        {t("view_details")}
                       </Button>
                       <Button
                         variant="contained"
                         color="error"
                         onClick={() => handleOpenDialog(user)}
                       >
-                        Delete
+                        {t("delete")}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -183,7 +197,7 @@ const AllUsers = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
+  
           {/* Pagination */}
           <Pagination
             count={totalPages}
@@ -199,86 +213,87 @@ const AllUsers = () => {
           />
         </>
       )}
-
+  
       {/* Delete Confirmation Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogTitle>{t("confirm_delete")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete the user "{selectedUser?.email}"?
+            {t("delete_confirmation", { email: selectedUser?.email })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} color="primary">
-            Cancel
+            {t("cancel")}
           </Button>
           <Button onClick={handleDelete} color="secondary">
-            Delete
+            {t("delete")}
           </Button>
         </DialogActions>
       </Dialog>
-
+  
       {/* User Details Dialog */}
       <Dialog open={!!userDetails} onClose={() => setUserDetails(null)}>
-        <DialogTitle>User Details</DialogTitle>
+        <DialogTitle>{t("user_details")}</DialogTitle>
         <DialogContent>
           {userDetails ? (
             <>
               <p>
-                <strong>ID:</strong> {userDetails.id}
+                <strong>{t("user_id")}:</strong> {userDetails.id}
               </p>
               <p>
-                <strong>Name:</strong> {userDetails.firstName}{" "}
+                <strong>{t("name")}:</strong> {userDetails.firstName}{" "}
                 {userDetails.lastName}
               </p>
               <p>
-                <strong>Phone:</strong> {userDetails.phone}
+                <strong>{t("phone")}:</strong> {userDetails.phone}
               </p>
               <p>
-                <strong>Email:</strong> {userDetails.email}
+                <strong>{t("email")}:</strong> {userDetails.email}
               </p>
               <p>
-                <strong>Address:</strong> {userDetails.address}
+                <strong>{t("address")}:</strong> {userDetails.address}
               </p>
               <p>
-                <strong>Date of Birth:</strong>{" "}
+                <strong>{t("date_of_birth")}:</strong>{" "}
                 {new Date(userDetails.dateOfBirth).toLocaleDateString()}
               </p>
               <p>
-                <strong>Role:</strong> {userDetails.role}
+                <strong>{t("role")}:</strong> {userDetails.role}
               </p>
-
+  
               {/* User Ratings Section */}
-              <h3>User Ratings</h3>
+              <h3>{t("user_ratings")}</h3>
               {userDetails.userHallRatings.length > 0 ? (
                 <ul>
                   {userDetails.userHallRatings.map((rating) => (
                     <li key={rating.id}>
                       <p>
-                        <strong>Rating:</strong> {rating.rating}
+                        <strong>{t("rating")}:</strong> {rating.rating}
                       </p>
                       <p>
-                        <strong>Comment:</strong> {rating.comment}
+                        <strong>{t("comment")}:</strong> {rating.comment}
                       </p>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p>No ratings available</p>
+                <p>{t("no_ratings")}</p>
               )}
             </>
           ) : (
-            <p>Loading user details...</p>
+            <p>{t("loading_user_details")}</p>
           )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setUserDetails(null)} color="primary">
-            Close
+            {t("close")}
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
+  
 };
 
 export default AllUsers;

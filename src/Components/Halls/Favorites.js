@@ -15,6 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useHistory } from "react-router-dom";
 import Pagination from "./Pagination"; // Assuming you have a Pagination component
 import "./favorites.css"; // Import the new styles
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -22,6 +23,7 @@ const Favorites = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const { t } = useTranslation(); // Initialize the translation hook
 
   const userId = localStorage.getItem("userId"); // Get user ID from localStorage
   const token = localStorage.getItem("accessToken"); // Get auth token
@@ -83,7 +85,9 @@ const Favorites = () => {
 
   return (
     <div className="favorites-page-container">
-      <Typography className="favorites-title">Your Favorite Halls</Typography>
+      <Typography className="favorites-title">
+        {t("your_favorite_halls")}
+      </Typography>
 
       {loading ? (
         <div className="loader-container">
@@ -93,7 +97,7 @@ const Favorites = () => {
         <>
           {favorites.length === 0 ? (
             <Typography className="no-favorites-message">
-              No favorite halls found.
+              {t("no_favorite_halls_found")}
             </Typography>
           ) : (
             <div className="favorites-grid-container">
@@ -120,7 +124,10 @@ const Favorites = () => {
                       color="text.secondary"
                       sx={{ marginBottom: 1 }}
                     >
-                      {hall.location} | {hall.capacity} guests
+                      {hall.location}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {hall.capacity} {t("guests")}
                     </Typography>
                   </CardContent>
                   <CardActions sx={{ justifyContent: "space-between" }}>
@@ -130,15 +137,16 @@ const Favorites = () => {
                       onClick={() => handleBookClick(hall.id)}
                       sx={{
                         backgroundColor: "#CBA36B",
+                        width: "100%",
                         "&:hover": {
                           backgroundColor: "#A97C50",
                         },
                       }}
                     >
-                      Book Now
+                      {t("book_now")}
                     </Button>
                     <IconButton
-                      aria-label="unfavorite"
+                      aria-label={t("unfavorite")}
                       onClick={() => handleUnfavoriteClick(hall.id)}
                       sx={{ color: "red" }}
                     >

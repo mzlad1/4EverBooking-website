@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./reservationSuccess.css"; // Custom CSS for styling the success message
+import { useTranslation } from "react-i18next";
 
 const ReservationSuccess = () => {
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Clear the reservation details from local storage on component mount
@@ -11,19 +13,21 @@ const ReservationSuccess = () => {
 
   return (
     <div className="reservation-success-page">
-      <h1>Reservation Successful!</h1>
-      <p>Your reservation was completed successfully.</p>
+      <h1>{t("reservation_successful")}</h1>
+      <p>{t("reservation_completed_successfully")}</p>
       <p>
-        You can view your reserved halls on the{" "}
-        <Link to="/dashboard/reserved-halls">Reserved Halls</Link> page.
+        {t("view_reserved_halls")}{" "}
+        <Link to="/dashboard/reserved-halls">{t("reserved_halls_page")}</Link>.
       </p>
       <Link
-      onClick={() => {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, Opera
-      }}
-      to="/" className="home-button">
-        Back to Home
+        onClick={() => {
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE, Opera
+        }}
+        to="/"
+        className="home-button"
+      >
+        {t("back_to_home")}
       </Link>
     </div>
   );

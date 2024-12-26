@@ -3,7 +3,6 @@ import "../../App.css";
 import Hero from "../HomeSection/Hero";
 import HomeAbout from "../HomeSection/HomeAbout";
 import MostPopular from "../HomeSection/popular/MostPopular";
-import Download from "../HomeSection/Download/Download";
 import DownloadAppPage from "../../Common/Navbar/DownloadAppPage";
 import Works from "../HomeSection/Works/Works";
 
