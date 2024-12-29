@@ -1,5 +1,10 @@
+/* General Styling */
 .popular {
+  padding: 50px 0;
   position: relative;
+  overflow: hidden;
+  background: #faf6f0;
+  margin-top: 30px;
 }
 .popular::after {
   content: "";
@@ -11,114 +16,134 @@
   left: 0;
   z-index: -1;
 }
-.popular .imgae {
-  position: relative;
-  width: 100%;
-  height: 200px; /* Set a consistent height */
-  overflow: hidden; /* Ensures the image doesn't overflow */
+
+/* Heading Styling */
+.heading {
+  text-align: center;
+  animation: fadeIn 1s ease forwards;
+}
+.heading h1 {
+  font-size: 28px;
+  color: #cba36b;
+  margin: 0;
+}
+.heading .Line {
+  width: 400px;
+  height: 3px;
+  background-color: #cba36b;
+  margin: 15px auto 30px;
+  border-radius: 1px;
 }
 
-.popular img {
-  width: 100%;
-  height: 100%; /* Match the height of the container */
-  object-fit: cover; /* Ensures images maintain aspect ratio and fill the container */
-  border-radius: 5px; /* Optional: adds rounded corners */
-  background-color: #f0f0f0; /* Optional: fallback color */
+/* Cards Container */
+.popular .cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  animation: fadeIn 1s ease forwards;
 }
 
-.popular .card {
-  margin: 10px;
+/* Card Items */
+.popular .cards .item {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 300px;
 }
-.popular .item {
-  padding: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  margin: 10px;
+
+.popular .cards .item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-.popular .imgae {
-  position: relative;
+
+/* Card Images */
+.popular .item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
-.popular .imgae i {
-  position: absolute;
-  bottom: 0;
-  color: white;
-  margin: 20px;
-}
-.popular .imgae i label {
-  margin-left: 10px;
-  font-weight: normal;
-}
+
+/* Details Section */
 .popular .details {
+  padding: 20px;
   text-align: center;
 }
+
+/* Price Section */
+.popular .cards .price {
+  font-size: 16px;
+  color: #cba36b;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.popular .cards .price span {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Stars */
 .popular .rate {
   display: flex;
   justify-content: center;
+  gap: 5px;
+  color: #ffc107;
+  font-size: 14px;
   margin-top: 10px;
-  font-size: 13px;
-  color: grey;
-}
-.popular .rate i {
-  margin: 2px;
 }
 
-.popular .cards .item {
+/* Capacity and Location */
+.popular .cards .capacity-location {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Ensure spacing between items */
+  justify-content: space-around;
+  margin-top: 10px;
+}
+.popular .cards .capacity-container,
+.popular .cards .location-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
+  font-size: 14px;
 }
 
+/* Book Now Button */
 .popular .cards .book-now {
   background-color: #cba36b;
-  color: white;
+  color: #ffffff;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 10px;
   border-radius: 5px;
-  width: 100%;
+  font-size: 16px;
   cursor: pointer;
-  text-align: center;
-  margin-top: 15px; /* Space above the button */
-}
-
-.heading {
-  text-align: center;
-  margin-bottom: 20px; /* Space between heading and content */
-}
-
-.heading h1 {
-  font-size: 24px; /* Adjust font size as needed */
-  color: #333; /* Color of the heading text */
-  margin: 0; /* Remove default margin */
-}
-
-.heading .Line {
-  width: 400px; /* Adjust the width of the line */
-  height: 2px; /* Height of the line */
-  background-color: #cba36b; /* Line color */
-  margin: 10px auto; /* Center the line and add vertical spacing */
-  border-radius: 1px; /* Optional: Make the edges slightly rounded */
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .popular .cards .book-now:hover {
-  background-color: #b99a5b; /* Slightly darker shade on hover */
+  background-color: #b99a5b;
 }
 
+/* Arrows */
 .arrow {
   position: absolute;
   top: 50%;
+  transform: translateY(-50%);
   z-index: 1;
-  background-color: white;
+  background-color: #ffffff;
   color: #cba36b;
-  border-radius: 50%; /* Makes the background circular */
-  width: 40px; /* Adjust the size of the circle */
-  height: 40px; /* Adjust the size of the circle */
-  display: flex; /* Center the arrow icon inside the circle */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 0 0 2px white; /* Optional: Add a white stroke around the circle */
 }
 
 .arrow-left {
@@ -129,100 +154,50 @@
   right: 10px;
 }
 
-.arrow button {
-  background: none;
-  border: none;
-  color: #cba36b;
-  font-size: 24px;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.popular .cards h2 {
-  font-weight: 500;
-  font-size: 20px;
-  color: #cba36b;
-  position: relative;
-  margin-bottom: 30px;
-}
-.popular .cards h2::after {
-  position: absolute;
-  content: "";
-  bottom: -10px;
-  left: 45%;
-  height: 1px;
-  width: 30px;
-  background: black;
-}
-.popular .cards h2::before {
-  position: absolute;
-  content: "";
-  bottom: -20px;
-  left: 40%;
-  height: 1px;
-  width: 60px;
-  background: black;
-}
-.popular .cards h3 {
-  color: #cba36b;
-  font-weight: 500;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.popular .cards .item:nth-child(1) {
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.2s;
 }
 
-.popular .cards .price {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Center-align the content horizontally */
-  color: #cba36b; /* Adjust color if needed */
-  font-size: 16px; /* Adjust font size as needed */
-  font-weight: 700; /* Make the price stand out */
-  margin-bottom: 10px; /* Space between price and rating */
-  text-align: center; /* Center-align the text */
+.popular .cards .item:nth-child(2) {
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.4s;
 }
 
-.popular .cards .price i {
-  color: grey; /* Color of the icon */
-  margin-right: 8px; /* Space between icon and price */
-  font-size: 20px; /* Size of the icon */
+.popular .cards .item:nth-child(3) {
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.6s;
 }
 
-.popular .cards .price span {
-  margin-left: 10px; /* Space between price and "Per Day" */
-  font-size: 16px; /* Adjust font size if needed */
-  color: grey; /* Adjust color if needed */
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .popular .cards .item {
+    max-width: 100%;
+  }
+
+  .arrow {
+    display: none;
+  }
 }
 
-.popular .cards .capacity-location {
-  display: flex;
-  align-items: center;
-}
-
-.popular .cards .capacity-container,
-.popular .cards .location-container {
-  display: flex;
-  align-items: center;
-}
-
-.popular .cards .capacity-container i,
-.popular .cards .location-container i {
-  color: grey;
-  margin-right: 8px; /* Space between icon and label */
-}
-
-.popular .cards .capacity-container label,
-.popular .cards .location-container label {
-  font-weight: 300;
-  font-size: 15px; /* Adjust size if needed */
-  color: grey;
-}
-
-.popular .content {
-  margin-bottom: 50px;
-}
 /*----- control btn -------*/
 .popular .reco-control-btn .next,
 .popular .reco-control-btn .prev {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 15px 20px;
   top: 100%;
   background: none;
 }

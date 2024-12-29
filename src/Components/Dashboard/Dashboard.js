@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Route,
   NavLink,
@@ -15,14 +15,23 @@ import MyHalls from "./hall_owner/MyHalls";
 import UpdateHallPage from "./hall_owner/updateHall";
 import AllUsers from "./admin/AllUsers";
 import ProcessHalls from "./admin/ProcessHalls";
-import DeleteUser from "./admin/DeleteUser";
+import DeletedUser from "./admin/DeletedUser";
 import DeletedHalls from "./hall_owner/DeletedHalls";
 import { useTranslation } from "react-i18next";
 import FinancialReport from "./hall_owner/FinancialReport";
 import "./Dashboard.css";
 
 // Import Font Awesome icons
-import { FaUserEdit, FaCalendarAlt, FaPlusSquare, FaHome, FaUsers, FaTrashAlt, FaFileInvoiceDollar, FaCog } from 'react-icons/fa';
+import {
+  FaUserEdit,
+  FaCalendarAlt,
+  FaPlusSquare,
+  FaHome,
+  FaUsers,
+  FaTrashAlt,
+  FaFileInvoiceDollar,
+  FaCog,
+} from "react-icons/fa";
 
 const Dashboard = () => {
   const { path, url } = useRouteMatch();
@@ -32,11 +41,42 @@ const Dashboard = () => {
 
   const userRole = localStorage.getItem("role"); // Get user role from localStorage
 
+  const [hallsToProcessCount, setHallsToProcessCount] = useState(0); // State for halls needing processing
+
   useEffect(() => {
     if (!loading && !isLoggedIn) {
       history.push("/unauthorized");
     }
   }, [isLoggedIn, loading, history]);
+
+  useEffect(() => {
+    if (userRole === "ADMIN") {
+      // Fetch count of halls needing processing
+      const fetchHallsToProcess = async () => {
+        try {
+          const response = await fetch(
+            "http://localhost:8080/admin/getAllHallIsProcessed?page=1&size=10",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setHallsToProcessCount(data.totalElements || 0);
+          } else {
+            console.error("Failed to fetch halls to process");
+          }
+        } catch (error) {
+          console.error("Error fetching halls to process:", error);
+        }
+      };
+
+      fetchHallsToProcess();
+    }
+  }, [userRole]);
 
   if (loading) {
     return <div>Loading...</div>; // Loading spinner or message
@@ -103,12 +143,17 @@ const Dashboard = () => {
               </li>
               <li className="nav-item">
                 <NavLink to={`${url}/procces-halls`} className="nav-link">
-                  <FaCog /> {t("Process_halls")}
+                  <FaCog /> {t("Process_halls")}{" "}
+                  {hallsToProcessCount > 0 && (
+                    <span className="notification-circle">
+                      {hallsToProcessCount}
+                    </span>
+                  )}
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to={`${url}/delete-user`} className="nav-link">
-                  <FaTrashAlt /> {t("delete_user")}
+                <NavLink to={`${url}/deleted-user`} className="nav-link">
+                  <FaTrashAlt /> {t("deleted_user")}
                 </NavLink>
               </li>
             </>
@@ -166,8 +211,8 @@ const Dashboard = () => {
             allowedRoles={["ADMIN"]}
           />
           <ProtectedRoute
-            path={`${path}/delete-user`}
-            component={DeleteUser}
+            path={`${path}/deleted-user`}
+            component={DeletedUser}
             allowedRoles={["ADMIN"]}
           />
         </Switch>

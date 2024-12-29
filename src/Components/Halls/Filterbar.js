@@ -84,7 +84,7 @@ const FilterBar = ({ onFilterChange }) => {
   ];
 
   const categories = [
-    { value: "", label: "--" },
+    { value: "", label: t("select_category") },
     { value: "PARTIES", label: t("categories.PARTIES") },
     { value: "MEETINGS", label: t("categories.MEETINGS") },
     { value: "FUNERALS", label: t("categories.FUNERALS") },

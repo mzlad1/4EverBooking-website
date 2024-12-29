@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import "./ChatOverlay.css";
 
 const ChatOverlay = () => {
@@ -6,6 +7,7 @@ const ChatOverlay = () => {
   const [messages, setMessages] = useState([]); // To store messages
   const [input, setInput] = useState(""); // To store user input
   const [isTyping, setIsTyping] = useState(false); // To track typing status
+  const { t } = useTranslation(); // Initialize translation hook
 
   // Function to toggle chat window
   const toggleChat = () => setIsOpen(!isOpen);
@@ -93,7 +95,7 @@ const ChatOverlay = () => {
       {isOpen && (
         <div className="chat-window">
           <div className="chat-header">
-            <h3>Chat</h3>
+            <h3>{t("Assistant")}</h3>
             <button onClick={toggleChat}>✖</button>
           </div>
           <div className="chat-body">
@@ -132,19 +134,21 @@ const ChatOverlay = () => {
             ))}
             {isTyping && (
               <div className="chat-message typing-indicator assistant">
-                Typing...
+                {t("typing")}...
               </div>
             )}
           </div>
           <div className="chat-footer">
             <input
               type="text"
-              placeholder="Type your message..."
+              placeholder={t("type_message")}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
             />
-            <button onClick={sendMessage}>Send</button>
+            <button onClick={sendMessage}>
+              {t("send")}
+            </button>
           </div>
         </div>
       )}

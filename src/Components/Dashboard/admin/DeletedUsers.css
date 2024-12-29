@@ -1,0 +1,45 @@
+.deleted-users-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+  }
+  
+  .deleted-users-container h1 {
+    text-align: center;
+    color: #343a40;
+  }
+  
+  .deleted-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .deleted-users-table th, .deleted-users-table td {
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .deleted-users-table th {
+    background-color: #cba36b;
+    color: #ffffff;
+  }
+  
+  .deleted-users-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .restore-button {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .restore-button:hover {
+    background-color: #218838;
+  }
+  

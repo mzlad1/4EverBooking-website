@@ -210,15 +210,15 @@ const Cards = () => {
                   {calculatePriceRange(value.categories, value.services)}
                   <span>{t("per_day")}</span> {/* Translated "Per Day" */}
                 </div>
-                {renderStars(value.averageRating)}
                 <h2>{value.name}</h2>
+                {renderStars(value.averageRating)}
+                
                 <div className="boarder"></div>
                 <h3 className="capacity-location">
                   <div className="capacity-container">
                     <i className="fa fa-users"></i>{" "}
                     <label>
-                      {value.capacity} <span>{t("capacity")}</span>{" "}
-                      {/* Translated "Capacity" */}
+                      {value.capacity}
                     </label>
                   </div>
                   <div className="location-container">

@@ -1,11 +1,12 @@
 /* Root container for dashboard, flex layout for navigation and content */
+/* Dashboard Container */
 .dashboard-container {
   display: flex;
-  height: 100vh;
+  flex-direction: row;
   background-color: #f9f9f9;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
 }
-
 
 /* Sidebar styling */
 .dashboard-nav {
@@ -124,4 +125,18 @@
     margin: 10px;
     padding: 20px;
   }
+}
+.notification-circle {
+  display: inline-block;
+  background-color: #ff4500; /* Bright color for visibility */
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  margin-left: 8px;
+  vertical-align: middle;
 }

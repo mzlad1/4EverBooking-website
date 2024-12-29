@@ -1,34 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { fetchWithAuth } from "../../../apiClient";
-import { useTranslation } from "react-i18next"; // Import useTranslation
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Pagination from '@mui/material/Pagination';
+import { useTranslation } from "react-i18next";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Pagination from "@mui/material/Pagination";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import './ProcessHalls.css'; // Assuming you have custom styles here
+import TextField from "@mui/material/TextField";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import "./ProcessHalls.css";
 
 const ProcessHalls = () => {
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation();
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isRejecting, setIsRejecting] = useState(false); // Loading state for rejection
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1); // Current page state
-  const [totalPages, setTotalPages] = useState(1); // Total pages state
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedHall, setSelectedHall] = useState(null); // Track selected hall for the dialog
-  const pageSize = 10; // Page size (can be adjusted)
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [selectedHall, setSelectedHall] = useState(null);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const pageSize = 10;
 
-  // Fetch the halls data based on the current page
   useEffect(() => {
     const fetchHalls = async () => {
       try {
@@ -49,7 +54,7 @@ const ProcessHalls = () => {
 
         const data = await response.json();
         setHalls(data.content);
-        setTotalPages(data.totalPages); // Set total number of pages from the response
+        setTotalPages(data.totalPages);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -60,15 +65,18 @@ const ProcessHalls = () => {
     fetchHalls();
   }, [page]);
 
-  // Open the dialog and set the selected hall
   const handleOpenDialog = (hall) => {
     setSelectedHall(hall);
     setOpenDialog(true);
   };
 
-  // Handle the accept action
+  const handleOpenRejectDialog = (hall) => {
+    setSelectedHall(hall);
+    setRejectDialogOpen(true);
+  };
+
   const handleAccept = async () => {
-    setOpenDialog(false); // Close the dialog
+    setOpenDialog(false);
 
     if (!selectedHall) return;
 
@@ -87,14 +95,54 @@ const ProcessHalls = () => {
         throw new Error(`Failed to accept the hall`);
       }
 
-      // Optionally update the UI to reflect the action (e.g., remove the hall from the list)
-      setHalls((prevHalls) => prevHalls.filter((hall) => hall.id !== selectedHall.id));
+      setHalls((prevHalls) =>
+        prevHalls.filter((hall) => hall.id !== selectedHall.id)
+      );
     } catch (error) {
       setError(error.message);
     }
+    window.location.reload();
   };
 
-  // Handle page change in pagination
+  const handleReject = async () => {
+    setIsRejecting(true); // Show loading overlay
+    setRejectDialogOpen(false);
+
+    if (!selectedHall || !rejectionReason.trim()) {
+      alert(t("please_provide_reason"));
+      setIsRejecting(false); // Hide loading overlay
+      return;
+    }
+
+    try {
+      const response = await fetchWithAuth(
+        `http://localhost:8080/admin/rejectHall/${selectedHall.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(rejectionReason),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to reject the hall`);
+      }
+
+      const data = await response.json();
+
+      setHalls((prevHalls) =>
+        prevHalls.filter((hall) => hall.id !== selectedHall.id)
+      );
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsRejecting(false); // Hide loading overlay
+    }
+    window.location.reload();
+  };
+
   const handlePageChange = (event, value) => {
     setPage(value);
   };
@@ -113,35 +161,48 @@ const ProcessHalls = () => {
       style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}
     >
       <h1>{t("process_halls")}</h1>
-  
+
       {halls.length === 0 ? (
         <p>{t("no_halls_to_process")}</p>
       ) : (
         <>
-          {/* Halls Table */}
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("name")}
                   </TableCell>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("location")}
                   </TableCell>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("capacity")}
                   </TableCell>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("description")}
                   </TableCell>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("phone")}
                   </TableCell>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("proof")}
                   </TableCell>
-                  <TableCell sx={{ backgroundColor: "#cba36b", color: "white" }}>
+                  <TableCell
+                    sx={{ backgroundColor: "#cba36b", color: "white" }}
+                  >
                     {t("actions")}
                   </TableCell>
                 </TableRow>
@@ -171,14 +232,21 @@ const ProcessHalls = () => {
                       >
                         {t("accept")}
                       </Button>
+                      <Button
+                        variant="contained"
+                        color="red"
+                        onClick={() => handleOpenRejectDialog(hall)}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        {t("reject")}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-  
-          {/* Pagination Controls */}
+
           <Pagination
             count={totalPages}
             page={page}
@@ -193,8 +261,7 @@ const ProcessHalls = () => {
           />
         </>
       )}
-  
-      {/* Custom Dialog for Accept Confirmation */}
+
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>{t("confirm_accept")}</DialogTitle>
         <DialogContent>
@@ -211,9 +278,40 @@ const ProcessHalls = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog
+        open={rejectDialogOpen}
+        onClose={() => setRejectDialogOpen(false)}
+      >
+        <DialogTitle>{t("reject_hall")}</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label={t("reason")}
+            fullWidth
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setRejectDialogOpen(false)} color="secondary">
+            {t("cancel")}
+          </Button>
+          <Button onClick={handleReject} color="primary">
+            {t("reject")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Loading Overlay */}
+      <Backdrop open={isRejecting} style={{ zIndex: 999 }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
-  
 };
 
 export default ProcessHalls;

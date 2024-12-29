@@ -4,57 +4,28 @@ body {
   background-color: #f4f4f9;
 }
 
-/* Search-body to wrap the search bar and results */
-/* Search Bar - Centering and Spacing */
-.search-body-modern {
-  width: 100%;
-  background-color: #faf6f0;
-  display: flex;
-  justify-content: center;
-  padding: 20px 0; /* Add padding for better spacing */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
-}
-
+/* Search Bar */
 .search-container-modern {
-  width: 60%; /* Reduced width to center the search bar on larger screens */
-  position: relative;
-  display: flex;
-  justify-content: center;
-  border-radius: 50px;
-  box-shadow: none;
-  background-color: transparent;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 90%;
 }
 
-.search-container-modern input {
+.search-input-modern {
   width: 100%;
-  padding: 15px 50px 15px 45px; /* Padding adjusted for icon placement */
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
   font-size: 16px;
-  border: 2px solid #ddd; /* Add a subtle border instead */
-  border-radius: 50px; /* Fully rounded input */
-  background-color: #fff; /* Input has a white background */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.search-container-modern input:focus {
-  outline: none;
-  border-color: #cba36b; /* Change border color on focus */
-  box-shadow: 0 0 8px rgba(203, 163, 107, 0.5); /* Soft focus glow */
-}
-
-/* Style for the search icon inside the input */
-.search-container-modern .search-icon {
-  position: absolute;
-  left: 15px; /* Adjust to ensure the icon is inside the input */
-  top: 50%;
-  transform: translateY(-50%); /* Center icon vertically */
-  font-size: 20px;
-  color: #c29d6d;
-}
-
-/* Adjust input padding for icon */
-.search-container-modern input {
-  padding-left: 45px; /* Space for icon inside the input */
+.search-input-modern:focus {
+  border-color: #cba36b;
+  box-shadow: 0 0 10px rgba(194, 157, 109, 0.3);
 }
 
 /* Main container for halls and filter */

@@ -99,7 +99,7 @@ const Navbar = () => {
       <nav className="navbar-modern">
         <div className="container-modern flex-space-modern">
           <div className="logo-modern">
-            <a className="logo-link-modern" onClick={closeMobileMenu}>
+            <a className="logo-link-modern" onClick={closeMobileMenu} href="/">
               <p>
                 4<span className="logo-highlight-modern">EVER</span>BOOKING
               </p>
