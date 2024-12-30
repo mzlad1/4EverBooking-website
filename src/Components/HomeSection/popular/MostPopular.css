@@ -107,6 +107,7 @@
 .popular .cards .location-container {
   display: flex;
   justify-content: space-between;
+  gap: 5px;
   align-items: center;
   color: #666;
   font-size: 14px;
