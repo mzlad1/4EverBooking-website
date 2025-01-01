@@ -331,6 +331,33 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">{errors.address}</p>
               )}
             </div>
+          </div>
+          <div className="reservation-payment-box">
+            <h2>{t("payment_information")}</h2>
+            <div className="reservation-form-group">
+              <label>{t("card_details")}:</label>
+              <CardElement
+                className="reservation-card-element"
+                options={{
+                  style: {
+                    base: {
+                      fontSize: "16px",
+                      color: "#333",
+                      "::placeholder": {
+                        color: "#aaa",
+                      },
+                    },
+                    invalid: {
+                      color: "#e53935",
+                    },
+                  },
+                }}
+              />
+
+              {errors.payment && (
+                <p className="reservation-error-message">{errors.payment}</p>
+              )}
+            </div>
             <div className="reservation-form-group">
               <label>{t("phone_number")}:</label>
               <div className="reservation-input-with-icon">
@@ -347,16 +374,6 @@ const ReservationPage = () => {
                 <p className="reservation-error-message">
                   {errors.phoneNumber}
                 </p>
-              )}
-            </div>
-          </div>
-          <div className="reservation-payment-box">
-            <h2>{t("payment_information")}</h2>
-            <div className="reservation-form-group">
-              <label>{t("card_details")}:</label>
-              <CardElement className="reservation-card-element" />
-              {errors.payment && (
-                <p className="reservation-error-message">{errors.payment}</p>
               )}
             </div>
           </div>
@@ -383,10 +400,20 @@ const ReservationPage = () => {
   );
 };
 
-const ReservationPageWithStripe = () => (
-  <Elements stripe={stripePromise}>
-    <ReservationPage />
-  </Elements>
-);
+const ReservationPageWithStripe = () => {
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language; // Get the current language (e.g., 'en', 'ar')
+
+  return (
+    <Elements
+      stripe={stripePromise}
+      options={{
+        locale: currentLanguage, // Dynamically set the locale for Stripe elements
+      }}
+    >
+      <ReservationPage />
+    </Elements>
+  );
+};
 
 export default ReservationPageWithStripe;

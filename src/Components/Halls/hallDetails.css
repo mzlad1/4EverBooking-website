@@ -111,7 +111,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px; /* Add spacing between all elements inside the sidebar */
-  height: fit-content; /* Allow the sidebar to grow with content */
   position: sticky; /* Keep sidebar fixed within the view */
   top: 0; /* Stick to the top of the page */
   min-height: 100vh; /* Ensure the sidebar matches the full height of the viewport */

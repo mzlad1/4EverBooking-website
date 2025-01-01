@@ -36,6 +36,7 @@ const Navbar = () => {
           if (user.image) {
             setProfileImage(user.image);
             localStorage.setItem("profileImage", user.image);
+            localStorage.setItem("userFirstName", user.firstName);
           }
         } catch (error) {
           console.error("Error fetching profile image:", error);
@@ -44,6 +45,7 @@ const Navbar = () => {
 
       // Fetch the user role from localStorage
       const role = localStorage.getItem("role");
+      const userFirstName = localStorage.getItem("userFirstName");
       console.log("User role from localStorage:", role); // Debugging
       setUserRole(role); // Set the role in state
 
@@ -172,7 +174,7 @@ const Navbar = () => {
                     alt="Profile"
                     className="profile-image-modern"
                   />
-                  <span className="profile-text-modern">{t("my_profile")}</span>
+                  <span className="profile-text-modern">{t("Hi")} {localStorage.getItem("userFirstName")}</span>
                 </div>
                 <ul className="dropdown-menu-modern">
                   <li>

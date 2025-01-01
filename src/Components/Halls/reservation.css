@@ -1,223 +1,196 @@
-/* General Page Styling */
-.reservation-confirmation-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
-  background-color: #f8f9fa;
-  min-height: 100vh;
+/* reservation.css */
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
-.reservation-fade-in-title {
-  font-size: 32px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 30px;
-  animation: fadeIn 0.5s ease-in-out;
+.reservation-confirmation-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  color: #c29d6d;
+  margin-bottom: 20px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.reservation-total-price-box {
+  text-align: center;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-total-price-box p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.reservation-total-price-box h2 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+}
+
+.reservation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reservation-form-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.reservation-billing-box,
+.reservation-payment-box {
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-billing-box h2,
+.reservation-payment-box h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.reservation-form-group {
+  margin-bottom: 20px;
+}
+
+.reservation-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.reservation-input-with-icon {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.reservation-input-with-icon input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+.reservation-input-with-icon input::placeholder {
+  color: #aaa;
+}
+
+.reservation-input-with-icon svg {
+  color: #888;
+  margin-right: 10px;
+}
+
+.reservation-error-message {
+  color: #e53935;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.reservation-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.reservation-submit-button,
+.reservation-cancel-button {
+  flex: 1;
+  padding: 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.reservation-submit-button {
+  background: #c29d6d;
+  color: #fff;
+}
+
+.reservation-submit-button:hover {
+  background: #b08e5a;
+  transform: translateY(-2px);
+}
+
+.reservation-cancel-button {
+  background: #f44336;
+  color: #fff;
+}
+
+.reservation-cancel-button:hover {
+  background: #e53935;
+  transform: translateY(-2px);
+}
+
+.reservation-card-element {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f9f9f9;
+  font-size: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: #333;
+  margin-top: 10px;
+  transition: border-color 0.3s;
+}
+
+.reservation-card-element:focus {
+  border-color: #4caf50;
+}
+
+
 .loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Ensure it appears above everything */
+  z-index: 1000;
 }
 
-/* Total Price Box */
-.reservation-total-price-box {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 40px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 500px;
-  text-align: center;
-}
-
-.reservation-total-price-box p {
-  font-size: 18px;
-  color: #555;
-}
-
-.reservation-total-price-box h2 {
-  font-size: 28px;
-  color: #cba36b;
-  font-weight: bold;
-}
-
-/* Form Styling */
-.reservation-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 800px;
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.reservation-form-boxes {
-  display: flex;
-  gap: 30px;
-}
-
-.reservation-billing-box,
-.reservation-payment-box {
-  flex: 1;
-}
-
-.reservation-billing-box h2,
-.reservation-payment-box h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* Form Groups */
-.reservation-form-group {
-  margin-bottom: 20px;
-}
-
-.reservation-form-group label {
-  font-size: 16px;
-  color: #555;
-  display: block;
-  margin-bottom: 8px;
-}
-
-/* Input Fields with Icons */
-.reservation-input-with-icon {
-  display: flex;
-  align-items: center;
-  background-color: #f1f1f1;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-.reservation-input-with-icon-date {
-  display: flex;
-  align-items: center;
-  background-color: #f1f1f1;
-  padding: 20px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-.reservation-input-with-icon-date input {
-  flex: 1;
-  border: none;
-  background-color: transparent;
-  padding-left: 10px;
-  font-size: 16px;
-  color: #333;
-}
-
-.reservation-input-with-icon-date input:focus {
-  outline: none;
-}
-
-.reservation-input-with-icon-date svg {
-  font-size: 18px;
-  color: #cba36b;
-}
-
-.reservation-input-with-icon input {
-  flex: 1;
-  border: none;
-  background-color: transparent;
-  padding-left: 10px;
-  font-size: 16px;
-  color: #333;
-}
-
-.reservation-input-with-icon input:focus {
-  outline: none;
-}
-
-.reservation-input-with-icon svg {
-  font-size: 18px;
-  color: #cba36b;
-}
-
-/* DatePicker Input */
-.reservation-datepicker-input {
-  width: 100%;
-  padding: 10px;
-  background-color: #f1f1f1;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  color: #333;
-}
-
-.reservation-datepicker-input:focus {
-  outline: none;
-  border: 2px solid #cba36b;
-}
-
-/* Error Messages */
-.reservation-error-message {
-  font-size: 14px;
-  color: red;
-  margin-top: 5px;
-}
-
-/* Button Container */
-.reservation-button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-
-.reservation-submit-button,
-.reservation-cancel-button {
-  width: 48%;
-  padding: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.reservation-submit-button {
-  background-color: #cba36b;
-  color: white;
-}
-
-.reservation-submit-button:hover {
-  background-color: #b9945a;
-}
-
-.reservation-cancel-button {
-  background-color: #d9534f;
-  color: white;
-}
-
-.reservation-cancel-button:hover {
-  background-color: #c9302c;
-}
-
-/* Animation */
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
-    transform: translateY(-20px);
   }
-  100% {
+  to {
     opacity: 1;
-    transform: translateY(0);
   }
-}
-
-.reservation-fade-in {
-  animation: fadeIn 1s ease-in-out;
 }
