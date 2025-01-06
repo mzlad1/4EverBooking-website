@@ -8,6 +8,11 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useTranslation } from "react-i18next";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import "./filter.css";
 
 const FilterBar = ({ onFilterChange }) => {
@@ -27,12 +32,8 @@ const FilterBar = ({ onFilterChange }) => {
   const userRole = localStorage.getItem("role") || ""; // Retrieve the user's role from localStorage
   const userId = localStorage.getItem("userId") || null; // Retrieve the user's ID from localStorage
 
-  useEffect(() => {
-    if (sortBy === "price" && !category) {
-      alert(t("please_select_category"));
-      setSortBy("");
-    }
-  }, [sortBy, category, t]);
+  const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+  const [openLocationDialog, setOpenLocationDialog] = useState(false);
 
   useEffect(() => {
     onFilterChange({
@@ -121,11 +122,13 @@ const FilterBar = ({ onFilterChange }) => {
             setSortBy("location");
           },
           (error) => {
-            alert(t("location_access_denied"));
+            setOpenLocationDialog(true); // Open dialog if location access is denied
             setSortBy("");
           }
         );
       }
+    } else if (type === "price" && !category) {
+      setOpenCategoryDialog(true); // Open dialog if category is not selected
     } else {
       setSortBy((prev) => (prev === type ? "" : type));
     }
@@ -149,7 +152,9 @@ const FilterBar = ({ onFilterChange }) => {
               }}
             />
           }
-          label={<span style={{ marginLeft: "10px" }}>{t("sort_by_price")}</span>}
+          label={
+            <span style={{ marginLeft: "10px" }}>{t("sort_by_price")}</span>
+          }
         />
         <FormControlLabel
           control={
@@ -165,7 +170,9 @@ const FilterBar = ({ onFilterChange }) => {
               }}
             />
           }
-          label={<span style={{ marginLeft: "10px" }}>{t("sort_by_location")}</span>}
+          label={
+            <span style={{ marginLeft: "10px" }}>{t("sort_by_location")}</span>
+          }
         />
         {userRole === "CUSTOMER" && userId && (
           <FormControlLabel
@@ -182,7 +189,11 @@ const FilterBar = ({ onFilterChange }) => {
                 }}
               />
             }
-            label={<span style={{ marginLeft: "10px" }}>{t("sort_by_recommended")}</span>}
+            label={
+              <span style={{ marginLeft: "10px" }}>
+                {t("sort_by_recommended")}
+              </span>
+            }
           />
         )}
         <FormControl variant="filled" className="form-control-modern">
@@ -292,6 +303,45 @@ const FilterBar = ({ onFilterChange }) => {
           {t("clear_filters")}
         </Button>
       </div>
+      {/* Dialog for Select Category Alert */}
+      <Dialog
+        open={openCategoryDialog}
+        onClose={() => setOpenCategoryDialog(false)}
+        aria-labelledby="alert-dialog-title-category"
+        aria-describedby="alert-dialog-description-category"
+      >
+        <DialogTitle id="alert-dialog-title-category">{t("alert")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description-category">
+            {t("please_select_category")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenCategoryDialog(false)} color="primary">
+            {t("ok")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog for Location Access Denied */}
+      <Dialog
+        open={openLocationDialog}
+        onClose={() => setOpenLocationDialog(false)}
+        aria-labelledby="alert-dialog-title-location"
+        aria-describedby="alert-dialog-description-location"
+      >
+        <DialogTitle id="alert-dialog-title-location">{t("alert")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description-location">
+            {t("location_access_denied")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenLocationDialog(false)} color="primary">
+            {t("ok")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

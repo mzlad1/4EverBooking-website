@@ -10,8 +10,12 @@ const Unauthorized = () => {
   const goHome = () => {
     if (userRole === "ADMIN") {
       history.push("/dashboard/edit-profile"); // Admin's settings page
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     } else {
       history.push("/"); // Home page for other roles
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   };
 

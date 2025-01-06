@@ -1,0 +1,96 @@
+/* AddAdmin Page Container */
+.add-admin-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff; /* White background */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Form Title */
+.add-admin-container h1 {
+  text-align: center;
+  color: #333; /* Dark text color */
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Form Fields */
+.add-admin-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.add-admin-container label {
+  font-weight: bold;
+  color: #555; /* Slightly lighter text color */
+}
+
+.add-admin-container input {
+  padding: 10px;
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-admin-container input:focus {
+  border-color: #cba36b; /* Highlight border on focus */
+  outline: none;
+}
+
+/* Submit Button */
+.add-admin-container button {
+  padding: 10px 15px;
+  background-color: #cba36b; /* Primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.add-admin-container button:hover {
+  background-color: #b99a5b; /* Darker shade on hover */
+}
+
+/* Error Message */
+.error-message {
+  color: #d9534f; /* Red color */
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Success Message */
+.success-message {
+  color: #5cb85c; /* Green color */
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Dialog Styling */
+.MuiDialog-paper {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.MuiDialogTitle-root {
+  font-weight: bold;
+  color: #333;
+}
+
+.MuiDialogContentText-root {
+  color: #555;
+}
+
+.MuiButton-containedPrimary {
+  background-color: #cba36b; /* Primary color */
+}
+
+.MuiButton-containedPrimary:hover {
+  background-color: #b99a5b; /* Darker shade */
+}

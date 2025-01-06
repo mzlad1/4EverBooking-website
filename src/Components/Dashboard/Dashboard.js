@@ -16,6 +16,7 @@ import UpdateHallPage from "./hall_owner/updateHall";
 import AllUsers from "./admin/AllUsers";
 import ProcessHalls from "./admin/ProcessHalls";
 import DeletedUser from "./admin/DeletedUser";
+import addAdmin from "./admin/addAdmin";
 import DeletedHalls from "./hall_owner/DeletedHalls";
 import { useTranslation } from "react-i18next";
 import FinancialReport from "./hall_owner/FinancialReport";
@@ -32,6 +33,7 @@ import {
   FaFileInvoiceDollar,
   FaCog,
 } from "react-icons/fa";
+import { add } from "date-fns";
 
 const Dashboard = () => {
   const { path, url } = useRouteMatch();
@@ -46,6 +48,8 @@ const Dashboard = () => {
   useEffect(() => {
     if (!loading && !isLoggedIn) {
       history.push("/unauthorized");
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   }, [isLoggedIn, loading, history]);
 
@@ -151,9 +155,35 @@ const Dashboard = () => {
                   )}
                 </NavLink>
               </li>
+            </>
+          )}
+
+          {userRole === "SUPER_ADMIN" && (
+            <>
+              <li className="nav-item">
+                <NavLink to={`${url}/all-users`} className="nav-link">
+                  <FaUsers /> {t("all_users")}
+                </NavLink>
+              </li>
+
+              <li className="nav-item">
+                <NavLink to={`${url}/procces-halls`} className="nav-link">
+                  <FaCog /> {t("Process_halls")}{" "}
+                  {hallsToProcessCount > 0 && (
+                    <span className="notification-circle">
+                      {hallsToProcessCount}
+                    </span>
+                  )}
+                </NavLink>
+              </li>
               <li className="nav-item">
                 <NavLink to={`${url}/deleted-user`} className="nav-link">
                   <FaTrashAlt /> {t("deleted_user")}
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to={`${url}/add-admin`} className="nav-link">
+                  <FaPlusSquare /> {t("add_admin")}
                 </NavLink>
               </li>
             </>
@@ -203,17 +233,22 @@ const Dashboard = () => {
           <ProtectedRoute
             path={`${path}/all-users`}
             component={AllUsers}
-            allowedRoles={["ADMIN"]}
+            allowedRoles={["SUPER_ADMIN", "ADMIN"]}
           />
           <ProtectedRoute
             path={`${path}/procces-halls`}
             component={ProcessHalls}
-            allowedRoles={["ADMIN"]}
+            allowedRoles={["SUPER_ADMIN", "ADMIN"]}
           />
           <ProtectedRoute
             path={`${path}/deleted-user`}
             component={DeletedUser}
-            allowedRoles={["ADMIN"]}
+            allowedRoles={["SUPER_ADMIN"]}
+          />
+          <ProtectedRoute
+            path={`${path}/add-admin`}
+            component={addAdmin}
+            allowedRoles={["SUPER_ADMIN"]}
           />
         </Switch>
       </div>

@@ -248,13 +248,15 @@ const AllUsers = () => {
                       >
                         {t("view_details")}
                       </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => handleOpenDialog(user)}
-                      >
-                        {t("delete")}
-                      </Button>
+                      {localStorage.getItem("role") === "SUPER_ADMIN" && (
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleOpenDialog(user)}
+                        >
+                          {t("delete")}
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

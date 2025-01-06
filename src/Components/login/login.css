@@ -4,7 +4,11 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f9f3e1, #f3ebd6); /* Subtle neutral gradient to complement primary color */
+  background: linear-gradient(
+    135deg,
+    #f9f3e1,
+    #f3ebd6
+  ); /* Subtle neutral gradient to complement primary color */
   background-size: 300% 300%;
   animation: gradientBackground 8s ease infinite;
   padding: 20px;
@@ -114,6 +118,8 @@
 .login-forgot-password {
   font-size: 14px;
   color: #cba36b; /* Primary color */
+  transition: color 0.3s ease;
+  margin: auto;
 }
 
 .login-forgot-password a {
@@ -159,7 +165,8 @@
 
 .login-submit-btn:hover {
   background-color: #b08e5a; /* Darker shade for hover */
-  box-shadow: 0 0 15px rgba(203, 163, 107, 0.5), 0 0 30px rgba(203, 163, 107, 0.3); /* Glowing effect */
+  box-shadow: 0 0 15px rgba(203, 163, 107, 0.5),
+    0 0 30px rgba(203, 163, 107, 0.3); /* Glowing effect */
   transform: translateY(-5px);
 }
 
@@ -221,7 +228,9 @@
   margin: 0 auto 20px auto; /* Centered and with some margin below */
   max-width: 150px; /* Adjust the size as necessary */
   height: auto;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); /* Drop shadow effect */
+  filter: drop-shadow(
+    0 0 10px rgba(255, 255, 255, 0.5)
+  ); /* Drop shadow effect */
   animation: fadeIn 1s ease-in-out 0.5s forwards;
   opacity: 0;
 }

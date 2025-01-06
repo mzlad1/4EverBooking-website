@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import Button from "@mui/material/Button";
+
+import DialogTitle from "@mui/material/DialogTitle";
 import "./register.css";
 import zxcvbn from "zxcvbn";
 
@@ -20,7 +27,11 @@ const Register = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(null);
   const [loading, setLoading] = useState(false); // New loading state
-
+  const [errorDialog, setErrorDialog] = useState({ open: false, message: "" });
+  const [successDialog, setSuccessDialog] = useState({
+    open: false,
+    message: "",
+  });
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -61,10 +72,14 @@ const Register = () => {
           },
           body: JSON.stringify(userData),
         });
-
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(t("registration_error"));
         }
+
+        setSuccessDialog({
+          open: true,
+          message: t("registration_success"),
+        });
 
         const data = await response.json();
         console.log("Registration Data:", data);
@@ -136,10 +151,15 @@ const Register = () => {
         setLoading(false); // Hide loading overlay before redirection
         // Redirect to login page
         window.location.href = "/sign-in";
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
       } catch (error) {
         console.error("Error:", error);
         setLoading(false); // Hide loading overlay before redirection
-        alert(t("registration_error")); // Use translated registration error message
+        setErrorDialog({
+          open: true,
+          message: t("registration_error"),
+        });
       }
     }
   };
@@ -156,17 +176,17 @@ const Register = () => {
       !phone ||
       (userType === "hallOwner" && !companyName)
     ) {
-      setError(t("all_fields_required")); // Use translated error message
+      setErrorDialog({ open: true, message: t("all_fields_required") });
       return false;
     }
 
     if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/.test(password)) {
-      setError(t("password_requirements")); // Use translated password requirements error
+      setErrorDialog({ open: true, message: t("password_requirements") });
       return false;
     }
 
     if (password !== confirmPassword) {
-      setError(t("password_mismatch")); // Use translated password mismatch error
+      setErrorDialog({ open: true, message: t("password_mismatch") });
       return false;
     }
 
@@ -341,6 +361,43 @@ const Register = () => {
           </div>
         </div>
       </section>
+      {/* Success Dialog */}
+      <Dialog
+        open={successDialog.open}
+        onClose={() => setSuccessDialog({ open: false, message: "" })}
+      >
+        <DialogTitle>{t("success")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{successDialog.message}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setSuccessDialog({ open: false, message: "" })}
+            autoFocus
+          >
+            {t("close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Error Dialog */}
+      <Dialog
+        open={errorDialog.open}
+        onClose={() => setErrorDialog({ open: false, message: "" })}
+      >
+        <DialogTitle>{t("error")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{errorDialog.message}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setErrorDialog({ open: false, message: "" })}
+            autoFocus
+          >
+            {t("close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

@@ -158,6 +158,8 @@ const HallsPage = () => {
     if (!userId || !token) {
       // Redirect to sign-in page if not logged in
       history.push("/sign-in");
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
       return;
     }
     try {
@@ -369,7 +371,7 @@ const HallsPage = () => {
                         color: "#ffffff",
                       },
                     }}
-                    onClick={() => history.push(`/hall/${hall.id}`)}
+                    onClick={() => history.push(`/hall/${hall.id}` )}
                   >
                     {t("book_now")} {/* Translated text for "Book Now" */}
                   </Button>

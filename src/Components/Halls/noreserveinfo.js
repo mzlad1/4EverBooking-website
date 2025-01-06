@@ -9,6 +9,8 @@ const Unauthorized = () => {
 
   const goHome = () => {
     history.push("/");
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   };
 
   return (

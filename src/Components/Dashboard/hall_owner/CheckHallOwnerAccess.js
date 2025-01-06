@@ -10,6 +10,8 @@ const CheckHallOwnerAccess = () => {
 
     if (role !== "HALL_OWNER") {
       history.push("/unauthorized"); // Redirect to unauthorized if not HALL_OWNER
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   }, [history]);
 

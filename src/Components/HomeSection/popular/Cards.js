@@ -160,6 +160,8 @@ const Cards = () => {
 
   const handleBookNow = (hallId) => {
     window.location.href = `/hall/${hallId}`;
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   };
 
   const calculatePriceRange = (categories, services) => {

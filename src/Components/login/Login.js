@@ -165,10 +165,14 @@ const Login = () => {
       }
 
       // Handle ADMIN role or default redirection
-      if (userData.role === "ADMIN") {
+      if (userData.role === "ADMIN" || userData.role === "SUPER_ADMIN") {
         history.push("/dashboard/edit-profile");
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
       } else {
         history.push("/");
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
       }
@@ -199,7 +203,7 @@ const Login = () => {
               />
             </Link>
 
-            <p className="login-form-title">{t("Log in to your account")}</p>
+            <p className="login-form-title">{t("Log_in_to_your_account")}</p>
             <form onSubmit={handleSubmit} className="login-form">
               <div className="login-input-wrapper">
                 <input
@@ -226,10 +230,6 @@ const Login = () => {
               </div>
 
               <div className="login-flex-space">
-                <div className="login-checkbox-container">
-                  <input type="checkbox" className="login-checkbox" />
-                  <label>{t("remember_me")}</label>
-                </div>
                 <div className="login-forgot-password">
                   <Link to="/reset-password">{t("forgot_password")}</Link>
                 </div>

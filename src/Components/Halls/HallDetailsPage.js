@@ -136,6 +136,8 @@ const HallDetailsPage = () => {
     if (!accessToken) {
       // If no access token is found, redirect to the login page
       history.push("/sign-in");
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
       return; // Exit the function early to prevent further actions
     }
 
@@ -192,7 +194,11 @@ const HallDetailsPage = () => {
         fromDate,
         toDate,
       },
-    });
+    }
+  
+  );
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
   };
 
   const tileDisabled = ({ date, view }) => {

@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
+import Alert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
 import { fetchWithAuth } from "../../apiClient";
-import Alert from "@mui/material/Alert";
 import "./EditProfile.css";
 
-const primaryColor = "#cba36b"; // Your primary color
+const primaryColor = "#cba36b";
 
 const EditProfile = () => {
   const { t } = useTranslation();
@@ -23,8 +21,8 @@ const EditProfile = () => {
     phone: "",
     email: "",
     dateOfBirth: "",
-    image: "/Images/user.png", // Default profile picture
-    companyName: "", // For hall owner only
+    image: "/Images/user.png",
+    companyName: "",
   });
 
   const [passwords, setPasswords] = useState({
@@ -34,7 +32,8 @@ const EditProfile = () => {
   });
 
   const [message, setMessage] = useState(null);
-  const [passwordMessage, setPasswordMessage] = useState(null);
+  const [passwordSuccessMessage, setPasswordSuccessMessage] = useState(null);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
 
   const userRole = localStorage.getItem("role");
 
@@ -100,6 +99,49 @@ const EditProfile = () => {
     });
   };
 
+  const handlePasswordSave = async () => {
+    setPasswordSuccessMessage(null);
+    setPasswordErrorMessage(null);
+
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setPasswordErrorMessage(t("passwords_do_not_match"));
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const email = profile.email;
+
+      const response = await fetchWithAuth(
+        `http://localhost:8080/common/changePassword?email=${encodeURIComponent(
+          email
+        )}&oldPassword=${encodeURIComponent(
+          passwords.oldPassword
+        )}&newPassword=${encodeURIComponent(passwords.newPassword)}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to change password");
+      }
+
+      setPasswordSuccessMessage(t("password_changed_success"));
+      setPasswords({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      setPasswordErrorMessage(`${t("error_changing_password")} ${error.message}`);
+    }
+  };
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -107,7 +149,7 @@ const EditProfile = () => {
       let apiEndpoint = "";
       let body = {};
 
-      if (userRole === "CUSTOMER") {
+      if (userRole === "CUSTOMER" || userRole === "ADMIN" || userRole === "SUPER_ADMIN") {
         apiEndpoint = `http://localhost:8080/customer/updateProfile/${profile.id}`;
         body = {
           firstName: profile.firstName,
@@ -150,83 +192,6 @@ const EditProfile = () => {
     }
   };
 
-  const handlePasswordSave = async () => {
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      alert(t("passwords_do_not_match"));
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("accessToken");
-      const email = profile.email;
-
-      const response = await fetchWithAuth(
-        `http://localhost:8080/common/changePassword?email=${encodeURIComponent(
-          email
-        )}&oldPassword=${encodeURIComponent(
-          passwords.oldPassword
-        )}&newPassword=${encodeURIComponent(passwords.newPassword)}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "*/*",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to change password");
-      }
-
-      setPasswordMessage(t("password_changed_success"));
-      setPasswords({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-    } catch (error) {
-      setPasswordMessage(`${t("error_changing_password")} ${error.message}`);
-    }
-  };
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const token = localStorage.getItem("accessToken");
-      const response = await fetchWithAuth(
-        `http://localhost:8080/common/uploadImageToProfile?id=${profile.id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
-
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        image: URL.createObjectURL(file),
-      }));
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  };
-
   return (
     <Box className="edit-profile-container-modern" p={3}>
       <Box className="edit-profile-modern" mb={3}>
@@ -242,36 +207,33 @@ const EditProfile = () => {
             id="profileImage"
             style={{ display: "none" }}
             accept="image/*"
-            onChange={handleImageChange}
+            onChange={(e) => console.log("Upload image functionality here")}
           />
           <label htmlFor="profileImage" className="change-picture-btn-modern">
             {t("change_picture")}
           </label>
         </Box>
         <Box className="profile-info-modern">
-          <Box className="form-row-modern">
-            <TextField
-              label={t("first_name")}
-              name="firstName"
-              value={profile.firstName}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label={t("last_name")}
-              name="lastName"
-              value={profile.lastName}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            />
-          </Box>
+          <TextField
+            label={t("first_name")}
+            name="firstName"
+            value={profile.firstName}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label={t("last_name")}
+            name="lastName"
+            value={profile.lastName}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
           <TextField
             label={t("email")}
             name="email"
             value={profile.email}
-            onChange={handleChange}
             fullWidth
             margin="normal"
             disabled
@@ -300,9 +262,7 @@ const EditProfile = () => {
             onChange={handleChange}
             fullWidth
             margin="normal"
-            InputLabelProps={{
-              shrink: true,
-            }}
+            InputLabelProps={{ shrink: true }}
           />
           {userRole === "HALL_OWNER" && (
             <TextField
@@ -326,67 +286,65 @@ const EditProfile = () => {
           >
             {t("save_profile")}
           </Button>
-        </Box>
-        {message && (
-          <Alert severity="success" sx={{ mt: 2 }}>
-            {message}
-          </Alert>
-        )}
-      </Box>
-
-      <Box className="utils-modern">
-        <Box className="change-password-section-modern" mb={3}>
-          <Typography variant="h5">{t("change_password")}</Typography>
-          <TextField
-            label={t("old_password")}
-            type="password"
-            name="oldPassword"
-            value={passwords.oldPassword}
-            onChange={handlePasswordChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label={t("new_password")}
-            type="password"
-            name="newPassword"
-            value={passwords.newPassword}
-            onChange={handlePasswordChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label={t("confirm_new_password")}
-            type="password"
-            name="confirmPassword"
-            value={passwords.confirmPassword}
-            onChange={handlePasswordChange}
-            fullWidth
-            margin="normal"
-          />
-          <Button
-            variant="contained"
-            onClick={handlePasswordSave}
-            fullWidth
-            sx={{
-              mt: 2,
-              backgroundColor: primaryColor,
-              "&:hover": { backgroundColor: "#b5884e" },
-            }}
-          >
-            {t("change_password")}
-          </Button>
-          {passwordMessage && (
-            <Alert
-              severity={
-                passwordMessage.startsWith("Error") ? "error" : "success"
-              }
-              sx={{ mt: 2 }}
-            >
-              {passwordMessage}
+          {message && (
+            <Alert severity="success" sx={{ mt: 2 }}>
+              {message}
             </Alert>
           )}
         </Box>
+      </Box>
+
+      <Box className="utils-modern">
+        <Typography variant="h5">{t("change_password")}</Typography>
+        <TextField
+          label={t("old_password")}
+          type="password"
+          name="oldPassword"
+          value={passwords.oldPassword}
+          onChange={handlePasswordChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label={t("new_password")}
+          type="password"
+          name="newPassword"
+          value={passwords.newPassword}
+          onChange={handlePasswordChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label={t("confirm_new_password")}
+          type="password"
+          name="confirmPassword"
+          value={passwords.confirmPassword}
+          onChange={handlePasswordChange}
+          fullWidth
+          margin="normal"
+        />
+        <Button
+          variant="contained"
+          onClick={handlePasswordSave}
+          fullWidth
+          sx={{
+            mt: 2,
+            backgroundColor: primaryColor,
+            "&:hover": { backgroundColor: "#b5884e" },
+          }}
+        >
+          {t("change_password")}
+        </Button>
+        {passwordSuccessMessage && (
+          <Alert severity="success" sx={{ mt: 2 }}>
+            {passwordSuccessMessage}
+          </Alert>
+        )}
+        {passwordErrorMessage && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {passwordErrorMessage}
+          </Alert>
+        )}
       </Box>
     </Box>
   );

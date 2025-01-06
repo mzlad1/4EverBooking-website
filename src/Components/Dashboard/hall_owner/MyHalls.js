@@ -102,6 +102,8 @@ const MyHalls = () => {
 
   const handleUpdateHall = (hallId) => {
     history.push(`update-hall/${hallId}`); // Navigate to the update hall page
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   };
 
   useEffect(() => {

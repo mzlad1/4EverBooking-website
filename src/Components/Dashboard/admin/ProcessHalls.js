@@ -17,6 +17,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Backdrop from "@mui/material/Backdrop";
+import Alert from "@mui/material/Alert";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import "./ProcessHalls.css";
 
@@ -109,7 +111,7 @@ const ProcessHalls = () => {
     setRejectDialogOpen(false);
 
     if (!selectedHall || !rejectionReason.trim()) {
-      alert(t("please_provide_reason"));
+      Alert("Please provide a reason for rejection");
       setIsRejecting(false); // Hide loading overlay
       return;
     }

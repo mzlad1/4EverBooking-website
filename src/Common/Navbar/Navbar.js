@@ -85,9 +85,13 @@ const Navbar = () => {
       localStorage.removeItem("userId");
       localStorage.removeItem("userRole");
       localStorage.removeItem("profileImage");
+      localStorage.removeItem("userFirstName");
+      localStorage.clear();
 
       // Redirect to sign-in page after successful logout
       window.location.href = "/";
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout Error:", error);
@@ -113,7 +117,10 @@ const Navbar = () => {
           </div>
 
           <ul className={click ? "nav-menu-modern active" : "nav-menu-modern"}>
-            {(!isLoggedIn || (userRole && userRole !== "ADMIN")) && (
+            {(!isLoggedIn ||
+              (userRole &&
+                userRole !== "ADMIN" &&
+                userRole !== "SUPER_ADMIN")) && (
               <li className="nav-item-modern">
                 <a
                   href="/"
@@ -138,7 +145,8 @@ const Navbar = () => {
             {(!isLoggedIn ||
               (userRole &&
                 userRole !== "HALL_OWNER" &&
-                userRole !== "ADMIN")) && (
+                userRole !== "ADMIN" &&
+                userRole !== "SUPER_ADMIN")) && (
               <li className="nav-item-modern">
                 <a
                   href="/halls"
@@ -174,7 +182,9 @@ const Navbar = () => {
                     alt="Profile"
                     className="profile-image-modern"
                   />
-                  <span className="profile-text-modern">{t("Hi")} {localStorage.getItem("userFirstName")}</span>
+                  <span className="profile-text-modern">
+                    {t("Hi")} {localStorage.getItem("userFirstName")}
+                  </span>
                 </div>
                 <ul className="dropdown-menu-modern">
                   <li>

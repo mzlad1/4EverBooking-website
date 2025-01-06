@@ -30,6 +30,8 @@ const Home = () => {
       setShowSearchInput(true);
     } else {
       history.push(`/halls?search=${encodeURIComponent(searchTerm)}`);
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   };
 

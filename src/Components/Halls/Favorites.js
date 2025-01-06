@@ -81,6 +81,8 @@ const Favorites = () => {
 
   const handleBookClick = (hallId) => {
     history.push(`/hall/${hallId}`); // Redirect to hall booking page
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   };
 
   return (
