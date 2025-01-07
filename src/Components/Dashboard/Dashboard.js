@@ -54,7 +54,7 @@ const Dashboard = () => {
   }, [isLoggedIn, loading, history]);
 
   useEffect(() => {
-    if (userRole === "ADMIN") {
+    if (userRole === "ADMIN" || userRole === "SUPER_ADMIN") {
       // Fetch count of halls needing processing
       const fetchHallsToProcess = async () => {
         try {

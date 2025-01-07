@@ -132,20 +132,22 @@ const DeletedHallsPage = () => {
                 <Typography variant="body2" color="textSecondary">
                   <strong>{t("capacity")}:</strong> {hall.capacity}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  <strong>{t("description")}:</strong> {hall.description}
-                </Typography>
+
                 <Typography variant="body2" color="textSecondary">
                   <strong>{t("phone")}:</strong> {hall.phone}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>{t("average_rating")}:</strong> {hall.averageRating}
+                  <strong>{t("average_rating")}:</strong>{" "}
+                  {parseFloat(hall.averageRating).toFixed(2)}
                 </Typography>
                 <Button
                   variant="contained"
-                  color="primary"
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#cba36b",
+                    color: "#ffffff", // Adjust text color for better contrast
+                  }}
                   onClick={() => openRestoreDialog(hall)}
-                  style={{ marginTop: "10px" }}
                 >
                   {t("restore_hall")}
                 </Button>
@@ -176,7 +178,8 @@ const DeletedHallsPage = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t("are_you_sure_you_want_to_restore_this_hall")} "{hallToRestore?.name}"?
+            {t("are_you_sure_you_want_to_restore_this_hall")} "
+            {hallToRestore?.name}"?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

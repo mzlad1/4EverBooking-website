@@ -81,7 +81,7 @@ const MyHalls = () => {
     try {
       const token = localStorage.getItem("accessToken");
       const ownerId = localStorage.getItem("hallOwnerId");
-      const deleteUrl = `http://localhost:8080/hallOwner/delete?id=${selectedHall}&ownerId=${ownerId}`;
+      const deleteUrl = `http://localhost:8080/hallOwner/?id=${selectedHall}&OwnerId=${ownerId}`;
 
       const response = await fetchWithAuth(deleteUrl, {
         method: "DELETE",
@@ -149,9 +149,8 @@ const MyHalls = () => {
               <div className="hall-actions-modern">
                 <Button
                   variant="contained"
-                  color="primary"
                   onClick={() => handleUpdateHall(hall.id)}
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "10px", backgroundColor: "#cba36b" }}
                 >
                   {t("update_hall")}
                 </Button>

@@ -14,7 +14,7 @@ import "./AddNewHall.css";
 const libraries = ["places"]; // Required for Places Autocomplete
 
 const AddNewHall = () => {
-      const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation(); // Initialize translation hook
   const [hallData, setHallData] = useState({
     name: "",
     city: "",
@@ -87,6 +87,19 @@ const AddNewHall = () => {
   const handleServiceChange = (e, index, field) => {
     const updatedServices = [...hallData.services];
     updatedServices[index][field] = e.target.value;
+
+    // Remove error dynamically for serviceName or servicePrice
+    if (
+      (field === "serviceName" || field === "servicePrice") &&
+      e.target.value
+    ) {
+      const updatedErrors = { ...errors };
+      delete updatedErrors[
+        `service${field.charAt(0).toUpperCase() + field.slice(1)}-${index}`
+      ];
+      setErrors(updatedErrors);
+    }
+
     setHallData({ ...hallData, services: updatedServices });
   };
 
@@ -147,48 +160,48 @@ const AddNewHall = () => {
     const newErrors = {};
 
     // Basic Information Validation
-    if (!(hallData.name || "").trim())
-      newErrors.name = "Hall name is required.";
+    if (!(hallData.name || "").trim()) newErrors.name = t("hall_name_required"); // Translation key for "Hall name is required."
     if (!(hallData.capacity || "").trim())
-      newErrors.capacity = "Capacity is required.";
-    if (!(hallData.phone || "").trim())
-      newErrors.phone = "Phone number is required.";
+      newErrors.capacity = t("capacity_required"); // Translation key for "Capacity is required."
+    if (!(hallData.phone || "").trim()) newErrors.phone = t("phone_required"); // Translation key for "Phone number is required."
     if (!(hallData.description || "").trim())
-      newErrors.description = "Description is required.";
+      newErrors.description = t("description_required"); // Translation key for "Description is required."
 
     // Location Validation
-    if (!(hallData.city || "").trim()) newErrors.city = "City is required.";
+    if (!(hallData.city || "").trim()) newErrors.city = t("city_required"); // Translation key for "City is required."
     if (!hallData.latitude || !hallData.longitude) {
-      newErrors.location = "Latitude and longitude are required.";
+      newErrors.location = t("location_required"); // Translation key for "Latitude and longitude are required."
     }
 
     // Services Validation
     hallData.services.forEach((service, index) => {
       if ((service.serviceName || "").trim() && !service.servicePrice) {
-        newErrors[`servicePrice-${index}`] =
-          "Service price is required if service name is provided.";
+        newErrors[`servicePrice-${index}`] = t("service_price_required"); // Translation key for "Service price is required if service name is provided."
+      }
+      if ((service.servicePrice || "").trim() && !service.serviceName) {
+        newErrors[`serviceName-${index}`] = t("service_name_required"); // Translation key for "Service name is required if service price is provided."
       }
     });
 
     // Categories Validation
     const selectedCategories = Object.keys(categoryPrices);
     if (selectedCategories.length === 0) {
-      newErrors.categories =
-        "At least one category and its price are required.";
+      newErrors.categories = t("categories_required"); // Translation key for "At least one category and its price are required."
     } else {
       selectedCategories.forEach((category) => {
         if (!categoryPrices[category]) {
-          newErrors[
-            `categoryPrice-${category}`
-          ] = `Price for ${category} is required.`;
+          newErrors[`categoryPrice-${category}`] = t(
+            "category_price_required",
+            { category: t(`category_${category.toLowerCase()}`) }
+          ); // Dynamic translation key for "Price for {category} is required."
         }
       });
     }
 
     // Image and Proof Validation
-    if (!hallData.image) newErrors.image = "Hall image is required.";
+    if (!hallData.image) newErrors.image = t("hall_image_required"); // Translation key for "Hall image is required."
     if (!hallData.proofOfOwnership)
-      newErrors.proofOfOwnership = "Proof of ownership is required.";
+      newErrors.proofOfOwnership = t("proof_required"); // Translation key for "Proof of ownership is required."
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -372,7 +385,7 @@ const AddNewHall = () => {
           {/* Section 1: Basic Information */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">{t("basic_information")}</h2>
-  
+
             {/* Hall Name */}
             <div className="form-group-unique">
               <label htmlFor="name" className="input-label-unique">
@@ -389,7 +402,7 @@ const AddNewHall = () => {
               />
               {errors.name && <p className="error-message">{errors.name}</p>}
             </div>
-  
+
             {/* Capacity */}
             <div className="form-group-unique">
               <label htmlFor="capacity" className="input-label-unique">
@@ -408,7 +421,7 @@ const AddNewHall = () => {
                 <p className="error-message">{errors.capacity}</p>
               )}
             </div>
-  
+
             {/* Phone */}
             <div className="form-group-unique">
               <label htmlFor="phone" className="input-label-unique">
@@ -425,7 +438,7 @@ const AddNewHall = () => {
               />
               {errors.phone && <p className="error-message">{errors.phone}</p>}
             </div>
-  
+
             {/* Description */}
             <div className="form-group-unique">
               <label htmlFor="description" className="input-label-unique">
@@ -444,11 +457,13 @@ const AddNewHall = () => {
               )}
             </div>
           </div>
-  
+
           {/* Section 2: Location Information */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">{t("location_information")}</h2>
-  
+            <h2 className="section-title-unique">
+              {t("location_information")}
+            </h2>
+
             {/* City Selection Dropdown */}
             <div className="form-group-unique">
               <label htmlFor="city" className="input-label-unique">
@@ -470,7 +485,7 @@ const AddNewHall = () => {
               </select>
               {errors.city && <p className="error-message">{errors.city}</p>}
             </div>
-  
+
             {/* Location Search Input */}
             <div className="form-group-unique">
               <label htmlFor="location" className="input-label-unique">
@@ -488,7 +503,7 @@ const AddNewHall = () => {
                 />
               </Autocomplete>
             </div>
-  
+
             {/* Google Map */}
             <div className="map-container">
               <GoogleMap
@@ -501,7 +516,7 @@ const AddNewHall = () => {
                 <Marker position={markerPosition} />
               </GoogleMap>
             </div>
-  
+
             {/* Latitude and Longitude */}
             <div className="form-group-unique">
               <label htmlFor="latitude" className="input-label-unique">
@@ -517,7 +532,7 @@ const AddNewHall = () => {
                 placeholder={t("selected_latitude")}
               />
             </div>
-  
+
             <div className="form-group-unique">
               <label htmlFor="longitude" className="input-label-unique">
                 {t("longitude")}
@@ -532,24 +547,32 @@ const AddNewHall = () => {
                 placeholder={t("selected_longitude")}
               />
             </div>
-  
+
             {errors.location && (
               <p className="error-message">{errors.location}</p>
             )}
           </div>
-  
+
           {/* Section: Services */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">{t("services")}</h2>
             {hallData.services.map((service, index) => (
               <div key={index} className="dynamic-service-unique">
+                {/* Service Name Input */}
                 <input
                   type="text"
                   className="input-field-unique"
                   value={service.serviceName}
                   onChange={(e) => handleServiceChange(e, index, "serviceName")}
-                  placeholder={`${t("service")} #${index + 1}`}
+                  placeholder={`${t("service")} ${index + 1}`}
                 />
+                {errors[`serviceName-${index}`] && (
+                  <p className="error-message">
+                    {errors[`serviceName-${index}`]}
+                  </p>
+                )}
+
+                {/* Service Price Input */}
                 <input
                   type="number"
                   className="input-field-unique"
@@ -559,6 +582,13 @@ const AddNewHall = () => {
                   }
                   placeholder={t("service_price")}
                 />
+                {errors[`servicePrice-${index}`] && (
+                  <p className="error-message">
+                    {errors[`servicePrice-${index}`]}
+                  </p>
+                )}
+
+                {/* Remove Service Button */}
                 <button
                   type="button"
                   className="remove-service-btn-unique"
@@ -568,6 +598,8 @@ const AddNewHall = () => {
                 </button>
               </div>
             ))}
+
+            {/* Add Service Button */}
             <button
               type="button"
               className="add-service-btn-unique"
@@ -576,7 +608,7 @@ const AddNewHall = () => {
               {t("add_service")}
             </button>
           </div>
-  
+
           {/* Section 4: Categories with Price Inputs */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">{t("categories")}</h2>
@@ -594,16 +626,14 @@ const AddNewHall = () => {
                     <label htmlFor={`category-${category}`}>
                       {t(`category_${category.toLowerCase()}`)}
                     </label>
-  
+
                     {/* Show price input if category is selected */}
                     {categoryPrices.hasOwnProperty(category) && (
                       <input
                         type="number"
                         className="input-field-unique"
                         value={categoryPrices[category]}
-                        onChange={(e) =>
-                          handleCategoryPriceChange(e, category)
-                        }
+                        onChange={(e) => handleCategoryPriceChange(e, category)}
                         placeholder={t("enter_price", {
                           category: t(`category_${category.toLowerCase()}`),
                         })}
@@ -622,7 +652,7 @@ const AddNewHall = () => {
               <p className="error-message">{errors.categories}</p>
             )}
           </div>
-  
+
           {/* Section 5: Upload Image */}
           <div className="add-hall-box">
             <h2 className="section-title-unique">{t("upload_image")}</h2>
@@ -637,10 +667,12 @@ const AddNewHall = () => {
               {errors.image && <p className="error-message">{errors.image}</p>}
             </div>
           </div>
-  
+
           {/* Section 6: Upload Proof of Ownership */}
           <div className="add-hall-box">
-            <h2 className="section-title-unique">{t("upload_proof_of_ownership")}</h2>
+            <h2 className="section-title-unique">
+              {t("upload_proof_of_ownership")}
+            </h2>
             <div className="form-group-unique">
               <input
                 type="file"
@@ -653,7 +685,7 @@ const AddNewHall = () => {
               )}
             </div>
           </div>
-  
+
           <button type="submit" className="submit-btn-unique">
             {t("submit")}
           </button>
@@ -665,7 +697,6 @@ const AddNewHall = () => {
       )}
     </div>
   );
-  
 };
 
 export default AddNewHall;

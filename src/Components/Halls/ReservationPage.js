@@ -170,19 +170,11 @@ const ReservationPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    const isConfirmed = window.confirm(
-      "Are you sure you want to confirm the reservation?"
-    );
-    if (!isConfirmed) {
-      setLoading(false);
-      return;
-    }
-
     const newErrors = {};
-    if (!billingAddress.fullName) newErrors.fullName = "Full name is required.";
-    if (!billingAddress.address) newErrors.address = "Address is required.";
+    if (!billingAddress.fullName) newErrors.fullName = t("full_name_required");
+    if (!billingAddress.address) newErrors.address = t("address_required");
     if (!billingAddress.phoneNumber || billingAddress.phoneNumber.length < 10)
-      newErrors.phoneNumber = "Valid phone number is required.";
+      newErrors.phoneNumber = t("valid_phone_required");
 
     setErrors(newErrors);
 
@@ -278,6 +270,8 @@ const ReservationPage = () => {
     }
 
     setLoading(false);
+    document.window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
   };
 
   return (
@@ -381,18 +375,18 @@ const ReservationPage = () => {
 
         <div className="reservation-button-container reservation-fade-in">
           <button
-            type="submit"
-            className="reservation-submit-button"
-            disabled={!stripe || !elements || loading}
-          >
-            {t("confirm_reservation")}
-          </button>
-          <button
             type="button"
             className="reservation-cancel-button"
             onClick={() => history.goBack()}
           >
             {t("cancel")}
+          </button>
+          <button
+            type="submit"
+            className="reservation-submit-button"
+            disabled={!stripe || !elements || loading}
+          >
+            {t("confirm_reservation")}
           </button>
         </div>
       </form>
