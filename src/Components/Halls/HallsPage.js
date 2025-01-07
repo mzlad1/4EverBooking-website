@@ -98,7 +98,19 @@ const HallsPage = () => {
       userId = "",
     } = appliedFilters;
 
-    const apiUrl = `http://localhost:8080/whitelist/getAll?page=${page}&size=6&search=${encodeURIComponent(
+    // Dynamically set the size based on the screen width
+    const screenWidth = window.innerWidth;
+    let size;
+
+    if (screenWidth >= 1200) {
+      size = 9; // Large screens
+    } else if (screenWidth >= 768) {
+      size = 6; // Medium screens (tablets)
+    } else {
+      size = 3; // Small screens (mobile)
+    }
+
+    const apiUrl = `http://localhost:8080/whitelist/getAll?page=${page}&size=${size}&search=${encodeURIComponent(
       search
     )}&location=${encodeURIComponent(city)}&category=${encodeURIComponent(
       category
@@ -371,7 +383,7 @@ const HallsPage = () => {
                         color: "#ffffff",
                       },
                     }}
-                    onClick={() => history.push(`/hall/${hall.id}` )}
+                    onClick={() => history.push(`/hall/${hall.id}`)}
                   >
                     {t("book_now")} {/* Translated text for "Book Now" */}
                   </Button>
