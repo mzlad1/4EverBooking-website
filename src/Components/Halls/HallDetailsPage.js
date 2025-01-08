@@ -103,6 +103,12 @@ const HallDetailsPage = () => {
         // Log the entire data to see if 'image' field exists
         console.log("API Response:", data);
 
+        //if the response {errorMessage: 'Hall not found with id: 11'} is returned, redirect to the detailsError page
+        if (data.errorMessage) {
+          history.push("/unauthorized");
+          return;
+        }
+
         if (data.image) {
           setImages(data.image.split(",")); // Assuming images are in a comma-separated string
         } else {
@@ -194,11 +200,9 @@ const HallDetailsPage = () => {
         fromDate,
         toDate,
       },
-    }
-  
-  );
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
+    });
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   };
 
   const tileDisabled = ({ date, view }) => {
@@ -334,12 +338,8 @@ const HallDetailsPage = () => {
   // Function to handle clicking an image or video and opening the modal
   // Function to handle clicking a media (image/video) and opening the modal
   const handleMediaClick = (mediaUrl) => {
-    const isVideo = mediaUrl.endsWith(".mp4") || mediaUrl.endsWith(".avi");
-
-    if (!isVideo) {
-      setSelectedMedia(mediaUrl); // Set the selected image URL
-      setModalVisible(true); // Show the modal only for images
-    }
+    setSelectedMedia(mediaUrl); // Set the selected media (image or video) URL
+    setModalVisible(true); // Show the modal
   };
 
   // Function to handle closing the modal
@@ -430,14 +430,13 @@ const HallDetailsPage = () => {
           </button>
         </div>
 
-        {/* Modal for showing selected media */}
         {isModalVisible && (
           <div className="modal-overlay" onClick={handleCloseModal}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <button className="modal-close-button" onClick={handleCloseModal}>
-                <Close />
+                Close
               </button>
-              {selectedMedia.endsWith(".mp4") ? (
+              {selectedMedia && selectedMedia.endsWith(".mp4") ? (
                 <video className="modal-video" controls autoPlay>
                   <source src={selectedMedia} type="video/mp4" />
                   Your browser does not support the video tag.
@@ -445,7 +444,7 @@ const HallDetailsPage = () => {
               ) : (
                 <img
                   src={selectedMedia}
-                  alt="Selected"
+                  alt="Selected Media"
                   className="modal-image"
                 />
               )}

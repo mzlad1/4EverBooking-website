@@ -329,10 +329,28 @@ const Register = () => {
                   type="date"
                   name="dateOfBirth"
                   value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const currentDate = new Date();
+                    const age =
+                      currentDate.getFullYear() - selectedDate.getFullYear();
+                    const isBeforeBirthdayThisYear =
+                      currentDate.getMonth() < selectedDate.getMonth() ||
+                      (currentDate.getMonth() === selectedDate.getMonth() &&
+                        currentDate.getDate() < selectedDate.getDate());
+
+                    if (age < 15 || (age === 15 && isBeforeBirthdayThisYear)) {
+                      setError(t("age_restriction_message")); // Add a translation for this message
+                      setDateOfBirth(""); // Reset the date if invalid
+                    } else {
+                      setError(""); // Clear any previous error
+                      setDateOfBirth(e.target.value); // Set the valid date
+                    }
+                  }}
                   className="register-input-field"
                   required
                 />
+
                 {/* Conditionally Render Company Name Input */}
                 {userType === "hallOwner" && (
                   <input

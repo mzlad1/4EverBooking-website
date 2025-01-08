@@ -10,6 +10,7 @@
   "no_halls_found": "No halls found for \"{{query}}\".",
   "guests": "guests",
   "book_now": "Book Now",
+  "age_restriction_message": "You must be at least 15 years old.",
   "loading": "Loading...",
   "west_bank_cities": {
     "Ramallah": "Ramallah",

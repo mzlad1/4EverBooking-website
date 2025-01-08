@@ -216,6 +216,8 @@ const AddNewHall = () => {
     }
 
     try {
+      setIsProcessing(true); // Show loading overlay
+
       const accessToken = localStorage.getItem("accessToken");
       const hallOwnerId = localStorage.getItem("hallOwnerId");
 
@@ -321,6 +323,7 @@ const AddNewHall = () => {
 
       const addHallData = await addHallResponse.json();
       console.log("Hall added successfully", addHallData);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Clear the form after successful submission
       setHallData({
@@ -340,11 +343,13 @@ const AddNewHall = () => {
 
       setCategoryPrices({}); // Clear category prices
       setIsProcessing(true); // Show processing message
-      setSuccessMessage(
-        "Your hall is under processing. You will receive an email when approved."
-      ); // Success message
+      setSuccessMessage(t("hall_under_processing")); // Success message
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setIsProcessing(false); // Hide loading overlay
+      document.documentElement.scrollTop = 0; // Scroll to top of the page
+      document.body.scrollTop = 0;
     }
   };
   // Function to handle proof of ownership file upload
@@ -378,6 +383,12 @@ const AddNewHall = () => {
 
   return (
     <div className="add-hall-unique-container">
+      {isProcessing && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+          <p>{t("loading")}</p>
+        </div>
+      )}
       <h1 className="add-hall-unique-title">{t("add_new_hall")}</h1>
       {successMessage && <p className="success-message">{successMessage}</p>}
       {!isProcessing ? (
@@ -691,9 +702,7 @@ const AddNewHall = () => {
           </button>
         </form>
       ) : (
-        <div>
-          <p>{t("hall_under_processing")}</p>
-        </div>
+        <p className="success-message"></p>
       )}
     </div>
   );

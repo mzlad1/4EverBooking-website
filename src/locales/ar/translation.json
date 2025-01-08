@@ -10,6 +10,7 @@
   "no_halls_found": "لم يتم العثور على أي قاعات لـ \"{{query}}\".",
   "guests": "ضيوف",
   "book_now": "احجز الآن",
+  "age_restriction_message": "يجب أن يكون عمرك 15 عامًا على الأقل.",
   "loading": "جاري التحميل...",
   "west_bank_cities": {
     "Ramallah": "رام الله",
@@ -320,7 +321,7 @@
   "upload_image": "تحميل الصور",
   "upload_proof_of_ownership": "تحميل إثبات الملكية",
   "submit": "إرسال",
-  "hall_under_processing": "قاعةك قيد المعالجة. ستتلقى بريدًا إلكترونيًا عند الموافقة.",
+  "hall_under_processing": "قاعتك قيد المعالجة. ستتلقى بريدًا إلكترونيًا عند الموافقة.",
   "category_weddings": "حفلات الزفاف",
   "category_birthdays": "أعياد الميلاد",
   "category_meetings": "الاجتماعات",
