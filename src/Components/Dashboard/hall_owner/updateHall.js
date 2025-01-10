@@ -280,6 +280,7 @@ const UpdateHall = () => {
         description: hallData.description,
         phone: hallData.phone,
         services: prepareServicesForPayload(), // Convert services to the required object structure
+        categories: categoryPrices,
         longitude: hallData.longitude,
         latitude: hallData.latitude,
       };
@@ -605,12 +606,23 @@ const UpdateHall = () => {
                       src={img}
                       controls
                       className="update-hall-media"
-                    ></video>
+                      onError={(e) => {
+                        e.target.onerror = null; // Prevent infinite loop
+                        e.target.style.display = "none"; // Hide the broken video
+                        alert(`Error loading video at index ${index}.`);
+                      }}
+                    >
+                      {t("your_browser_does_not_support_video")}
+                    </video>
                   ) : (
                     <img
                       src={img}
                       alt={`Media ${index}`}
                       className="update-hall-media"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://via.placeholder.com/150?text=Video"; // Fallback image
+                      }}
                     />
                   )}
                   <button

@@ -138,7 +138,9 @@ const EditProfile = () => {
         confirmPassword: "",
       });
     } catch (error) {
-      setPasswordErrorMessage(`${t("error_changing_password")} ${error.message}`);
+      setPasswordErrorMessage(
+        `${t("error_changing_password")} ${error.message}`
+      );
     }
   };
 
@@ -149,7 +151,11 @@ const EditProfile = () => {
       let apiEndpoint = "";
       let body = {};
 
-      if (userRole === "CUSTOMER" || userRole === "ADMIN" || userRole === "SUPER_ADMIN") {
+      if (
+        userRole === "CUSTOMER" ||
+        userRole === "ADMIN" ||
+        userRole === "SUPER_ADMIN"
+      ) {
         apiEndpoint = `http://localhost:8080/customer/updateProfile/${profile.id}`;
         body = {
           firstName: profile.firstName,
@@ -192,6 +198,43 @@ const EditProfile = () => {
     }
   };
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetchWithAuth(
+        `http://localhost:8080/common/uploadImageToProfile?id=${profile.id}`, // Enclosed in backticks for string interpolation
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Enclosed in backticks for string interpolation
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        image: URL.createObjectURL(file),
+      }));
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
   return (
     <Box className="edit-profile-container-modern" p={3}>
       <Box className="edit-profile-modern" mb={3}>
@@ -207,7 +250,7 @@ const EditProfile = () => {
             id="profileImage"
             style={{ display: "none" }}
             accept="image/*"
-            onChange={(e) => console.log("Upload image functionality here")}
+            onChange={handleImageChange}
           />
           <label htmlFor="profileImage" className="change-picture-btn-modern">
             {t("change_picture")}

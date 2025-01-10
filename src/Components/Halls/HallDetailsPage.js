@@ -103,12 +103,6 @@ const HallDetailsPage = () => {
         // Log the entire data to see if 'image' field exists
         console.log("API Response:", data);
 
-        //if the response {errorMessage: 'Hall not found with id: 11'} is returned, redirect to the detailsError page
-        if (data.errorMessage) {
-          history.push("/unauthorized");
-          return;
-        }
-
         if (data.image) {
           setImages(data.image.split(",")); // Assuming images are in a comma-separated string
         } else {
@@ -338,8 +332,13 @@ const HallDetailsPage = () => {
   // Function to handle clicking an image or video and opening the modal
   // Function to handle clicking a media (image/video) and opening the modal
   const handleMediaClick = (mediaUrl) => {
-    setSelectedMedia(mediaUrl); // Set the selected media (image or video) URL
-    setModalVisible(true); // Show the modal
+    // Check if the URL is a video by matching video extensions with optional query parameters
+    const isVideo = /\.(mp4|avi)(\?.*)?$/.test(mediaUrl);
+
+    if (!isVideo) {
+      setSelectedMedia(mediaUrl); // Set the selected image URL
+      setModalVisible(true); // Show the modal only for images
+    }
   };
 
   // Function to handle closing the modal
@@ -355,7 +354,7 @@ const HallDetailsPage = () => {
         <input
           type="text"
           value={value || ""}
-          placeholder="mm/dd/yyyy"
+          placeholder={t("mm/dd/yyyy")}
           readOnly
           className="custom-date-picker"
         />
@@ -397,7 +396,7 @@ const HallDetailsPage = () => {
           </button>
           <div className="image-slider-container" ref={sliderRef}>
             {media.map((item, index) => {
-              const isVideo = item.endsWith(".mp4") || item.endsWith(".avi");
+              const isVideo = /\.(mp4|avi)(\?.*)?$/.test(item);
 
               return isVideo ? (
                 <video
@@ -430,13 +429,14 @@ const HallDetailsPage = () => {
           </button>
         </div>
 
+        {/* Modal for showing selected media */}
         {isModalVisible && (
           <div className="modal-overlay" onClick={handleCloseModal}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <button className="modal-close-button" onClick={handleCloseModal}>
-                Close
+                <Close />
               </button>
-              {selectedMedia && selectedMedia.endsWith(".mp4") ? (
+              {selectedMedia.endsWith(".mp4") ? (
                 <video className="modal-video" controls autoPlay>
                   <source src={selectedMedia} type="video/mp4" />
                   Your browser does not support the video tag.
@@ -444,7 +444,7 @@ const HallDetailsPage = () => {
               ) : (
                 <img
                   src={selectedMedia}
-                  alt="Selected Media"
+                  alt="Selected"
                   className="modal-image"
                 />
               )}

@@ -11,19 +11,16 @@ import "./financial.css";
 import { fetchWithAuth } from "../../../apiClient"; // Import the fetchWithAuth function
 import { useTranslation } from "react-i18next"; // Import useTranslation
 
-
 const FinancialReport = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [pdfFilename, setPdfFilename] = useState(null); // To store the filename
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { isLoggedIn } = useAuth();
-      const { t } = useTranslation(); // Initialize translation hook
-  
+  const { t } = useTranslation(); // Initialize translation hook
 
   useEffect(() => {
     const fetchFinancialReport = async () => {
-
       try {
         const token = localStorage.getItem("accessToken"); // Get access token from localStorage
         const ownerId = localStorage.getItem("hallOwnerId"); // Fetch owner ID from localStorage
@@ -47,7 +44,11 @@ const FinancialReport = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch financial report");
         }
-
+        // if the response is ok and the status is 200, the response body not contains the PDF URL write a message that the hall owner has no financial report
+        if (response.status === 200) {
+          setError("The hall owner has no financial report");
+          return;
+        }
         const pdfUrl = await response.text(); // Response body contains the PDF URL
         const filename = pdfUrl.split("/").pop(); // Extract the filename from the URL
         setPdfUrl(pdfUrl);
@@ -66,13 +67,13 @@ const FinancialReport = () => {
   const handleDownload = async () => {
     try {
       const token = localStorage.getItem("accessToken"); // Get access token from localStorage
-  
+
       // Use regex to extract the filename starting from "HallReport_" and ending with ".pdf"
       const cleanedFilename = pdfFilename.match(/HallReport_.*\.pdf/)[0]; // Extracts the correct filename
-  
+
       // Construct the API URL using the cleaned filename
       const downloadUrl = `http://localhost:8080/hallOwner/download/${cleanedFilename}`;
-  
+
       const response = await fetchWithAuth(downloadUrl, {
         method: "GET",
         headers: {
@@ -80,11 +81,11 @@ const FinancialReport = () => {
           Authorization: `Bearer ${token}`, // Include Authorization header
         },
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to download report");
       }
-  
+
       // Create a Blob from the response and trigger the download
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -98,7 +99,6 @@ const FinancialReport = () => {
       console.error("Download error:", error);
     }
   };
-  
 
   if (loading) {
     return (
@@ -124,7 +124,7 @@ const FinancialReport = () => {
       <Typography variant="h4" gutterBottom>
         {t("financial_report")}
       </Typography>
-  
+
       {pdfUrl ? (
         <>
           {/* Render the PDF using react-pdf-viewer */}
@@ -135,7 +135,7 @@ const FinancialReport = () => {
               <Viewer fileUrl={pdfUrl} />
             </Worker>
           </div>
-  
+
           {/* Download Button */}
           <Button
             variant="contained"
@@ -153,7 +153,6 @@ const FinancialReport = () => {
       )}
     </Container>
   );
-  
 };
 
 export default FinancialReport;

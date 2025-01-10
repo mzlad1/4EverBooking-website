@@ -320,6 +320,7 @@
   "enter_price": "أدخل السعر لـ {{category}}",
   "upload_image": "تحميل الصور",
   "upload_proof_of_ownership": "تحميل إثبات الملكية",
+  "mm/dd/yyyy": "شهر/يوم/سنة",
   "submit": "إرسال",
   "hall_under_processing": "قاعتك قيد المعالجة. ستتلقى بريدًا إلكترونيًا عند الموافقة.",
   "category_weddings": "حفلات الزفاف",
