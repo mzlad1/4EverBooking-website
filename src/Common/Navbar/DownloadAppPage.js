@@ -16,7 +16,7 @@ const DownloadAppPage = () => {
         justifyContent: "center",
         textAlign: "center",
         minHeight: "80vh",
-        background: "linear-gradient(135deg, #461270, #A237AE)", // Custom gradient
+        background: "linear-gradient(135deg, #cba36b, #9b7a52)", // Custom gradient using primary color
         p: 4,
       }}
     >
@@ -39,7 +39,7 @@ const DownloadAppPage = () => {
             variant="body1"
             sx={{
               fontSize: "18px",
-              color: "#e0e0e0", // Light grey for softer contrast
+              color: "#f0e2d1", // Light version of primary color for softer contrast
               mb: 5,
               marginLeft: "60px",
               maxWidth: "600px", // Limit text width for readability
@@ -127,7 +127,7 @@ const DownloadAppPage = () => {
             }}
           >
             <img
-              src="https://res.cloudinary.com/dykzph9bu/image/upload/v1727104880/psd_phone_template_with_blank_frame_for_design_oujptd.png"
+              src="https://res.cloudinary.com/dykzph9bu/image/upload/v1736696854/psd_phone_template_with_blank_frame_for_design_pra7lg.png"
               alt={t("app_display_image_alt")}
               style={{
                 maxWidth: "100%",
