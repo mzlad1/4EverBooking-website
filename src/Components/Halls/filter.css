@@ -2,17 +2,71 @@
 .filter-bar-container-modern {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between; /* Ensures "Clear Filters" stays at the bottom */
   align-items: center;
   width: 100%;
-  max-width: 350px; /* Set fixed width for professional layout */
+  max-width: 350px; /* Fixed width for a neat layout */
   background: #ffffff; /* Clean white background */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
   padding: 25px;
-  position: sticky; /* Sticky filter bar for scrolling */
-  top: 20px; /* Sticks at the top with spacing */
   margin-right: 20px;
   margin: 20px;
+  height: 130vh; /* Automatically adjusts to content */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  top: 20px; /* Sticks to the top with spacing */
+}
+/* Grouping the checkbox boxes */
+.checkbox-group-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between each checkbox box */
+  width: 100%;
+}
+
+/* Styling individual checkbox boxes */
+.checkbox-box-modern {
+  display: flex;
+  align-items: center;
+  background-color: #f7f7f7; /* Off-white background */
+  padding: 10px 15px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: all 0.3s ease-in-out;
+  cursor: pointer; /* Pointer cursor for hover effect */
+}
+
+.checkbox-box-modern:hover {
+  background-color: #ffffff; /* White background on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Slightly larger shadow on hover */
+}
+
+.checkbox-box-modern .MuiFormControlLabel-root {
+  flex: 1; /* Ensure checkbox and label align properly */
+  margin: 0;
+}
+
+.checkbox-box-modern .MuiCheckbox-root {
+  margin-right: 10px;
+  color: #c29d6d;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .filter-bar-container-modern {
+    max-width: 300px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-bar-container-modern {
+    width: 100%;
+    margin: 0 auto;
+    box-shadow: none;
+    border-radius: 0;
+    position: relative; /* No sticky on small screens */
+    top: auto;
+  }
 }
 
 /* Filter Bar Title */

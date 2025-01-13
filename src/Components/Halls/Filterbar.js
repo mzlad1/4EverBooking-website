@@ -138,64 +138,75 @@ const FilterBar = ({ onFilterChange }) => {
     <div className="filter-bar-container-modern">
       <div className="filter-bar-modern">
         <div className="filter-bar-label-modern">{t("advanced_search")}</div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={sortBy === "price"}
-              onChange={() => handleSortChange("price")}
-              style={{
-                marginLeft: "15px",
-                width: "20px",
-                height: "20px",
-                accentColor: "#c29d6d",
-                transition: "transform 0.3s ease, background-color 0.3s ease",
-              }}
+        <div className="checkbox-group-modern">
+          <div className="checkbox-box-modern">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sortBy === "price"}
+                  onChange={() => handleSortChange("price")}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    accentColor: "#c29d6d",
+                    transition:
+                      "transform 0.3s ease, background-color 0.3s ease",
+                  }}
+                />
+              }
+              label={
+                <span style={{ marginLeft: "10px" }}>{t("sort_by_price")}</span>
+              }
             />
-          }
-          label={
-            <span style={{ marginLeft: "10px" }}>{t("sort_by_price")}</span>
-          }
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={sortBy === "location"}
-              onChange={() => handleSortChange("location")}
-              style={{
-                marginLeft: "15px",
-                width: "20px",
-                height: "20px",
-                accentColor: "#c29d6d",
-                transition: "transform 0.3s ease, background-color 0.3s ease",
-              }}
+          </div>
+          <div className="checkbox-box-modern">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sortBy === "location"}
+                  onChange={() => handleSortChange("location")}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    accentColor: "#c29d6d",
+                    transition:
+                      "transform 0.3s ease, background-color 0.3s ease",
+                  }}
+                />
+              }
+              label={
+                <span style={{ marginLeft: "10px" }}>
+                  {t("sort_by_location")}
+                </span>
+              }
             />
-          }
-          label={
-            <span style={{ marginLeft: "10px" }}>{t("sort_by_location")}</span>
-          }
-        />
-        {userRole === "CUSTOMER" && userId && (
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={sortBy === "recommended"}
-                onChange={() => handleSortChange("recommended")}
-                style={{
-                  marginLeft: "15px",
-                  width: "20px",
-                  height: "20px",
-                  accentColor: "#c29d6d",
-                  transition: "transform 0.3s ease, background-color 0.3s ease",
-                }}
+          </div>
+          {userRole === "CUSTOMER" && userId && (
+            <div className="checkbox-box-modern">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={sortBy === "recommended"}
+                    onChange={() => handleSortChange("recommended")}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      accentColor: "#c29d6d",
+                      transition:
+                        "transform 0.3s ease, background-color 0.3s ease",
+                    }}
+                  />
+                }
+                label={
+                  <span style={{ marginLeft: "10px" }}>
+                    {t("sort_by_recommended")}
+                  </span>
+                }
               />
-            }
-            label={
-              <span style={{ marginLeft: "10px" }}>
-                {t("sort_by_recommended")}
-              </span>
-            }
-          />
-        )}
+            </div>
+          )}
+        </div>
+
         <FormControl variant="filled" className="form-control-modern">
           <InputLabel id="city-select-label-modern">{t("city")}</InputLabel>
           <Select
