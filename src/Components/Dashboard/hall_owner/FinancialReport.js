@@ -40,17 +40,20 @@ const FinancialReport = () => {
             },
           }
         );
-
+        console.log("Response:", response);
         if (!response.ok) {
           throw new Error("Failed to fetch financial report");
         }
         // if the response is ok and the status is 200, the response body not contains the PDF URL write a message that the hall owner has no financial report
-        if (response.status === 200) {
+
+        const pdfUrl = await response.text(); // Response body contains the PDF URL
+        const filename = pdfUrl.split("/").pop(); // Extract the filename from the URL
+        // if the pdfUrl is empty, write a message that the hall owner has no financial report
+        console.log("PDF URL:", pdfUrl);
+        if (!pdfUrl) {
           setError("The hall owner has no financial report");
           return;
         }
-        const pdfUrl = await response.text(); // Response body contains the PDF URL
-        const filename = pdfUrl.split("/").pop(); // Extract the filename from the URL
         setPdfUrl(pdfUrl);
         setPdfFilename(filename); // Store the filename for download
       } catch (error) {
