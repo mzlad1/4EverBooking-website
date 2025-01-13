@@ -44,7 +44,7 @@ body {
   margin-right: 20px;
   display: flex;
   flex-direction: column;
-  height: fit-content;
+  height: auto;
   margin-top: 20px;
 }
 
@@ -200,3 +200,53 @@ body {
   }
 }
 /* Modern Page Layout Adjustments */
+/* Hall Card */
+.hall-card-modern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInSlideUp 0.5s ease forwards;
+  background-color: #ffffff; /* Modern clean white background */
+  border-radius: 15px; /* Rounded corners for smooth feel */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+.hall-card-modern:hover {
+  transform: scale(1.05); /* Slightly increase size for a smooth zoom effect */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+  background-color: #faf9f7; /* Subtle change in background color */
+}
+
+/* Hall Card Image */
+.hall-card-modern img {
+  border-radius: 15px 15px 0 0; /* Only top corners rounded */
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease; /* Smooth image hover animation */
+}
+
+.hall-card-modern:hover img {
+  transform: scale(1.03); /* Slight zoom-in effect for the image */
+}
+
+/* Button hover animations */
+.book-now-button-modern {
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 25px; /* Rounded button for modern feel */
+}
+
+.book-now-button-modern:hover {
+  transform: translateY(-3px);
+  background-color: #a87c50;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Button shadow effect */
+}

@@ -267,14 +267,14 @@ const HallsPage = () => {
           )}
           {halls.map((hall, index) => {
             const categoryPrices = Object.values(hall.categories || {}).map(
-              (price) => Math.floor(price) // Ensure only integer part of the price is used
+              (price) => Math.floor(price)
             );
 
             const lowPrice = Math.min(...categoryPrices);
             const highPrice = Math.max(...categoryPrices);
 
             const servicePrices = Object.values(hall.services || {}).map(
-              (price) => Math.floor(price) // Ensure service prices also only use the integer part
+              (price) => Math.floor(price)
             );
 
             const totalServicesPrice = servicePrices.reduce(
@@ -282,7 +282,6 @@ const HallsPage = () => {
               0
             );
 
-            // Calculate highPriceWithServices and ensure it's a valid number
             const highPriceWithServices =
               Number(highPrice + totalServicesPrice) || 0;
 
@@ -291,23 +290,56 @@ const HallsPage = () => {
                 className="hall-card-modern"
                 key={index}
                 sx={{
-                  width: 320,
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "100%",
                   maxWidth: "100%",
                   boxShadow: "lg",
                   marginBottom: "20px",
+                  overflow: "hidden",
                 }}
               >
-                <CardOverflow>
-                  <AspectRatio sx={{ minWidth: 200 }}>
+                {/* Image Section */}
+                <div
+                  className="hall-card-image"
+                  style={{ position: "relative", flex: "0 0 40%" }}
+                >
+                  <AspectRatio sx={{ height: "100%", width: "100%" }}>
                     <img
-                      src={getHallImage(hall.image)} // Use the helper function to get the image
+                      src={getHallImage(hall.image)}
                       alt={`Hall ${index}`}
                       className="hall-image-modern"
                       loading="lazy"
                     />
                   </AspectRatio>
-                </CardOverflow>
-                <CardContent className="card-content-modern">
+                  {/* Favorite Button */}
+                  <IconButton
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      backgroundColor: "rgba(255, 255, 255, 1)",
+                      color: favorites.includes(hall.id) ? "red" : "#CBA36B",
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      },
+                    }}
+                    onClick={() => handleFavoriteClick(hall.id)}
+                  >
+                    {favorites.includes(hall.id) ? (
+                      <FavoriteIcon />
+                    ) : (
+                      <FavoriteBorderIcon />
+                    )}
+                  </IconButton>
+                </div>
+
+                {/* Info Section */}
+                <div
+                  className="hall-card-info"
+                  style={{ flex: "1", padding: "20px" }}
+                >
                   <Typography
                     level="h1"
                     className="hall-title-modern"
@@ -317,7 +349,6 @@ const HallsPage = () => {
                       color: "#c29d6d",
                       textTransform: "uppercase",
                       letterSpacing: "1px",
-                      mt: 2,
                     }}
                   >
                     {hall.name}
@@ -331,7 +362,10 @@ const HallsPage = () => {
                     ${lowPrice.toFixed(2)} - ${highPriceWithServices.toFixed(2)}
                   </Typography>
 
-                  <div className="rating-stars-modern">
+                  <div
+                    className="rating-stars-modern"
+                    style={{ marginTop: "10px" }}
+                  >
                     {renderStars(hall.averageRating)}
                     <Typography
                       level="body-xs"
@@ -341,43 +375,33 @@ const HallsPage = () => {
                     </Typography>
                   </div>
 
-                  <div className="capacity-location-row-modern">
+                  <div
+                    className="capacity-location-row-modern"
+                    style={{ marginTop: "15px" }}
+                  >
                     <Typography level="body-sm" className="capacity-modern">
                       <People
                         style={{ color: "#c29d6d", marginRight: "5px" }}
                       />
-                      {hall.capacity} {t("guests")}{" "}
-                      {/* Translated text for "guests" */}
+                      {hall.capacity} {t("guests")}
                     </Typography>
                     <Typography level="body-sm" className="location-modern">
                       <LocationOn
                         style={{ color: "#c29d6d", marginRight: "5px" }}
                       />
-                      {t(`west_bank_cities.${hall.location}`)}{" "}
-                      {/* Translate location if it's a city */}
+                      {t(`west_bank_cities.${hall.location}`)}
                     </Typography>
                   </div>
-                </CardContent>
-                <CardOverflow
-                  className="card-footer-modern"
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row", // Ensures the layout is horizontal (row)
-                    justifyContent: "space-between", // Spread items across the row
-                    alignItems: "center", // Vertically center items in the row
-                    padding: "10px 15px",
-                    backgroundColor: "#f5f5f5", // Optional: background color
-                    borderTop: "1px solid #e0e0e0", // Optional: subtle top border
-                  }}
-                >
+
                   <Button
                     variant="solid"
                     size="lg"
                     className="book-now-button-modern"
                     sx={{
                       backgroundColor: "#CBA36B",
+                      width: "35%",
                       color: "#ffffff",
-                      width: "250px", // Set a fixed width for the button
+                      marginTop: "20px",
                       "&:hover": {
                         backgroundColor: "#A97C50",
                         color: "#ffffff",
@@ -385,26 +409,9 @@ const HallsPage = () => {
                     }}
                     onClick={() => history.push(`/hall/${hall.id}`)}
                   >
-                    {t("book_now")} {/* Translated text for "Book Now" */}
+                    {t("book_now")}
                   </Button>
-
-                  {/* Favorite Icon */}
-                  <IconButton
-                    size="small"
-                    sx={{
-                      color: favorites.includes(hall.id) ? "red" : "#CBA36B",
-                      padding: 0,
-                      marginLeft: "10px", // Space between button and icon
-                    }}
-                    onClick={() => handleFavoriteClick(hall.id)} // Handle click for individual hall
-                  >
-                    {favorites.includes(hall.id) ? (
-                      <FavoriteIcon />
-                    ) : (
-                      <FavoriteBorderIcon />
-                    )}
-                  </IconButton>
-                </CardOverflow>
+                </div>
               </Card>
             );
           })}
