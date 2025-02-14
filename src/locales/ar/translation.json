@@ -12,6 +12,9 @@
   "book_now": "احجز الآن",
   "age_restriction_message": "يجب أن يكون عمرك 15 عامًا على الأقل.",
   "loading": "جاري التحميل...",
+  "please_select_category": "يرجى اختيار فئة.",
+  "location_access_denied": "تم رفض الوصول إلى الموقع.",
+  "alert": "تنبيه",
   "west_bank_cities": {
     "Ramallah": "رام الله",
     "Nablus": "نابلس",
