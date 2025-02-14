@@ -321,7 +321,6 @@ const FilterBar = ({ onFilterChange }) => {
         aria-labelledby="alert-dialog-title-category"
         aria-describedby="alert-dialog-description-category"
       >
-        <DialogTitle id="alert-dialog-title-category">{t("alert")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description-category">
             {t("please_select_category")}
@@ -341,7 +340,6 @@ const FilterBar = ({ onFilterChange }) => {
         aria-labelledby="alert-dialog-title-location"
         aria-describedby="alert-dialog-description-location"
       >
-        <DialogTitle id="alert-dialog-title-location">{t("alert")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description-location">
             {t("location_access_denied")}
