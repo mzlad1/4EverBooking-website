@@ -56,26 +56,8 @@ body {
   padding: 20px;
   width: 75%;
   margin: 0 auto; /* Center the container */
-}
-
-/* Adjust for 1 to 3 cards: center-align the cards */
-.page-container-modern.few-cards {
   justify-content: center; /* Center cards if fewer than 4 */
   align-items: center;
-}
-
-/* Adjust card width for 1 or 2 cards */
-.page-container-modern.few-cards .hall-card-modern {
-  flex: 1 1 calc(50% - 20px); /* For 2 cards: take 50% width */
-  max-width: calc(50% - 20px);
-  justify-content: center;
-}
-
-.page-container-modern.single-card .hall-card-modern {
-  flex: 1 1 100%; /* For a single card: take full width */
-  max-width: 500px; /* Restrict width */
-  margin: 0 auto; /* Center the single card */
-  justify-content: center;
 }
 
 /* Hall Card */
