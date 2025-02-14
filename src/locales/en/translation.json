@@ -12,6 +12,9 @@
   "book_now": "Book Now",
   "age_restriction_message": "You must be at least 15 years old.",
   "loading": "Loading...",
+  "please_select_category": "Please select a category",
+  "location_access_denied": "Location access denied",
+  "alert": "Alert",
   "west_bank_cities": {
     "Ramallah": "Ramallah",
     "Nablus": "Nablus",
