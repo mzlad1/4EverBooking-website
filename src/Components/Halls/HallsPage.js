@@ -255,11 +255,7 @@ const HallsPage = () => {
         }}
       >
         <FilterBar onFilterChange={handleFilterChange} />
-        <div
-          className={`page-container-modern ${
-            halls.length <= 3 ? "few-cards" : ""
-          } ${halls.length === 1 ? "single-card" : ""}`}
-        >
+        <div className="page-container-modern">
           {halls.length === 0 && searchQuery && !loading && (
             <p className="no-results-modern">
               {t("no_halls_found", { query: searchQuery })} {/* Translated */}
